@@ -206,147 +206,174 @@ TEMPLATE = r"""<!doctype html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>해커톤 면접 노트</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Manrope:wght@500;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  color-scheme:light;
-  --bg:#f6f7f9; --card:#ffffff; --line:#e6e8ec; --soft:#f0f2f5;
-  --ink:#111318; --ink-2:#4b5160; --mute:#8b92a1;
-  --accent:#4f5df0; --accent-soft:#eef0ff;
-  --know:#1f8f3a; --half:#d98a00; --dunno:#d7423a;
-  --project:#4f5df0; --concept:#1baf7a; --lesson:#eb6834;
-  --shadow:0 1px 2px rgba(16,24,40,.04), 0 8px 24px -12px rgba(16,24,40,.12);
-}
-@media (prefers-color-scheme:dark){
-  :root:not([data-theme="light"]){
-    color-scheme:dark;
-    --bg:#121417; --card:#1b1e23; --line:#2a2f37; --soft:#232830;
-    --ink:#f2f4f7; --ink-2:#c2c8d2; --mute:#8a919e;
-    --accent:#7c88ff; --accent-soft:#232a4d;
-    --know:#3fae3f; --half:#e0a030; --dunno:#e66767;
-    --project:#7c88ff; --concept:#2dbf8a; --lesson:#f07a4a;
-    --shadow:none;
-  }
-}
-:root[data-theme="dark"]{
-  color-scheme:dark;
-  --bg:#121417; --card:#1b1e23; --line:#2a2f37; --soft:#232830;
-  --ink:#f2f4f7; --ink-2:#c2c8d2; --mute:#8a919e;
-  --accent:#7c88ff; --accent-soft:#232a4d;
-  --know:#3fae3f; --half:#e0a030; --dunno:#e66767;
-  --project:#7c88ff; --concept:#2dbf8a; --lesson:#f07a4a;
-  --shadow:none;
+  --bg:#ffffff; --ink:#202124; --muted:#666666; --line:#e5e5e5; --soft:#f7f7f8; --head:#2b2f3a;
+  --accent:#5b5bd6; --accent-bg:#eeeefc;
+  --know:#1a7f37; --half:#b7791f; --dunno:#c0392b;
+  --project:#5b5bd6; --concept:#1baf7a; --lesson:#eb6834;
 }
 *{box-sizing:border-box}
-html,body{margin:0;min-height:100%}
-body{background:var(--bg);color:var(--ink);font:15px/1.6 -apple-system,"Segoe UI","Pretendard","Noto Sans KR",sans-serif;-webkit-font-smoothing:antialiased}
-a{color:var(--accent);text-decoration:none}
-button{font:inherit;cursor:pointer}
-.wrap{max-width:960px;margin:0 auto;padding:0 16px}
-header.top{position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
-header.top .wrap{display:flex;align-items:center;gap:14px;height:56px}
-.brand{font-weight:700;letter-spacing:-.01em;color:var(--ink)}
-.brand small{font-weight:400;color:var(--mute);margin-left:8px;font-size:12px}
+html{scroll-behavior:smooth}
+html,body{margin:0;background:var(--bg);color:var(--ink)}
+body{font:15px/1.8 "Noto Sans KR",-apple-system,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+button{font:inherit;cursor:pointer;color:inherit}
+:focus-visible{outline:2px solid #555;outline-offset:2px}
+.wrap{max-width:1000px;margin:0 auto;padding:0 20px}
+.num,.meta,.badge,.tabbar a,.kv dt{font-family:"Manrope","Noto Sans KR",sans-serif}
+
+header.top{border-bottom:1px solid var(--line);background:#fff}
+header.top .wrap{display:flex;align-items:center;gap:20px;height:60px}
+.brand{font-weight:700;font-size:16px;letter-spacing:-.01em}
+.brand small{font-weight:400;color:var(--muted);margin-left:10px;font-size:12px}
 .top .sp{flex:1}
-.top input{padding:7px 12px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);width:220px}
-.top a.gh{font-size:12px;color:var(--mute)}
-main{padding:28px 0 80px}
-h1{font-size:26px;letter-spacing:-.02em;margin:0 0 6px;line-height:1.3}
-h2{font-size:18px;letter-spacing:-.01em;margin:36px 0 12px}
-h2 .n{color:var(--mute);font-weight:500;font-size:13px;margin-left:8px}
-.lead{color:var(--ink-2);margin:0 0 18px;font-size:16px}
-.crumb{font-size:13px;color:var(--mute);margin-bottom:14px}
-.crumb a{color:var(--mute)} .crumb a:hover{color:var(--ink)}
-.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px;box-shadow:var(--shadow)}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
-.pcard{display:block;color:inherit;transition:transform .12s, border-color .12s}
-.pcard:hover{transform:translateY(-1px);border-color:var(--accent)}
-.pcard .when{font-size:12px;color:var(--mute)}
-.pcard h3{margin:4px 0 6px;font-size:16px;line-height:1.35}
-.pcard p{margin:0 0 12px;color:var(--ink-2);font-size:13px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.top nav a{font-size:14px;color:var(--muted);margin-left:18px;padding:10px 0;display:inline-block}
+.top nav a:hover,.top nav a.on{color:var(--ink);text-decoration:underline;text-underline-offset:6px}
+.top input{padding:9px 12px;border:1px solid var(--line);border-radius:8px;width:200px;font:inherit;font-size:14px}
+main{padding:32px 0 96px}
+
+.page-title{font-size:24px;font-weight:700;letter-spacing:-.02em;margin:0 0 6px}
+.page-sub{color:var(--muted);margin:0 0 28px;font-size:14px}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
+.filters button{border:1px solid var(--line);background:#fff;border-radius:999px;padding:8px 16px;font-size:13px;color:var(--muted)}
+.filters button[aria-pressed="true"]{border-color:var(--ink);color:var(--ink)}
+.pgroup{margin:26px 0 6px}
+.ghead{font-size:15px;font-weight:700;margin:0 0 10px;padding-bottom:8px;border-bottom:1px solid var(--line);display:flex;gap:8px;align-items:baseline}
+.ghead .n{color:var(--muted);font-weight:500;font-size:12px;font-family:"Manrope",sans-serif}
+.list{display:grid;gap:8px}
+.item{display:grid;grid-template-columns:72px 1fr;gap:16px;border:1px solid var(--line);border-radius:10px;padding:12px 14px;background:#fff;align-items:center}
+.item:hover{border-color:var(--ink)}
+.thumb{border-radius:8px;height:56px;display:flex;align-items:center;justify-content:center;text-align:center;padding:6px;color:#fff;font-family:"Manrope","Noto Sans KR",sans-serif;font-weight:700;font-size:11px;line-height:1.25;background:linear-gradient(135deg,var(--c1),var(--c2));overflow:hidden}
+.item h3{margin:0 0 4px;font-size:15.5px;font-weight:700;letter-spacing:-.01em;line-height:1.4}
+.item .row{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.item .when{font-family:"Manrope",sans-serif;font-size:12px;color:var(--muted);margin-right:4px}
+.item p{margin:0 0 10px;color:var(--muted);font-size:13.5px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;margin:0;font-size:13px}
+.kv dt{color:var(--muted);font-weight:500}
+.kv dd{margin:0}
+.badge{display:inline-block;font-size:11px;font-weight:700;padding:1px 8px;border-radius:6px;background:var(--accent-bg);color:var(--accent);vertical-align:1px;margin-left:8px}
+.badge.gray{background:var(--soft);color:var(--muted)}
 .chips{display:flex;flex-wrap:wrap;gap:6px}
-.chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:999px;padding:2px 10px;font-size:12px;color:var(--ink-2);background:var(--soft)}
-.chip.link{background:var(--card);cursor:pointer;color:var(--ink)} .chip.link:hover{border-color:var(--accent)}
+.chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:6px;padding:3px 10px;font-size:12px;color:var(--ink);background:#fff;min-height:28px}
+.chip.link:hover{border-color:var(--ink)}
 .dot{width:8px;height:8px;border-radius:50%;display:inline-block;flex:none}
-.st{width:8px;height:8px;border-radius:2px;display:inline-block;flex:none;background:var(--line)}
-.st.know{background:var(--know)} .st.half{background:var(--half)} .st.dunno{background:var(--dunno)}
-.prog{display:flex;align-items:center;gap:10px;margin-top:12px;font-size:12px;color:var(--mute)}
-.bar{flex:1;height:6px;border-radius:3px;background:var(--soft);overflow:hidden;display:flex}
-.bar i{display:block;height:100%}
-.stats{display:flex;gap:10px;flex-wrap:wrap;margin:0 0 26px}
-.stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 16px;min-width:140px}
-.stat b{display:block;font-size:22px;font-weight:600;letter-spacing:-.02em}
-.stat span{font-size:12px;color:var(--mute)}
-.empty{color:var(--mute);font-size:13px;background:var(--soft);border-radius:10px;padding:12px 14px}
-.hero{display:flex;gap:18px;align-items:flex-start;flex-wrap:wrap}
-.hero .meta{font-size:13px;color:var(--mute);margin:6px 0 12px}
-.hero .meta a{color:var(--ink-2)}
-.hero .intro{font-size:16px;color:var(--ink);background:var(--accent-soft);border-radius:12px;padding:14px 16px;margin:14px 0 0;border-left:3px solid var(--accent)}
-table.stack{width:100%;border-collapse:collapse;font-size:13.5px;table-layout:fixed}
-table.stack col.c1{width:20%} table.stack col.c2{width:15%} table.stack col.c3{width:38%} table.stack col.c4{width:27%}
-table.stack td,table.stack th{word-break:keep-all;overflow-wrap:anywhere}
-table.stack code{font-size:12px;word-break:break-all}
-table.stack th{text-align:left;font-weight:600;color:var(--mute);font-size:12px;padding:8px 10px;border-bottom:1px solid var(--line)}
-table.stack td{padding:10px;border-bottom:1px solid var(--line);vertical-align:top;color:var(--ink-2)}
-table.stack td:first-child{color:var(--ink);font-weight:600}
-table.stack tr:last-child td{border-bottom:0}
-.tblwrap{overflow:auto}
-.missing{color:var(--mute);font-style:italic}
-ul.clean{margin:0;padding-left:0;list-style:none;display:grid;gap:10px}
-ul.clean li{padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink-2)}
-ul.clean li b,ul.clean li strong{color:var(--ink)}
-.q{border:1px solid var(--line);border-radius:12px;background:var(--card);margin-bottom:10px;overflow:hidden}
-.q .qh{display:flex;gap:10px;align-items:flex-start;padding:14px 16px;cursor:pointer}
-.q .lv{flex:none;font-size:11px;font-weight:600;color:var(--accent);background:var(--accent-soft);border-radius:6px;padding:2px 7px;margin-top:3px}
-.q .qt{flex:1;font-weight:500;line-height:1.5}
-.q .tg{flex:none;color:var(--mute);font-size:12px;margin-top:3px}
-.q .qa{display:none;padding:0 16px 16px 16px;color:var(--ink-2);font-size:14px}
+.st{width:9px;height:9px;border-radius:2px;display:inline-block;flex:none;background:var(--line)}
+.st.know{background:var(--know)}.st.half{background:var(--half)}.st.dunno{background:var(--dunno)}
+.prog{display:flex;align-items:center;gap:10px;font-size:12px;color:var(--muted);margin-top:8px}
+.bar{flex:1;max-width:160px;height:5px;border-radius:3px;background:var(--soft);overflow:hidden}
+.bar i{display:block;height:100%;background:var(--ink)}
+
+.hero{border:1px solid var(--line);border-radius:14px;overflow:hidden;margin-bottom:22px;background:#fff}
+.banner{padding:34px 28px;color:#fff;background:linear-gradient(120deg,var(--c1),var(--c2));min-height:150px;display:flex;flex-direction:column;justify-content:flex-end;gap:6px}
+.banner .kind{font-family:"Manrope",sans-serif;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;opacity:.85}
+.banner h1{margin:0;font-size:26px;line-height:1.35;font-weight:700;letter-spacing:-.02em}
+.hero .info{padding:20px 28px;display:grid;grid-template-columns:1fr auto;gap:14px 28px;align-items:center}
+.hero .kv{font-size:14px;gap:6px 18px}
+.hero .actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+.btn{border:1px solid var(--ink);border-radius:10px;padding:10px 18px;font-size:14px;font-weight:500;background:#fff;min-height:44px;display:inline-flex;align-items:center}
+.btn.primary{background:var(--ink);color:#fff}
+.btn:hover{opacity:.85}
+.intro{padding:18px 28px;border-top:1px solid var(--line);font-size:15.5px;line-height:1.85}
+
+.tabbar{position:sticky;top:0;z-index:5;background:#fff;border-bottom:2px solid var(--line);margin:0 0 8px;display:flex;overflow:auto}
+.tabbar a{flex:none;padding:14px 18px;font-size:14px;font-weight:700;color:var(--muted);border-bottom:2px solid transparent;margin-bottom:-2px;white-space:nowrap}
+.tabbar a.on{color:var(--ink);border-bottom-color:var(--ink)}
+section.sec{padding:34px 0 10px;scroll-margin-top:60px}
+section.sec h2{font-size:18px;font-weight:700;margin:0 0 6px;letter-spacing:-.01em;display:flex;align-items:baseline;gap:8px}
+section.sec h2 .num{color:var(--accent)}
+section.sec .desc{color:var(--muted);font-size:13.5px;margin:0 0 16px}
+section.sec + section.sec{border-top:1px solid var(--line)}
+.hint{font-size:13px;color:var(--muted);background:var(--soft);border-radius:8px;padding:10px 14px;margin:12px 0 0}
+
+table.t{width:100%;border-collapse:collapse;font-size:14px;table-layout:fixed}
+table.t th{background:var(--head);color:#fff;font-weight:500;text-align:left;padding:11px 14px;font-size:13px}
+table.t th:first-child{border-radius:8px 0 0 0} table.t th:last-child{border-radius:0 8px 0 0}
+table.t td{padding:13px 14px;border-bottom:1px solid var(--line);vertical-align:top;color:var(--ink);word-break:keep-all;overflow-wrap:anywhere;line-height:1.7}
+table.t td:first-child{font-weight:700}
+table.t code{font-size:12.5px;background:var(--soft);padding:0 4px;border-radius:4px;word-break:break-all}
+.missing{color:var(--muted);font-style:italic}
+.missing b{color:var(--dunno);font-style:normal;font-weight:500}
+
+ol.plain,ul.plain{margin:0;padding:0;list-style:none;display:grid;gap:0}
+ul.plain li,ol.plain li{padding:14px 4px;border-bottom:1px solid var(--line);display:grid;grid-template-columns:32px 1fr;gap:10px;line-height:1.8}
+ol.plain li:last-child,ul.plain li:last-child{border-bottom:0}
+.plain .n{font-family:"Manrope",sans-serif;font-weight:700;color:var(--accent)}
+
+.qlist{display:grid;gap:10px}
+.q{border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.q .qh{display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:start;padding:16px 18px;cursor:pointer;background:#fff;min-height:44px}
+.q .qh:hover{background:var(--soft)}
+.q .lv{font-family:"Manrope",sans-serif;font-size:11px;font-weight:700;color:var(--accent);background:var(--accent-bg);border-radius:6px;padding:2px 8px;margin-top:4px}
+.q .qt{font-weight:500;line-height:1.7}
+.q .tg{font-size:12px;color:var(--muted);margin-top:4px;white-space:nowrap}
+.q .qa{display:none;padding:4px 18px 18px 18px;border-top:1px solid var(--line);background:#fff}
 .q.open .qa{display:block}
-.q .qa .lbl{display:block;font-size:11px;color:var(--mute);letter-spacing:.05em;text-transform:uppercase;margin:12px 0 2px}
-.q .qa p{margin:0}
-.rate{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-.rate span{font-size:13px;color:var(--ink-2);margin-right:4px}
-.rate button{border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink-2);padding:7px 14px;font-size:13px}
-.rate button[aria-pressed="true"].know{border-color:var(--know);color:var(--know);background:color-mix(in srgb,var(--know) 10%,transparent)}
-.rate button[aria-pressed="true"].half{border-color:var(--half);color:var(--half);background:color-mix(in srgb,var(--half) 10%,transparent)}
-.rate button[aria-pressed="true"].dunno{border-color:var(--dunno);color:var(--dunno);background:color-mix(in srgb,var(--dunno) 10%,transparent)}
-.ccard{display:block;color:inherit;padding:14px 16px}
-.ccard:hover{border-color:var(--accent)}
-.ccard .t{font-weight:600;display:flex;gap:8px;align-items:center}
-.ccard .s{font-size:13px;color:var(--ink-2);margin-top:4px}
-.ccard .m{font-size:12px;color:var(--mute);margin-top:6px}
-details.raw{margin-top:28px}
-details.raw summary{cursor:pointer;color:var(--mute);font-size:13px}
-.md{font-size:14.5px;color:var(--ink-2)}
-.md h1,.md h2,.md h3{color:var(--ink);line-height:1.3;margin:22px 0 8px}
+.q.open .tg::after{content:" ▲"} .q .tg::after{content:" ▼"}
+.q .qa .lbl{display:block;font-family:"Manrope",sans-serif;font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;margin:14px 0 4px}
+.q .qa p{margin:0;color:var(--ink);line-height:1.8}
+.q .qa .wrong{color:var(--dunno)}
+.rate{display:flex;gap:10px;align-items:center;flex-wrap:wrap;border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin-top:18px;background:var(--soft)}
+.rate span{font-size:14px;font-weight:500;margin-right:auto}
+.rate button{border:1px solid var(--line);border-radius:8px;background:#fff;padding:10px 16px;font-size:13px;color:var(--muted);min-height:44px}
+.rate button[aria-pressed="true"]{color:#fff;border-color:transparent}
+.rate button[aria-pressed="true"].know{background:var(--know)}
+.rate button[aria-pressed="true"].half{background:var(--half)}
+.rate button[aria-pressed="true"].dunno{background:var(--dunno)}
+
+.cgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:12px}
+.ccard{border:1px solid var(--line);border-radius:12px;padding:16px 18px;display:block}
+.ccard:hover{border-color:var(--ink)}
+.ccard .t{font-weight:700;display:flex;gap:8px;align-items:center;line-height:1.4}
+.ccard .s{font-size:13px;color:var(--muted);margin-top:6px;line-height:1.6}
+.ccard .m{font-size:12px;color:var(--muted);margin-top:8px;font-family:"Manrope","Noto Sans KR",sans-serif}
+
+details.raw{margin-top:30px;border-top:1px solid var(--line);padding-top:16px}
+details.raw summary{cursor:pointer;color:var(--muted);font-size:13px;padding:8px 0}
+.md{font-size:14.5px;color:var(--ink);line-height:1.85}
+.md h1,.md h2,.md h3{line-height:1.4;margin:26px 0 8px;font-weight:700}
 .md h1{font-size:18px}.md h2{font-size:16px}.md h3{font-size:15px}
-.md code{background:var(--soft);border:1px solid var(--line);border-radius:4px;padding:0 4px;font-size:12.5px}
-.md pre{background:var(--soft);border:1px solid var(--line);border-radius:10px;padding:12px;overflow:auto;font-size:12.5px}
+.md code{background:var(--soft);border-radius:4px;padding:0 4px;font-size:12.5px}
+.md pre{background:var(--soft);border-radius:8px;padding:12px;overflow:auto;font-size:12.5px}
 .md table{border-collapse:collapse;font-size:13px;margin:8px 0;display:block;overflow:auto}
-.md th,.md td{border:1px solid var(--line);padding:4px 8px;text-align:left;vertical-align:top}
-.md blockquote{border-left:3px solid var(--line);margin:8px 0;padding:2px 12px}
-.md a.wiki{color:var(--accent);border-bottom:1px dotted currentColor}
-footer{border-top:1px solid var(--line);padding:16px 0;color:var(--mute);font-size:12px}
-footer .wrap{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
-footer button{border:0;background:none;color:var(--ink-2);text-decoration:underline;padding:0;font-size:12px}
+.md th,.md td{border:1px solid var(--line);padding:5px 9px;text-align:left;vertical-align:top}
+.md th{background:var(--soft)}
+.md blockquote{border-left:3px solid var(--line);margin:8px 0;padding:2px 12px;color:var(--muted)}
+.md a.wiki{color:var(--accent);text-decoration:underline;text-underline-offset:3px}
+
+footer{border-top:1px solid var(--line);padding:18px 0;color:var(--muted);font-size:12px}
+footer .wrap{display:flex;gap:16px;flex-wrap:wrap;align-items:center}
+footer button{border:0;background:none;text-decoration:underline;padding:8px 0;font-size:12px;color:var(--muted)}
 footer .sp{flex:1}
-#graphbox{height:70vh;position:relative;border:1px solid var(--line);border-radius:14px;background:var(--card);overflow:hidden}
+#graphbox{height:70vh;position:relative;border:1px solid var(--line);border-radius:14px;overflow:hidden}
 svg{width:100%;height:100%;display:block;cursor:grab}
-.link{stroke:var(--line);stroke-width:1.2px}.link.hi{stroke:var(--ink-2);stroke-width:2px}
-.node circle{stroke:var(--card);stroke-width:2px;cursor:pointer}
+.link{stroke:var(--line);stroke-width:1.2px}.link.hi{stroke:var(--muted);stroke-width:2px}
+.node circle{stroke:#fff;stroke-width:2px;cursor:pointer}
 .node.dim{opacity:.15}.link.dim{opacity:.08}
-.node text{font-size:11px;fill:var(--ink-2);pointer-events:none;paint-order:stroke;stroke:var(--card);stroke-width:3px}
-.node.minor text{display:none}.node.hi text,.node.sel text{display:block;fill:var(--ink);font-weight:600}
+.node text{font-size:11px;fill:var(--muted);pointer-events:none;paint-order:stroke;stroke:#fff;stroke-width:3px}
+.node.minor text{display:none}.node.hi text,.node.sel text{display:block;fill:var(--ink);font-weight:700}
 .node.sel circle{stroke:var(--ink);stroke-width:3px}
-#tip{position:absolute;pointer-events:none;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:8px 10px;max-width:300px;font-size:12px;color:var(--ink-2);box-shadow:var(--shadow);display:none}
-@media (max-width:640px){ .top input{width:140px} h1{font-size:22px} table.stack{font-size:12.5px} table.stack col.c2{width:0} table.stack td:nth-child(2),table.stack th:nth-child(2){display:none} }
+#tip{position:absolute;pointer-events:none;background:#fff;border:1px solid var(--line);border-radius:8px;padding:8px 10px;max-width:300px;font-size:12px;color:var(--muted);display:none}
+@media (prefers-reduced-motion:reduce){ html{scroll-behavior:auto} }
+@media (max-width:820px){ .brand small{display:none} header.top .wrap{gap:12px} }
+@media (max-width:720px){
+  .item{grid-template-columns:56px 1fr;gap:12px} .thumb{height:48px;font-size:10px}
+  .hero .info{grid-template-columns:1fr} .hero .actions{justify-content:flex-start}
+  .banner{padding:26px 20px} .banner h1{font-size:21px}
+  .intro,.hero .info{padding-left:20px;padding-right:20px}
+  .top input{width:130px} .top nav a{margin-left:12px}
+  table.t th:nth-child(2),table.t td:nth-child(2){display:none}
+}
 </style>
 </head>
 <body>
 <header class="top"><div class="wrap">
   <a class="brand" href="#/">해커톤 면접 노트<small>프로젝트로 배우는 CS</small></a>
   <span class="sp"></span>
-  <input type="search" id="q" placeholder="검색" aria-label="검색">
-  <a class="gh" href="#/graph">관계도</a>
+  <input type="search" id="q" placeholder="프로젝트·기술 검색" aria-label="검색">
+  <nav><a href="#/" data-nav="home">프로젝트</a><a href="#/graph" data-nav="graph">관계도</a></nav>
 </div></header>
 <main><div class="wrap" id="app"></div></main>
 <footer><div class="wrap">
@@ -365,15 +392,18 @@ const byId = new Map(DATA.nodes.map(n => [n.id, n]));
 const nb = new Map(DATA.nodes.map(n => [n.id, new Set()]));
 DATA.links.forEach(l => { nb.get(l.source).add(l.target); nb.get(l.target).add(l.source); });
 const projects = DATA.nodes.filter(n => n.type === 'project').sort((a,b) => (b.created||'').localeCompare(a.created||''));
-const conceptsOf = pid => [...nb.get(pid)].map(x => byId.get(x)).filter(n => n && n.type !== 'project').sort((a,b)=>a.type.localeCompare(b.type));
+const conceptsOf = pid => [...nb.get(pid)].map(x => byId.get(x)).filter(n => n && n.type !== 'project').sort((a,b)=>a.type.localeCompare(b.type)||a.title.localeCompare(b.title));
 const projectsOf = id => [...nb.get(id)].map(x => byId.get(x)).filter(n => n && n.type === 'project');
 const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const STATE = {know:'설명 가능', half:'애매함', dunno:'모름'};
 const KIND = {project:'프로젝트', concept:'개념', lesson:'교훈'};
+const PALETTES = [['#3b4a8a','#6b7cc7'],['#2f6f5e','#5fb59b'],['#7a3e6a','#b76aa3'],['#3f5f7a','#6f9bc0'],['#7a5a2f','#c09a5f'],['#4a3f7a','#8a7ac7'],['#2f6a7a','#5fb0c0'],['#6a3f3f','#b07070']];
+const pal = id => PALETTES[[...id].reduce((s,c)=>s+c.charCodeAt(0),0) % PALETTES.length];
 function md(t){ const w=String(t??'').replace(/\[\[([^\]|#]+)(?:[|#][^\]]*)?\]\]/g,(m,id)=>byId.has(id)?`<a class="wiki" href="#/${byId.get(id).type==='project'?'p':'c'}/${id}">${esc(byId.get(id).title)}</a>`:esc(id)); if(window.marked){marked.setOptions({gfm:true});return marked.parse(w);} return `<pre style="white-space:pre-wrap">${esc(t)}</pre>`; }
 const inline = t => md(t).replace(/^<p>|<\/p>\s*$/g,'');
+const shortTitle = t => t.split(/\s[—-]\s/)[0];
+function overview(body){ const parts=body.split(/\n(?=## )/); const first=parts.find(x=>/^## .*개요/.test(x)) || parts[1]; if(first) return first.replace(/^## [^\n]*\n?/,''); return body.replace(/^# [^\n]*\n?/,'').slice(0,600); }
 
-// 이해도
 const KEY='wiki-progress-v1'; let progress={};
 try{progress=JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){}
 const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(progress))}catch(e){}};
@@ -384,118 +414,144 @@ document.getElementById('import').onclick=()=>document.getElementById('importFil
 document.getElementById('importFile').onchange=e=>{const f=e.target.files[0];if(!f)return;f.text().then(t=>{try{Object.assign(progress,JSON.parse(t));save();route();}catch(err){alert('JSON을 읽지 못했습니다')}});};
 function readiness(p){ const cs=conceptsOf(p.id).filter(c=>c.type==='concept'); const items=[...cs.map(c=>stateOf(c.id)), stateOf('p:'+p.id)]; const w={know:1,half:.5,dunno:0,'':0}; return {pct:Math.round(items.reduce((s,x)=>s+w[x],0)/items.length*100), known:cs.filter(c=>stateOf(c.id)==='know').length, total:cs.length}; }
 
-// 라우팅
 const app=document.getElementById('app');
 const q=document.getElementById('q'); q.addEventListener('input',()=>{ if(location.hash.startsWith('#/graph')) paintGraph(); else if(!location.hash||location.hash==='#/') home(); });
 const query=()=>q.value.trim().toLowerCase();
 const matches=n=>{const s=query(); if(!s) return true; return (n.title+' '+n.summary+' '+n.tags.join(' ')+' '+n.cs_topics.join(' ')+' '+(n.interview?n.interview.stack.map(x=>x.tech).join(' '):'')).toLowerCase().includes(s);};
 window.addEventListener('hashchange',route);
+let filter='all';
 function route(){ const h=location.hash||'#/'; window.scrollTo(0,0);
+  document.querySelectorAll('.top nav a').forEach(a=>a.classList.toggle('on', a.dataset.nav==='graph'?h.startsWith('#/graph'):!h.startsWith('#/graph')));
   let m; if((m=h.match(/^#\/p\/(.+)$/))) return project(decodeURIComponent(m[1]));
   if((m=h.match(/^#\/c\/(.+)$/))) return concept(decodeURIComponent(m[1]));
   if(h.startsWith('#/graph')) return graph();
   home(); }
 
-// 홈
+// 기술 문자열 정리: 괄호·경로 제거, 구분자로 쪼개 짧은 이름만
+function techNames(p){ if(!p.interview) return []; const out=[]; for(const s of p.interview.stack){ let t=s.tech.replace(/`/g,'').replace(/\([^)]*\)/g,'').replace(/\[[^\]]*\]/g,''); for(let x of t.split(/[·,+/]|\s{2,}| \+ /)){ x=x.trim(); if(!x||x.length>24||/^(및|등)$/.test(x)) continue; if(!out.includes(x)) out.push(x); } } return out; }
+const TECH_CATS = [
+  ['블록체인·신원', /solidity|sui|move|walrus|seal|viem|ethers|erc|did|vc\b|jwt|jose|sepolia|온체인|체인|지갑|wallet/i],
+  ['LLM·에이전트', /gpt|openai|claude|hyperclova|hcx|clova|langgraph|langchain|llm|assemblyai|embedding|bge|prompt|agent|에이전트|structured/i],
+  ['데이터 분석', /pandas|numpy|parquet|통계|trend|트렌드|bigkinds|빅카인즈|datalab|데이터랩|csv|matplotlib|공공데이터|dart|공시|api 허브|지수/i],
+  ['웹·앱', /next|react|vite|typescript|fastapi|express|vercel|expo|native|node|trigger|supabase|prisma|postgres|sqlite|redis|three|mediapipe|web|tailwind|python/i],
+];
+function primaryCat(p){ const names=techNames(p).join(' '); let best=['기타',0]; for(const [c,re] of TECH_CATS){ const n=(names.match(new RegExp(re.source,'gi'))||[]).length; if(n>best[1]) best=[c,n]; } return best[0]; }
 function home(){
-  const list=projects.filter(matches);
-  const cs=DATA.nodes.filter(n=>n.type==='concept');
-  const known=cs.filter(c=>stateOf(c.id)==='know').length;
-  const nq=DATA.nodes.reduce((s,n)=>s+((n.study&&n.study.questions.length)||0)+((n.interview&&n.interview.questions.length)||0),0);
+  const cs=DATA.nodes.filter(n=>n.type==='concept'); const known=cs.filter(c=>stateOf(c.id)==='know').length;
+  const list=projects.filter(matches).filter(p=>filter==='all'||(filter==='ready'?readiness(p).pct>=70:readiness(p).pct<70));
+  const order=[...TECH_CATS.map(x=>x[0]),'기타'];
+  const groups=new Map(); list.forEach(p=>{const c=primaryCat(p); if(!groups.has(c)) groups.set(c,[]); groups.get(c).push(p);});
   app.innerHTML=`
-    <h1>내가 한 해커톤, 면접에서 설명할 수 있나</h1>
-    <p class="lead">프로젝트를 고르면 기술 스택을 왜 썼는지, 무엇을 고민했는지, 어떤 질문이 나올지 순서대로 보입니다.</p>
-    <div class="stats">
-      <div class="stat"><b>${projects.length}</b><span>프로젝트</span></div>
-      <div class="stat"><b>${cs.length}</b><span>배운 개념</span></div>
-      <div class="stat"><b>${nq}</b><span>예상 질문</span></div>
-      <div class="stat"><b>${cs.length?Math.round(known/cs.length*100):0}%</b><span>설명 가능한 개념</span></div>
+    <h1 class="page-title">프로젝트</h1>
+    <p class="page-sub">해커톤 ${projects.length}개 · 설명 가능한 개념 ${known}/${cs.length}</p>
+    <div class="filters">
+      <button data-f="all" aria-pressed="${filter==='all'}">전체</button>
+      <button data-f="todo" aria-pressed="${filter==='todo'}">아직 준비 안 됨</button>
+      <button data-f="ready" aria-pressed="${filter==='ready'}">준비도 70% 이상</button>
     </div>
-    <div class="grid">${list.map(p=>{const r=readiness(p); const stack=(p.interview?p.interview.stack.map(s=>s.tech):[]).slice(0,5);
-      return `<a class="card pcard" href="#/p/${p.id}">
-        <div class="when">${esc((p.created||'').slice(0,7))}${p.interview?'':' · 면접 준비 절 없음'}</div>
-        <h3>${esc(p.title)}</h3>
-        <p>${esc(p.interview&&p.interview.intro||p.summary)}</p>
-        <div class="chips">${stack.map(s=>`<span class="chip">${esc(s)}</span>`).join('')}</div>
-        <div class="prog"><div class="bar"><i style="width:${r.pct}%;background:var(--know)"></i></div><span>준비도 ${r.pct}% · 개념 ${r.known}/${r.total}</span></div>
-      </a>`;}).join('')}</div>
-    ${list.length?'':'<div class="empty">검색 결과가 없습니다.</div>'}`;
+    ${order.filter(c=>groups.has(c)).map(c=>`
+      <section class="pgroup"><h2 class="ghead">${esc(c)}<span class="n">${groups.get(c).length}</span></h2>
+      <div class="list">${groups.get(c).map(p=>{const r=readiness(p); const [c1,c2]=pal(p.id); const tech=techNames(p).slice(0,4);
+        return `<a class="item" href="#/p/${p.id}">
+          <div class="thumb" style="--c1:${c1};--c2:${c2}">${esc(shortTitle(p.title)).slice(0,14)}</div>
+          <div>
+            <h3>${esc(p.title)}${r.pct>=70?'<span class="badge">준비됨</span>':''}</h3>
+            <div class="row"><span class="when">${esc((p.created||'').slice(0,7))}</span>${tech.map(t=>`<span class="chip">${esc(t)}</span>`).join('')}${tech.length?'':'<span class="chip">면접 준비 절 없음</span>'}</div>
+            <div class="prog"><div class="bar"><i style="width:${r.pct}%"></i></div><span>${r.pct}%</span></div>
+          </div></a>`;}).join('')}</div></section>`).join('')}
+    ${list.length?'':'<p class="page-sub">조건에 맞는 프로젝트가 없습니다.</p>'}`;
+  app.querySelectorAll('.filters button').forEach(b=>b.onclick=()=>{filter=b.dataset.f;home();});
 }
 
-// 질문 카드
-function qcards(list, prefix){ return list.map((x,i)=>`
-  <div class="q" id="${prefix}${i}">
-    <div class="qh" onclick="this.parentElement.classList.toggle('open')"><span class="lv">${esc(x.level||'Q')}</span><span class="qt">${inline(x.q)}</span><span class="tg">답 보기</span></div>
+function qcards(list){ return `<div class="qlist">${list.map((x,i)=>`
+  <div class="q">
+    <div class="qh" role="button" tabindex="0" onclick="this.parentElement.classList.toggle('open')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click();}"><span class="lv">${esc(x.level||'Q')}</span><span class="qt">${inline(x.q)}</span><span class="tg">답</span></div>
     <div class="qa"><span class="lbl">답</span><p>${inline(x.a)}</p>
       ${x.tail?`<span class="lbl">꼬리질문</span><p>${inline(x.tail)}</p>`:''}
-      ${x.wrong?`<span class="lbl">틀리기 쉬운 답</span><p>${inline(x.wrong)}</p>`:''}</div>
-  </div>`).join(''); }
-function rateBox(key, label){ const st=stateOf(key); return `<div class="card rate" data-key="${key}"><span>${label}</span>
+      ${x.wrong?`<span class="lbl">틀리기 쉬운 답</span><p class="wrong">${inline(x.wrong)}</p>`:''}</div>
+  </div>`).join('')}</div>`; }
+function rateBox(key, label){ const st=stateOf(key); return `<div class="rate" data-key="${key}"><span>${label}</span>
   <button class="dunno" data-st="dunno" aria-pressed="${st==='dunno'}">모름</button>
   <button class="half" data-st="half" aria-pressed="${st==='half'}">애매함</button>
   <button class="know" data-st="know" aria-pressed="${st==='know'}">설명 가능</button></div>`; }
-function bindRate(){ app.querySelectorAll('.rate button').forEach(b=>b.onclick=()=>{ setState(b.parentElement.dataset.key,b.dataset.st); route(); }); }
+function bindRate(){ app.querySelectorAll('.rate button').forEach(b=>b.onclick=()=>{ const y=window.scrollY; setState(b.parentElement.dataset.key,b.dataset.st); route(); window.scrollTo(0,y); }); }
+function sec(n, title, desc, body){ return `<section class="sec" id="s${n}"><h2><span class="num">${n}.</span>${esc(title)}</h2>${desc?`<p class="desc">${desc}</p>`:''}${body}</section>`; }
+function tabbar(items){ return `<nav class="tabbar" id="tabbar" aria-label="절 이동">${items.map(([n,t])=>`<a href="#s${n}" data-s="s${n}" onclick="event.preventDefault();document.getElementById('s${n}').scrollIntoView({behavior:'smooth'})">${n}. ${esc(t)}</a>`).join('')}</nav>`; }
+function spy(){ const tabs=[...document.querySelectorAll('#tabbar a')]; if(!tabs.length) return; const secs=tabs.map(a=>document.getElementById(a.dataset.s));
+  const on=()=>{ let cur=secs[0]; for(const s of secs){ if(s && s.getBoundingClientRect().top<=120) cur=s; } tabs.forEach(a=>a.classList.toggle('on', a.dataset.s===cur.id)); };
+  window.removeEventListener('scroll', window.__spy); window.__spy=on; window.addEventListener('scroll',on,{passive:true}); on(); }
 
-// 프로젝트
 function project(id){
   const p=byId.get(id); if(!p||p.type!=='project'){home();return;}
-  const iv=p.interview; const cs=conceptsOf(id); const r=readiness(p);
+  const iv=p.interview; const cs=conceptsOf(id); const r=readiness(p); const [c1,c2]=pal(id);
+  const tabs=iv?[[1,'개요'],[2,'기술 스택'],[3,'고민한 점'],[4,'예상 질문'],[5,'솔직하게'],[6,'배운 개념']]:[[1,'개요'],[2,'배운 개념']];
   app.innerHTML=`
-    <div class="crumb"><a href="#/">프로젝트</a> › ${esc(p.title)}</div>
-    <div class="hero"><div style="flex:1;min-width:260px">
-      <h1>${esc(p.title)}</h1>
-      <div class="meta">${esc(p.created||'')} · <a href="${p.url}" target="_blank" rel="noopener">위키 원문</a>${p.repo&&p.repo!=='없음'?` · <a href="${esc(p.repo)}" target="_blank" rel="noopener">코드 저장소</a>`:''}${p.tags.length?` · ${p.tags.map(t=>'#'+esc(t)).join(' ')}`:''}</div>
-      <div class="prog"><div class="bar"><i style="width:${r.pct}%;background:var(--know)"></i></div><span>준비도 ${r.pct}%</span></div>
-      ${iv&&iv.intro?`<div class="intro">${inline(iv.intro)}</div>`:`<p class="lead" style="margin-top:12px">${esc(p.summary)}</p>`}
-    </div></div>
+    <div class="hero">
+      <div class="banner" style="--c1:${c1};--c2:${c2}"><div class="kind">Hackathon · ${esc(p.created||'')}</div><h1>${esc(p.title)}</h1></div>
+      <div class="info">
+        <dl class="kv">
+          <dt>시기</dt><dd>${esc(p.created||'자료에 없음')}</dd>
+          <dt>준비도</dt><dd>${r.pct}%<span class="badge ${r.pct>=70?'':'gray'}">${r.pct>=70?'준비됨':'준비 중'}</span> <span style="color:var(--muted);font-size:13px">개념 ${r.known}/${r.total} 설명 가능</span></dd>
+          ${p.tags.length?`<dt>태그</dt><dd style="color:var(--muted)">${p.tags.map(t=>'#'+esc(t)).join(' ')}</dd>`:''}
+        </dl>
+        <div class="actions">${p.repo&&p.repo!=='없음'?`<a class="btn" href="${esc(p.repo)}" target="_blank" rel="noopener">코드 저장소</a>`:''}<a class="btn primary" href="${p.url}" target="_blank" rel="noopener">위키 원문</a></div>
+      </div>
+      ${iv&&iv.intro?`<div class="intro">${inline(iv.intro)}</div>`:''}
+    </div>
+    ${tabbar(tabs)}
+    ${sec(1,'개요','이 프로젝트가 무엇이었는지 30초 안에 말할 수 있어야 합니다.', `<div class="md">${md(overview(p.body))}</div>`)}
     ${iv?`
-    <h2>기술 스택, 왜 썼나<span class="n">${iv.stack.length}</span></h2>
-    <div class="card tblwrap"><table class="stack"><colgroup><col class="c1"><col class="c2"><col class="c3"><col class="c4"></colgroup><thead><tr><th>기술</th><th>역할</th><th>왜 이걸 썼나</th><th>대안과 포기한 것</th></tr></thead><tbody>
-      ${iv.stack.map(s=>`<tr><td>${inline(s.tech)}</td><td>${inline(s.role)}</td><td>${/자료에 없음/.test(s.why)?`<span class="missing">${esc(s.why)} — 직접 채울 것</span>`:inline(s.why)}</td><td>${inline(s.alt)}</td></tr>`).join('')}
-    </tbody></table></div>
-    <h2>고민한 점<span class="n">${iv.concerns.length}</span></h2>
-    <ul class="clean">${iv.concerns.map(c=>`<li>${inline(c)}</li>`).join('')}</ul>
-    <h2>예상 질문<span class="n">프로젝트 전체 ${iv.questions.length}</span></h2>
-    ${qcards(iv.questions,'pq')}
-    ${rateBox('p:'+id,'이 프로젝트, 지금 면접에서 5분 설명할 수 있나?')}
-    ${iv.honest.length?`<h2>솔직하게 말할 것</h2><ul class="clean">${iv.honest.map(c=>`<li>${inline(c)}</li>`).join('')}</ul>`:''}
-    `:`<div class="empty" style="margin-top:20px">이 프로젝트에는 아직 면접 준비 절이 없습니다. 위키 문서에 <code>## 면접 준비</code> 절을 채우면 여기에 표시됩니다.</div>`}
-    <h2>이 프로젝트에서 배운 개념<span class="n">${cs.length}</span></h2>
-    <div class="grid">${cs.map(c=>`<a class="card ccard" href="#/c/${c.id}">
-      <div class="t"><span class="dot" style="background:var(--${c.type})"></span>${esc(c.title)}<span class="st ${stateOf(c.id)}" title="${STATE[stateOf(c.id)]||'기록 없음'}" style="margin-left:auto"></span></div>
-      <div class="s">${esc(c.summary)}</div>
-      <div class="m">${c.cs_topics.length?c.cs_topics.map(esc).join(' · ')+' · ':''}${c.study?c.study.questions.length+'문':''}${c.type==='lesson'?'교훈':''}</div>
-    </a>`).join('')}</div>
-    <details class="raw"><summary>위키 문서 전문 보기</summary><div class="md card" style="margin-top:10px">${md(p.body)}</div></details>`;
-  bindRate();
+    ${sec(2,'기술 스택과 선택 이유','면접관은 무엇을 썼는지가 아니라 왜 그것이었는지를 묻습니다. 비어 있는 칸은 원자료에 근거가 없어 남긴 자리입니다.',
+      `<table class="t"><colgroup><col style="width:22%"><col style="width:16%"><col style="width:36%"><col style="width:26%"></colgroup><thead><tr><th>기술</th><th>역할</th><th>왜 이걸 썼나</th><th>대안과 포기한 것</th></tr></thead><tbody>
+      ${iv.stack.map(s=>`<tr><td>${inline(s.tech)}</td><td>${inline(s.role)}</td><td>${/자료에 없음/.test(s.why)?`<span class="missing"><b>비어 있음</b> · 직접 채울 것</span>`:inline(s.why)}</td><td>${/자료에 없음/.test(s.alt)?`<span class="missing">${esc(s.alt)}</span>`:inline(s.alt)}</td></tr>`).join('')}
+      </tbody></table>`)}
+    ${sec(3,'고민한 점','선택지가 있었고 근거를 들어 골랐다는 것을 보여주는 대목입니다. 꼬리질문은 대부분 여기서 나옵니다.', `<ol class="plain">${iv.concerns.map((c,i)=>`<li><span class="n">${i+1}</span><div>${inline(c)}</div></li>`).join('')}</ol>`)}
+    ${sec(4,'예상 질문','L1 개념 → L2 판단 → L3 한계 순서입니다. 답을 보기 전에 소리 내어 답해보세요.', qcards(iv.questions)+rateBox('p:'+id,'이 프로젝트, 지금 면접에서 5분 설명할 수 있나?'))}
+    ${sec(5,'솔직하게 말할 것','부풀리면 꼬리질문에 무너지는 지점입니다. 먼저 인정하고 배운 점으로 돌리는 편이 강합니다.', `<ul class="plain">${iv.honest.map((c,i)=>`<li><span class="n">!</span><div>${inline(c)}</div></li>`).join('')}</ul>`)}
+    ${sec(6,'이 프로젝트에서 배운 개념','각 개념 페이지에 확인 질문이 있습니다. 개념을 설명할 수 있으면 프로젝트 준비도가 올라갑니다.', conceptGrid(cs))}
+    `:`
+    <div class="hint">이 프로젝트에는 아직 <b>면접 준비</b> 절이 없습니다. 위키 문서에 <code>## 면접 준비</code>를 채우면 기술 스택·고민·예상 질문이 여기에 표시됩니다.</div>
+    ${sec(2,'이 프로젝트에서 배운 개념','', conceptGrid(cs))}`}
+    <details class="raw"><summary>위키 문서 전문 보기</summary><div class="md">${md(p.body)}</div></details>`;
+  bindRate(); spy();
 }
+function conceptGrid(cs){ return cs.length?`<div class="cgrid">${cs.map(c=>`<a class="ccard" href="#/c/${c.id}">
+  <div class="t"><span class="dot" style="background:var(--${c.type})"></span>${esc(c.title)}<span class="st ${stateOf(c.id)}" title="${STATE[stateOf(c.id)]||'기록 없음'}" style="margin-left:auto"></span></div>
+  <div class="s">${esc(c.summary)}</div>
+  <div class="m">${c.cs_topics.length?c.cs_topics.map(esc).join(' · ')+' · ':''}${c.study?c.study.questions.length+'문항':''}${c.type==='lesson'?'교훈':''}</div>
+</a>`).join('')}</div>`:'<p class="page-sub">연결된 개념 문서가 없습니다.</p>'; }
 
-// 개념
 function concept(id){
   const c=byId.get(id); if(!c||c.type==='project'){home();return;}
-  const s=c.study; const from=projectsOf(id); const st=stateOf(id);
-  const back=from[0];
+  const s=c.study; const from=projectsOf(id); const back=from[0]; const [c1,c2]=pal(back?back.id:id);
+  const tabs=s?[[1,'설명할 것'],[2,'바탕 CS'],[3,'확인 질문'],[4,'더 파볼 것']]:[[1,'본문']];
   app.innerHTML=`
-    <div class="crumb"><a href="#/">프로젝트</a>${back?` › <a href="#/p/${back.id}">${esc(back.title)}</a>`:''} › ${esc(c.title)}</div>
-    <h1>${esc(c.title)}</h1>
-    <div class="hero"><div class="meta" style="margin:0 0 14px">${KIND[c.type]}${c.group?' · '+esc(c.group):''}${c.cs_topics.length?' · CS: '+c.cs_topics.map(esc).join(', '):''} · <a href="${c.url}" target="_blank" rel="noopener">위키 원문</a></div></div>
-    ${from.length?`<div class="chips" style="margin-bottom:18px">${from.map(p=>`<a class="chip link" href="#/p/${p.id}"><span class="dot" style="background:var(--project)"></span>${esc(p.title)}</a>`).join('')}</div>`:''}
+    <div class="hero">
+      <div class="banner" style="--c1:${c1};--c2:${c2}"><div class="kind">${KIND[c.type]}${c.group?' · '+esc(c.group):''}</div><h1>${esc(c.title)}</h1></div>
+      <div class="info">
+        <dl class="kv">
+          ${from.length?`<dt>출처 프로젝트</dt><dd><div class="chips">${from.map(p=>`<a class="chip link" href="#/p/${p.id}"><span class="dot" style="background:var(--project)"></span>${esc(shortTitle(p.title))}</a>`).join('')}</div></dd>`:''}
+          ${c.cs_topics.length?`<dt>CS 과목</dt><dd>${c.cs_topics.map(esc).join(' · ')}</dd>`:''}
+          <dt>이해도</dt><dd>${STATE[stateOf(id)]||'기록 없음'}</dd>
+        </dl>
+        <div class="actions"><a class="btn primary" href="${c.url}" target="_blank" rel="noopener">위키 원문</a></div>
+      </div>
+      ${c.summary?`<div class="intro">${esc(c.summary)}</div>`:''}
+    </div>
+    ${tabbar(tabs)}
     ${s?`
-      ${s.explain.length?`<h2>설명할 수 있어야 하는 것</h2><ul class="clean">${s.explain.map(x=>`<li>${inline(x)}</li>`).join('')}</ul>`:''}
-      ${s.cs.length?`<h2>바탕이 되는 CS</h2><ul class="clean">${s.cs.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`:''}
-      <h2>확인 질문<span class="n">${s.questions.length}</span></h2>
-      ${qcards(s.questions,'cq')}
-      ${rateBox(id,'이 개념, 면접에서 설명할 수 있나?')}
-      ${s.further.length?`<h2>더 파볼 것</h2><ul class="clean">${s.further.map(f=>`<li>${f.url?`<a href="${esc(f.url)}" target="_blank" rel="noopener">${esc(f.title)}</a>`:esc(f.title)}${f.note?' — '+esc(f.note):''}</li>`).join('')}</ul>`:''}
-      <details class="raw"><summary>위키 문서 전문 보기</summary><div class="md card" style="margin-top:10px">${md(c.body)}</div></details>
-    `:`<div class="md card">${md(c.body)}</div>`}`;
-  bindRate();
+    ${sec(1,'설명할 수 있어야 하는 것','이 세 문장을 자기 말로 할 수 있으면 이 개념은 끝난 겁니다.', `<ol class="plain">${s.explain.map((x,i)=>`<li><span class="n">${i+1}</span><div>${inline(x)}</div></li>`).join('')}</ol>`)}
+    ${sec(2,'바탕이 되는 CS','이 개념이 어느 과목의 어느 장과 이어지는지.', `<ul class="plain">${s.cs.map(x=>`<li><span class="n">·</span><div>${esc(x)}</div></li>`).join('')}</ul>`)}
+    ${sec(3,'확인 질문','답을 보기 전에 먼저 답해보고, 아래에서 이해도를 표시하세요.', qcards(s.questions)+rateBox(id,'이 개념, 면접에서 설명할 수 있나?'))}
+    ${sec(4,'더 파볼 것','직접 열어 확인한 자료만 있습니다.', s.further.length?`<ul class="plain">${s.further.map(f=>`<li><span class="n">→</span><div>${f.url?`<a href="${esc(f.url)}" target="_blank" rel="noopener" style="text-decoration:underline;text-underline-offset:3px">${esc(f.title)}</a>`:esc(f.title)}${f.note?`<div style="color:var(--muted);font-size:13px">${esc(f.note)}</div>`:''}</div></li>`).join('')}</ul>`:'<p class="page-sub">없음</p>')}
+    <details class="raw"><summary>위키 문서 전문 보기</summary><div class="md">${md(c.body)}</div></details>
+    `:sec(1,'본문','', `<div class="md">${md(c.body)}</div>`)}`;
+  bindRate(); spy();
 }
 
-// 관계도
 let nodeSel=null, linkSel=null, selected=null;
 function graph(){
-  app.innerHTML=`<div class="crumb"><a href="#/">프로젝트</a> › 관계도</div><h1>문서 관계도</h1><p class="lead">프로젝트(파랑)와 개념(초록), 교훈(주황)이 어떻게 이어지는지. 노드를 누르면 해당 페이지로 갑니다.</p><div id="graphbox"><svg></svg><div id="tip"></div></div>`;
+  app.innerHTML=`<h1 class="page-title">문서 관계도</h1><p class="page-sub">프로젝트(보라)와 개념(초록), 교훈(주황)이 어떻게 이어지는지. 노드를 누르면 해당 페이지로 갑니다.</p><div id="graphbox"><svg></svg><div id="tip"></div></div>`;
   const box=document.getElementById('graphbox'), svg=d3.select(box).select('svg'); const W=box.clientWidth,H=box.clientHeight;
   const degree=new Map(DATA.nodes.map(n=>[n.id,nb.get(n.id).size]));
   const nodes=DATA.nodes.map(n=>({id:n.id,type:n.type,title:n.title,summary:n.summary})); const links=DATA.links.map(l=>({source:l.source,target:l.target}));
@@ -537,7 +593,7 @@ def main() -> int:
     data = build()
     OUT.parent.mkdir(parents=True, exist_ok=True)
     html = (TEMPLATE
-            .replace("__DATA__", json.dumps(data, ensure_ascii=False).replace("</", "<\\/"))
+            .replace("__DATA__", json.dumps(data, ensure_ascii=False).replace("<", "\\u003c"))
             .replace("__BUILT__", data["built"]))
     OUT.write_text(html, encoding="utf-8")
     ns = sum(1 for n in data["nodes"] if n["study"])
