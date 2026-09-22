@@ -586,7 +586,7 @@ function spy(initial){ app.querySelectorAll('#tabbar a').forEach(a=>a.onclick=e=
 // ---- 아키텍처 그림: 좌표를 직접 계산해 상자·선을 같은 숫자로 그린다 ----
 const LAYERS=[['client','클라이언트'],['edge','엣지 · CDN'],['server','서버'],['worker','워커 · 배치'],['data','데이터'],['chain','체인'],['external','외부 서비스'],['ops','운영']];
 const L = {colW:150, colGap:72, nodeH:126, nodeGap:26, padX:28, padTop:46, padBottom:24, grpPad:12, grpHead:28};
-function layout(a){ const cols=[]; const byLayer=new Map(); const colIdx=Object.fromEntries(LAYERS.map(([k],i)=>[k,i])); const present=LAYERS.filter(([k])=>a.nodes.some(n=>n.layer===k)).map(([k])=>k); const ci=k=>present.indexOf(k); const byName=Object.fromEntries(a.nodes.map(n=>[n.name,n])); const topLanes=a.edges.filter(e=>byName[e.from]&&byName[e.to]&&ci(byName[e.to].layer)-ci(byName[e.from].layer)>1).length; const botLanes=a.edges.filter(e=>byName[e.from]&&byName[e.to]&&ci(byName[e.to].layer)-ci(byName[e.from].layer)<0).length; L.padTop=46+topLanes*12; L.padBottom=24+botLanes*12; a.nodes.forEach(n=>{ if(!byLayer.has(n.layer)) byLayer.set(n.layer,[]); byLayer.get(n.layer).push(n); });
+function layout(a){ const cols=[]; const byLayer=new Map(); const colIdx=Object.fromEntries(LAYERS.map(([k],i)=>[k,i])); const present=LAYERS.filter(([k])=>a.nodes.some(n=>n.layer===k)).map(([k])=>k); const ci=k=>present.indexOf(k); const byName=Object.fromEntries(a.nodes.map(n=>[n.name,n])); const topLanes=a.edges.filter(e=>byName[e.from]&&byName[e.to]&&ci(byName[e.to].layer)-ci(byName[e.from].layer)>1).length; const botLanes=a.edges.filter(e=>byName[e.from]&&byName[e.to]&&ci(byName[e.to].layer)-ci(byName[e.from].layer)<0).length; L.padTop=46+topLanes*18; L.padBottom=24+botLanes*18; a.nodes.forEach(n=>{ if(!byLayer.has(n.layer)) byLayer.set(n.layer,[]); byLayer.get(n.layer).push(n); });
   LAYERS.filter(([k])=>byLayer.has(k)).forEach(([k,label],ci)=>{ const items=byLayer.get(k); const order=[]; const seen=new Set(); items.forEach(n=>{ if(n.group){ if(seen.has(n.group)) return; seen.add(n.group); order.push({group:n.group, items:items.filter(x=>x.group===n.group)}); } else order.push({items:[n]}); });
     const x=L.padX+ci*(L.colW+L.colGap); let y=L.padTop; const placed=[]; const groups=[];
     order.forEach(o=>{ if(o.group){ const gy=y; y+=L.grpHead; o.items.forEach(n=>{ placed.push({n,x:x+L.grpPad,y,w:L.colW-2*L.grpPad,h:L.nodeH}); y+=L.nodeH+L.nodeGap; }); y-=L.nodeGap; groups.push({name:o.group,x,y:gy,w:L.colW,h:y-gy+L.grpPad}); y+=L.grpPad+L.nodeGap+8; } else { const n=o.items[0]; placed.push({n,x,y,w:L.colW,h:L.nodeH}); y+=L.nodeH+L.nodeGap; } });
@@ -614,7 +614,7 @@ function routes(a,lay){ const pos=lay.pos; const colX=lay.cols.map(c=>c.x); cons
   E.forEach(r=>{ if(r.kind==='adj') gapX(r.ca,r); if(r.kind==='top'){ gapX(r.ca,r); gapX(r.cb-1,r); } if(r.kind==='bottom'){ gapX(r.ca-1,r); gapX(r.cb,r); } });
   const chan=(gi,r)=>{ const list=gapUse[gi]||[r]; const n=list.length; const idx=Math.max(0,list.indexOf(r)); const x0=colX[gi]+L.colW, w=L.colGap; return x0+w*(idx+1)/(n+1); };
   let topN=0, botN=0; E.forEach(r=>{ if(r.kind==='top') r.lane=topN++; if(r.kind==='bottom') r.lane=botN++; });
-  const topY=k=>18+ (topN-1-k)*12 + 10; const botY=k=>lay.H-6-(k)*12;
+  const topY=k=>26+(topN-1-k)*18; const botY=k=>lay.H-10-(k)*18;
   const out=[];
   E.forEach(r=>{ const {A,B}=r; const po=(r.port&&r.port.out)||0, pi=(r.port&&r.port.in)||0; let pts=[];
     if(r.kind==='adj'){ const x1=A.x+A.w, y1=A.ly+po, x2=B.x, y2=B.ly+pi, cx=chan(r.ca,r); pts=[[x1,y1],[cx,y1],[cx,y2],[x2,y2]]; }
@@ -624,7 +624,7 @@ function routes(a,lay){ const pos=lay.pos; const colX=lay.cols.map(c=>c.x); cons
     // 가장 긴 수평 구간에 번호와 라벨
     let best=null; for(let k=0;k<pts.length-1;k++){ const [x1,y1]=pts[k],[x2,y2]=pts[k+1]; if(Math.abs(y1-y2)<0.5 && (!best||Math.abs(x2-x1)>best.len)) best={len:Math.abs(x2-x1), x:(x1+x2)/2, y:y1}; }
     if(!best){ const [x1,y1]=pts[0],[x2,y2]=pts[pts.length-1]; best={x:(x1+x2)/2,y:(y1+y2)/2,len:0,vertical:true}; }
-    out.push({i:r.i, pts, mid:best, label:r.e.label||''}); });
+    out.push({i:r.i, pts, mid:best, label:(r.kind==='adj'||r.kind==='same')?(r.e.label||''):'', kind:r.kind}); });
   return out; }
 function drawWires(){ const box=app.querySelector('.arch'); const svg=box&&box.querySelector('svg.wires'); const a=window.__arch, lay=window.__lay; if(!box||!svg||!a||!lay) return;
   while(svg.firstChild) svg.removeChild(svg.firstChild); const NS='http://www.w3.org/2000/svg'; const el=(t,at)=>{const e=document.createElementNS(NS,t); for(const k in at) e.setAttribute(k,at[k]); return e;};
