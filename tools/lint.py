@@ -98,6 +98,28 @@ def deterministic() -> list[str]:
 
     for link in indexed - names:
         issues.append(f"인덱스에 있으나 파일 없음: [[{link}]]")
+
+    # concept 문서의 학습 절 (wiki-rules.md 11절)
+    for p in (WIKI / "concepts").glob("*.md"):
+        rel = p.relative_to(ROOT).as_posix()
+        text = read(p)
+        fm = frontmatter(text) or {}
+        m = re.search(r"^## 학습\s*$", text, flags=re.M)
+        if not m:
+            issues.append(f"학습 절 없음: {rel}")
+            continue
+        study = text[m.end():]
+        nq = len(re.findall(r"\*\*Q:\*\*", study))
+        na = len(re.findall(r"\*\*A:\*\*", study))
+        if nq < 3:
+            issues.append(f"확인 질문 {nq}개 (최소 3): {rel}")
+        if na != nq:
+            issues.append(f"Q {nq}개 / A {na}개 불일치: {rel}")
+        for key in ("### CS 주제", "### 설명할 수 있어야 하는 것", "### 확인 질문", "### 더 파볼 것"):
+            if key not in study:
+                issues.append(f"학습 절 소제목 누락 [{key}]: {rel}")
+        if not fm.get("cs_topics"):
+            issues.append(f"머리말 cs_topics 없음: {rel}")
     return issues
 
 
@@ -146,11 +168,12 @@ def llm_review(model: str, effort: str) -> str:
             f"## 문서 {p.relative_to(ROOT).as_posix()}\n{t[:8000]}\n\n" + "\n".join(srcs)
         )
 
-    prompt = f"""너는 개인 지식 위키의 점검자다. 아래 자료를 읽고 다음 세 가지만 보고하라. 없는 문제를 만들지 마라.
+    prompt = f"""너는 개인 지식 위키의 점검자다. 아래 자료를 읽고 다음 네 가지만 보고하라. 없는 문제를 만들지 마라.
 
 A. 중복 개념: concept 문서들 중 같은 개념을 다루어 병합해야 할 쌍. 서로 다른 개념이면 보고하지 않는다. 각 쌍마다 "왜 같은가" 한 문장.
 B. 모순: 위키 문서들 사이, 또는 한 문서 안에서 서로 어긋나는 사실 서술. 문서명과 어긋나는 두 문장을 인용.
 C. 원자료 대비 누락/왜곡: 최근 넣은 문서가 원자료의 중요한 사실을 빠뜨렸거나 다르게 옮긴 곳. 원자료 문장과 위키 문장을 나란히.
+D. 학습 절 검증: 최근 넣은 concept 문서의 `## 학습` 확인 질문에서, 답(A)이 문서 본문이나 원자료에서 뒷받침되지 않는 것. 질문 번호와 뒷받침 안 되는 주장을 인용. 또 질문이 "면접 프로젝트 딥다이브" 수준(왜 그 선택인가, 대안, 깨지는 조건)이 아니라 단순 용어 정의에 그치는 경우도 지적.
 
 출력은 한국어 마크다운 불릿. 항목이 없으면 "없음"이라고만 쓴다. 자동 수정 제안은 하되, 수정 자체를 지시하지 마라.
 

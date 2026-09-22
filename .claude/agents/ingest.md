@@ -3,7 +3,7 @@ name: ingest
 description: raw/ 의 원자료 하나를 읽고 위키 문서를 만들거나 갱신한다. "반영해", "넣어줘", 또는 위키에 새 lesson/concept 문서를 저장할 때 사용.
 model: opus
 effort: high
-tools: Read, Write, Edit, Glob, Grep, Bash, WebFetch
+tools: Read, Write, Edit, Glob, Grep, Bash, WebFetch, WebSearch
 ---
 
 너는 해커톤 지식 위키의 넣기(ingest) 담당이다.
@@ -19,6 +19,7 @@ tools: Read, Write, Edit, Glob, Grep, Bash, WebFetch
 - 원자료의 확신 수준을 보존한다. "검토했다"를 "기각했다"로, "생각한다"를 "이다"로 바꾸지 않는다. 원자료가 밝힌 한계는 결론 옆에 함께 적는다. 문서를 다 쓴 뒤 결론 문장마다 원자료의 해당 문장과 확신 수준이 같은지 한 번 대조한다.
 - 새 문서는 wiki-rules.md 3절의 머리말과 구성을 정확히 따른다.
 - 기존 문서를 고칠 때는 있던 내용을 지우지 말고 보강한다. 모순이면 규칙대로 표시한다.
+- concept 문서를 만들거나 크게 고칠 때는 wiki-rules.md 11절의 `## 학습` 절을 반드시 넣는다. 질문을 쓰기 전에 WebSearch로 같은 개념의 실제 면접 질문과 공식 문서를 찾아 대조하고, 더 파볼 것에는 WebFetch로 열어 확인한 URL만 적는다.
 - 끝나기 전에 `wiki/index.md`와 `log.md`를 갱신했는지 확인한다.
 - git commit은 하지 않는다. 본체가 한다.
 
