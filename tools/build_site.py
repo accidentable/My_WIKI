@@ -240,7 +240,7 @@ TEMPLATE = r"""<!doctype html>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>해커톤 면접 노트</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Manrope:wght@500;700&family=Nanum+Pen+Script&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Manrope:wght@500;700&display=swap" rel="stylesheet">
 <style>
 :root{
   --bg:#ffffff; --ink:#202124; --muted:#666666; --line:#e5e5e5; --soft:#f7f7f8; --head:#2b2f3a;
@@ -391,43 +391,25 @@ section.sec + section.sec{border-top:0}
 .secnav a{font-size:13px;color:var(--muted);padding:10px 0;display:inline-flex;align-items:center;gap:6px}
 .secnav a:hover{color:var(--ink)}
 
-/* 손그림 모드 */
+/* 아키텍처 툴바 */
 .archbar{display:flex;gap:8px;align-items:center;margin:0 0 10px;flex-wrap:wrap}
-.archbar .seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
-.archbar .seg button{border:0;background:#fff;padding:6px 12px;font-size:12px;color:var(--muted);min-height:32px}
-.archbar .seg button[aria-pressed="true"]{background:var(--ink);color:#fff}
 .archbar .dl{margin-left:auto;font-size:12px;color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:6px 12px;background:#fff;min-height:32px}
-.arch.sketch{border:0;background:#fff;padding:26px 24px}
-.arch.sketch .flow{gap:64px}
-.arch.sketch .col{gap:34px}
-.arch.sketch .lname{font-family:"Nanum Pen Script",cursive;font-size:18px;letter-spacing:0;text-transform:none;color:#555}
-.arch.sketch .nd{width:128px;padding:10px 6px 8px;min-height:118px}
-.arch.sketch .nd .logo{width:48px;height:48px;margin-bottom:6px}
-.arch.sketch .nd .logo img{max-width:44px;max-height:44px}
-.arch.sketch .nd .bn{font-family:"Nanum Pen Script",cursive;font-size:21px;font-weight:400;line-height:1.15;color:#1e1e1e}
-.arch.sketch .nd .bt{font-family:"Nanum Pen Script",cursive;font-size:15px;color:#666;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.arch.sketch .nd .bh{display:none}
-.arch.sketch .grp{border:0;background:transparent;padding:34px 12px 12px}
-.arch.sketch .grp .gname{font-family:"Nanum Pen Script",cursive;font-size:19px;font-weight:400;color:#1e1e1e;top:6px;left:16px}
-.arch.sketch .edgeno{position:absolute;pointer-events:none}
-/* 아키텍처: 좌→우 흐름 */
-.arch{position:relative;border:1px solid var(--line);border-radius:12px;padding:22px 20px;background:#fff;overflow:auto}
+.arch .elabel{font-family:"Manrope","Noto Sans KR",sans-serif}
+/* 아키텍처: 좌표 고정 캔버스 */
+.arch{position:relative;border:1px solid var(--line);border-radius:12px;background:#fff;overflow:auto}
+.arch .canvas{position:relative}
 .arch svg.wires{position:absolute;left:0;top:0;pointer-events:none;z-index:0}
-.arch .flow{z-index:1}
-.arch .nd,.arch .grp{background:transparent}
-.flow{display:flex;gap:48px;align-items:flex-start;min-width:max-content;position:relative;z-index:1}
-.col{display:flex;flex-direction:column;gap:26px;align-items:center;min-width:140px}
-.col .lname{font-family:"Manrope",sans-serif;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);text-align:center;height:16px}
-.grp{border:1.5px dashed #c9ccd6;border-radius:16px;padding:32px 14px 14px;background:#fafbfc;position:relative;display:flex;flex-direction:column;gap:16px;align-items:center}
-.grp .gname{position:absolute;top:8px;left:14px;font-family:"Manrope","Noto Sans KR",sans-serif;font-size:12px;font-weight:700;color:var(--ink);display:flex;gap:6px;align-items:center}
-.grp .gname img{width:16px;height:16px}
-.nd{width:140px;text-align:center;position:relative;z-index:1}
-.nd .logo{width:56px;height:56px;margin:0 auto 8px;display:flex;align-items:center;justify-content:center}
-.nd .logo img{max-width:52px;max-height:52px}
-.nd .logo .ini{width:52px;height:52px;border-radius:12px;background:var(--soft);border:1px solid var(--line);color:var(--muted);font-size:15px;display:inline-flex;align-items:center;justify-content:center;font-family:"Manrope",sans-serif;font-weight:700}
-.nd .bn{font-weight:700;font-size:13.5px;line-height:1.35}
-.nd .bt{font-size:11.5px;color:var(--ink-2,#4b5160);margin-top:3px;line-height:1.5}
-.nd .bh{font-size:11px;color:var(--muted);margin-top:3px;font-family:"Manrope","Noto Sans KR",sans-serif}
+.arch .lname{position:absolute;font-family:"Manrope",sans-serif;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);text-align:center;z-index:1}
+.arch .gname{position:absolute;font-family:"Manrope","Noto Sans KR",sans-serif;font-size:12px;font-weight:700;color:var(--ink);display:flex;gap:6px;align-items:center;z-index:2;background:transparent}
+.arch .gname img{width:15px;height:15px}
+.arch .grpbox{position:absolute;border:1.5px dashed #c9ccd6;border-radius:16px;background:#fafbfc;z-index:0}
+.nd{position:absolute;text-align:center;z-index:1;padding:8px 6px 6px;border-radius:12px}
+.nd .logo{width:52px;height:52px;margin:0 auto 6px;display:flex;align-items:center;justify-content:center}
+.nd .logo img{max-width:48px;max-height:48px}
+.nd .logo .ini{width:48px;height:48px;border-radius:12px;background:var(--soft);border:1px solid var(--line);color:var(--muted);font-size:14px;display:inline-flex;align-items:center;justify-content:center;font-family:"Manrope",sans-serif;font-weight:700}
+.nd .bn{font-weight:700;font-size:13.5px;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.nd .bt{font-size:11px;color:var(--ink-2,#4b5160);margin-top:2px;line-height:1.35;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.nd .bh{font-size:10.5px;color:var(--muted);margin-top:2px;font-family:"Manrope","Noto Sans KR",sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .nd .bh.none{font-style:italic}
 .arch .note{font-size:12px;color:var(--muted);margin:0 0 8px}
 .edgelist{margin:12px 0 0;padding:0;list-style:none;font-size:13px;color:var(--muted);display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:6px 18px}
@@ -478,7 +460,6 @@ svg{width:100%;height:100%;display:block;cursor:grab}
 <script id="data" type="application/json">__DATA__</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/roughjs@4.6.6/bundled/rough.js"></script>
 <script>
 const DATA = JSON.parse(document.getElementById('data').textContent);
 const byId = new Map(DATA.nodes.map(n => [n.id, n]));
@@ -602,61 +583,68 @@ function showSec(n, push){ const secs=[...app.querySelectorAll('section.sec')]; 
 }
 function spy(initial){ app.querySelectorAll('#tabbar a').forEach(a=>a.onclick=e=>{e.preventDefault(); showSec(+a.dataset.s,true);}); if(!app.querySelector('.secnav')) app.insertAdjacentHTML('beforeend','<div class="secnav"></div>'); const raw=app.querySelector('details.raw'); if(raw) app.appendChild(raw); showSec(initial||1,false); }
 
-// ---- 아키텍처 그림 (좌→우 흐름, 묶음 상자, 컬러 로고) ----
+// ---- 아키텍처 그림: 좌표를 직접 계산해 상자·선을 같은 숫자로 그린다 ----
 const LAYERS=[['client','클라이언트'],['edge','엣지 · CDN'],['server','서버'],['worker','워커 · 배치'],['data','데이터'],['chain','체인'],['external','외부 서비스'],['ops','운영']];
-function nodeHtml(n){ return `<div class="nd" data-node="${esc(n.name)}"><div class="logo">${iconImg(n.tech[0]||n.name,52)}</div><div class="bn">${esc(n.name)}</div>${n.tech.length?`<div class="bt">${n.tech.map(esc).join(' · ')}</div>`:''}<div class="bh ${/자료에 없음/.test(n.host)?'none':''}">${esc(n.host||'')}</div></div>`; }
-function archHtml(a){ if(!a) return ''; const by=new Map(); a.nodes.forEach(n=>{ if(!by.has(n.layer)) by.set(n.layer,[]); by.get(n.layer).push(n); });
-  const cols=LAYERS.filter(([k])=>by.has(k)).map(([k,label])=>{ const items=by.get(k); const groups=new Map(); const singles=[]; items.forEach(n=>{ if(n.group){ if(!groups.has(n.group)) groups.set(n.group,[]); groups.get(n.group).push(n);} else singles.push(n); });
-    return `<div class="col" data-layer="${k}"><div class="lname">${label}</div>${[...groups.entries()].map(([g,ns])=>`<div class="grp" data-group="${esc(g)}"><div class="gname">${LOGOS[iconSlug(g)]?iconImg(g,16):''}${esc(g)}</div>${ns.map(nodeHtml).join('')}</div>`).join('')}${singles.map(nodeHtml).join('')}</div>`; }).join('');
-  return `${archToolbar()}${a.note?`<p class="note">${esc(a.note)}</p>`:''}<div class="arch ${archMode==='sketch'?'sketch':''}"><svg class="wires"></svg><div class="flow">${cols}</div></div>
+const L = {colW:150, colGap:72, nodeH:126, nodeGap:26, padX:28, padTop:46, padBottom:24, grpPad:12, grpHead:28};
+function layout(a){ const cols=[]; const byLayer=new Map(); const colIdx=Object.fromEntries(LAYERS.map(([k],i)=>[k,i])); const present=LAYERS.filter(([k])=>a.nodes.some(n=>n.layer===k)).map(([k])=>k); const ci=k=>present.indexOf(k); const byName=Object.fromEntries(a.nodes.map(n=>[n.name,n])); const topLanes=a.edges.filter(e=>byName[e.from]&&byName[e.to]&&ci(byName[e.to].layer)-ci(byName[e.from].layer)>1).length; const botLanes=a.edges.filter(e=>byName[e.from]&&byName[e.to]&&ci(byName[e.to].layer)-ci(byName[e.from].layer)<0).length; L.padTop=46+topLanes*12; L.padBottom=24+botLanes*12; a.nodes.forEach(n=>{ if(!byLayer.has(n.layer)) byLayer.set(n.layer,[]); byLayer.get(n.layer).push(n); });
+  LAYERS.filter(([k])=>byLayer.has(k)).forEach(([k,label],ci)=>{ const items=byLayer.get(k); const order=[]; const seen=new Set(); items.forEach(n=>{ if(n.group){ if(seen.has(n.group)) return; seen.add(n.group); order.push({group:n.group, items:items.filter(x=>x.group===n.group)}); } else order.push({items:[n]}); });
+    const x=L.padX+ci*(L.colW+L.colGap); let y=L.padTop; const placed=[]; const groups=[];
+    order.forEach(o=>{ if(o.group){ const gy=y; y+=L.grpHead; o.items.forEach(n=>{ placed.push({n,x:x+L.grpPad,y,w:L.colW-2*L.grpPad,h:L.nodeH}); y+=L.nodeH+L.nodeGap; }); y-=L.nodeGap; groups.push({name:o.group,x,y:gy,w:L.colW,h:y-gy+L.grpPad}); y+=L.grpPad+L.nodeGap+8; } else { const n=o.items[0]; placed.push({n,x,y,w:L.colW,h:L.nodeH}); y+=L.nodeH+L.nodeGap; } });
+    cols.push({key:k,label,x,nodes:placed,groups,h:y}); });
+  const W=L.padX*2+cols.length*L.colW+Math.max(0,cols.length-1)*L.colGap; const H=Math.max(...cols.map(c=>c.h),L.padTop)+L.padBottom;
+  const pos={}; cols.forEach(c=>c.nodes.forEach(p=>{ pos[p.n.name]={...p, cx:p.x+p.w/2, ly:p.y+8+26, col:c.x}; }));
+  return {cols,W,H,pos}; }
+function archHtml(a){ if(!a) return ''; const lay=layout(a); window.__lay=lay;
+  const nodes=lay.cols.flatMap(c=>c.nodes).map(p=>{ const n=p.n; return `<div class="nd" data-node="${esc(n.name)}" style="left:${p.x}px;top:${p.y}px;width:${p.w}px;height:${p.h}px" title="${esc(n.host||'')}"><div class="logo">${iconImg(n.tech[0]||n.name,48)}</div><div class="bn">${esc(n.name)}</div>${n.tech.length?`<div class="bt">${esc(n.tech.slice(0,3).join(' · '))}</div>`:''}<div class="bh ${/자료에 없음/.test(n.host)?'none':''}">${esc(n.host||'')}</div></div>`; }).join('');
+  const groups=lay.cols.flatMap(c=>c.groups).map(g=>`<div class="grpbox" style="left:${g.x}px;top:${g.y}px;width:${g.w}px;height:${g.h}px"></div><div class="gname" style="left:${g.x+12}px;top:${g.y+6}px">${LOGOS[iconSlug(g.name)]?iconImg(g.name,15):''}${esc(g.name)}</div>`).join('');
+  const labels=lay.cols.map(c=>`<div class="lname" style="left:${c.x}px;top:14px;width:${L.colW}px">${esc(c.label)}</div>`).join('');
+  return `${archToolbar()}${a.note?`<p class="note">${esc(a.note)}</p>`:''}<div class="arch"><div class="canvas" style="width:${lay.W}px;height:${lay.H}px"><svg class="wires" width="${lay.W}" height="${lay.H}" viewBox="0 0 ${lay.W} ${lay.H}"></svg>${labels}${groups}${nodes}</div></div>
   ${a.edges.length?`<ol class="edgelist">${a.edges.map((e,i)=>`<li><span class="en">${i+1}</span><b>${esc(e.from)}</b> → <b>${esc(e.to)}</b>${e.label?`<span class="el"> · ${esc(e.label)}</span>`:''}</li>`).join('')}</ol>`:''}`; }
-let archMode = (()=>{ try { return localStorage.getItem('arch-mode') || 'sketch'; } catch(e) { return 'sketch'; } })();
-function setArchMode(m){ archMode=m; try{localStorage.setItem('arch-mode',m);}catch(e){} const box=app.querySelector('.arch'); if(box){ box.classList.toggle('sketch', m==='sketch'); app.querySelectorAll('.archbar .seg button').forEach(b=>b.setAttribute('aria-pressed', b.dataset.m===m)); requestAnimationFrame(drawWires); } }
-function archToolbar(){ return `<div class="archbar"><div class="seg" role="group" aria-label="그림 스타일"><button data-m="sketch" aria-pressed="${archMode==='sketch'}">손그림</button><button data-m="clean" aria-pressed="${archMode==='clean'}">깔끔</button></div><button class="dl" id="dlExcali">Excalidraw로 열기 (.excalidraw)</button></div>`; }
-function geom(box){ const r0=box.getBoundingClientRect(); const ox=box.scrollLeft-r0.left, oy=box.scrollTop-r0.top;
-  const R=el=>{ const r=el.getBoundingClientRect(); return {l:r.left+ox, r:r.right+ox, t:r.top+oy, b:r.bottom+oy, w:r.width, h:r.height}; };
-  const nodes={}; box.querySelectorAll('.nd').forEach(el=>{ const g=R(el); const lg=R(el.querySelector('.logo')||el); nodes[el.dataset.node]={...g, cx:lg.l+lg.w/2, ly:lg.t+lg.h/2}; });
-  const groups=[]; box.querySelectorAll('.grp').forEach(el=>groups.push({name:el.dataset.group, ...R(el)}));
-  return {nodes, groups, W:box.scrollWidth, H:box.scrollHeight}; }
-function edgePath(A,B){ let x1,y1,x2,y2; if(Math.abs(A.cx-B.cx)>60){ const lr=A.cx<B.cx; x1=lr?A.r-4:A.l+4; y1=A.ly; x2=lr?B.l+4:B.r-4; y2=B.ly; const mx=(x1+x2)/2; return {d:`M${x1},${y1} C${mx},${y1} ${mx},${y2} ${x2},${y2}`, x1,y1,x2,y2, end:[x2,y2], dir:[x2-mx, y2-y2||0.001]}; }
-  const down=A.ly<B.ly; x1=A.cx; y1=down?A.b+2:A.t-2; x2=B.cx; y2=down?B.t-2:B.b+2; const my=(y1+y2)/2; return {d:`M${x1},${y1} C${x1},${my} ${x2},${my} ${x2},${y2}`, x1,y1,x2,y2, end:[x2,y2], dir:[x2-x2||0.001, y2-my]}; }
-function drawWires(){ const box=app.querySelector('.arch'); if(!box) return; const svg=box.querySelector('svg.wires'); const a=window.__arch; if(!a||!svg) return;
-  const g=geom(box); svg.setAttribute('width',g.W); svg.setAttribute('height',g.H); svg.setAttribute('viewBox',`0 0 ${g.W} ${g.H}`);
-  const sketch=box.classList.contains('sketch') && window.rough;
-  while(svg.firstChild) svg.removeChild(svg.firstChild);
-  const NS='http://www.w3.org/2000/svg'; const el=(t,at)=>{const e=document.createElementNS(NS,t); for(const k in at) e.setAttribute(k,at[k]); return e;};
-  const rc = sketch ? rough.svg(svg) : null;
-  if(sketch){ // 묶음 상자, 노드 상자
-    g.groups.forEach(gr=>svg.appendChild(rc.rectangle(gr.l+2,gr.t+2,gr.w-4,gr.h-4,{roughness:1.4,stroke:'#1e1e1e',strokeWidth:1.3,fill:'#fff8e1',fillStyle:'solid',fillWeight:1})));
-    Object.values(g.nodes).forEach(n=>svg.appendChild(rc.rectangle(n.l+1,n.t+1,n.w-2,n.h-2,{roughness:1.2,stroke:'#1e1e1e',strokeWidth:1.2,fill:'#ffffff',fillStyle:'solid'})));
-  } else {
-    const defs=el('defs',{}); defs.innerHTML='<marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#5f6368"/></marker>'; svg.appendChild(defs);
-  }
-  a.edges.forEach((e,i)=>{ const A=g.nodes[e.from], B=g.nodes[e.to]; if(!A||!B) return; const P=edgePath(A,B);
-    if(sketch){ svg.appendChild(rc.path(P.d,{roughness:1.1,stroke:'#1e1e1e',strokeWidth:1.4,bowing:1.2}));
-      const [ex,ey]=P.end; const ang=Math.atan2(P.dir[1],P.dir[0]); const L=11; [ang+Math.PI*0.8, ang-Math.PI*0.8].forEach(t=>svg.appendChild(rc.line(ex,ey,ex+L*Math.cos(t),ey+L*Math.sin(t),{roughness:1,stroke:'#1e1e1e',strokeWidth:1.4})));
-      const mx=(P.x1+P.x2)/2, my=(P.y1+P.y2)/2; svg.appendChild(rc.circle(mx,my,20,{roughness:1,stroke:'#1e1e1e',strokeWidth:1,fill:'#fff',fillStyle:'solid'}));
-      const tx=el('text',{x:mx,y:my+5,'text-anchor':'middle','font-size':'14','font-family':'Nanum Pen Script, cursive',fill:'#1e1e1e'}); tx.textContent=String(i+1); svg.appendChild(tx);
-    } else {
-      svg.appendChild(el('path',{d:P.d,fill:'none',stroke:'#5f6368','stroke-width':'1.6','marker-end':'url(#arr)'}));
-      const mx=(P.x1+P.x2)/2, my=(P.y1+P.y2)/2; svg.appendChild(el('circle',{cx:mx,cy:my,r:9,fill:'#fff',stroke:'#5f6368','stroke-width':'1.2'}));
-      const tx=el('text',{x:mx,y:my+3.5,'text-anchor':'middle','font-size':'10','font-weight':'700','font-family':'Manrope, sans-serif',fill:'#202124'}); tx.textContent=String(i+1); svg.appendChild(tx);
-    } });
-}
-// Excalidraw 파일 내보내기 (위치는 화면 배치를 그대로 사용)
-function excalidrawJSON(){ const box=app.querySelector('.arch'); const a=window.__arch; if(!box||!a) return null; const g=geom(box); const els=[]; let id=0; const nid=()=>'e'+(++id);
-  const rect=(x,y,w,h,extra={})=>{ const o={id:nid(),type:'rectangle',x,y,width:w,height:h,angle:0,strokeColor:'#1e1e1e',backgroundColor:'transparent',fillStyle:'solid',strokeWidth:1,strokeStyle:'solid',roughness:1,opacity:100,groupIds:[],frameId:null,roundness:{type:3},seed:Math.floor(Math.random()*1e9),version:1,versionNonce:1,isDeleted:false,boundElements:[],updated:Date.now(),link:null,locked:false,...extra}; els.push(o); return o; };
-  const text=(x,y,t,size,extra={})=>{ const w=Math.max(20,t.length*size*0.6); const o={id:nid(),type:'text',x:x-w/2,y,width:w,height:size*1.25,angle:0,strokeColor:'#1e1e1e',backgroundColor:'transparent',fillStyle:'solid',strokeWidth:1,strokeStyle:'solid',roughness:1,opacity:100,groupIds:[],frameId:null,roundness:null,seed:Math.floor(Math.random()*1e9),version:1,versionNonce:1,isDeleted:false,boundElements:[],updated:Date.now(),link:null,locked:false,text:t,fontSize:size,fontFamily:1,textAlign:'center',verticalAlign:'top',baseline:size,containerId:null,originalText:t,lineHeight:1.25,...extra}; els.push(o); return o; };
-  g.groups.forEach(gr=>{ rect(gr.l,gr.t,gr.w,gr.h,{backgroundColor:'#fff8e1',strokeStyle:'dashed'}); text(gr.l+gr.w/2, gr.t+6, gr.name, 16); });
-  a.nodes.forEach(n=>{ const r=g.nodes[n.name]; if(!r) return; rect(r.l,r.t,r.w,r.h,{backgroundColor:'#ffffff'}); text(r.cx, r.t+r.h*0.55, n.name, 18); if(n.tech.length) text(r.cx, r.t+r.h*0.78, n.tech.slice(0,2).join(' · '), 12, {strokeColor:'#666666'}); if(n.tech[0]) text(r.cx, r.t+10, n.tech[0].slice(0,14), 12, {strokeColor:'#1e1e1e'}); });
-  a.edges.forEach((e,i)=>{ const A=g.nodes[e.from], B=g.nodes[e.to]; if(!A||!B) return; const P=edgePath(A,B); const pts=[[0,0],[P.x2-P.x1,P.y2-P.y1]]; els.push({id:nid(),type:'arrow',x:P.x1,y:P.y1,width:Math.abs(P.x2-P.x1),height:Math.abs(P.y2-P.y1),angle:0,strokeColor:'#1e1e1e',backgroundColor:'transparent',fillStyle:'solid',strokeWidth:1,strokeStyle:'solid',roughness:1,opacity:100,groupIds:[],frameId:null,roundness:{type:2},seed:Math.floor(Math.random()*1e9),version:1,versionNonce:1,isDeleted:false,boundElements:[],updated:Date.now(),link:null,locked:false,points:pts,lastCommittedPoint:null,startBinding:null,endBinding:null,startArrowhead:null,endArrowhead:'arrow'}); if(e.label) text((P.x1+P.x2)/2,(P.y1+P.y2)/2-18,`${i+1}. ${e.label}`,12,{strokeColor:'#666666'}); });
+// 직각 라우팅: 옆 열은 열 사이 채널, 멀리 가는 선은 위 통로, 거꾸로 가는 선은 아래 통로
+function routes(a,lay){ const pos=lay.pos; const colX=lay.cols.map(c=>c.x); const colOf=x=>colX.indexOf(x);
+  const E=a.edges.map((e,i)=>({i,e,A:pos[e.from],B:pos[e.to]})).filter(r=>r.A&&r.B);
+  E.forEach(r=>{ r.ca=colOf(r.A.col); r.cb=colOf(r.B.col); r.d=r.cb-r.ca; r.kind=r.d===0?'same':(r.d===1?'adj':(r.d>1?'top':'bottom')); });
+  // 포트 분산: 같은 노드에서 같은 방향으로 나가는/들어오는 선을 위아래로 벌린다
+  const ports={}; const portKey=(name,side)=>name+'|'+side; const want=[];
+  E.forEach(r=>{ if(r.kind==='adj'||r.kind==='top'){ want.push([r,portKey(r.e.from,'R'),'out']); want.push([r,portKey(r.e.to,'L'),'in']); } else if(r.kind==='bottom'){ want.push([r,portKey(r.e.from,'L'),'out']); want.push([r,portKey(r.e.to,'R'),'in']); } });
+  const groups={}; want.forEach(([r,k,io])=>{ (groups[k]=groups[k]||[]).push([r,io]); });
+  Object.entries(groups).forEach(([k,list])=>{ list.sort((x,y)=>((x[0].B.y+x[0].A.y)-(y[0].B.y+y[0].A.y))); const n=list.length; list.forEach(([r,io],idx)=>{ const off=(idx-(n-1)/2)*14; (r.port=r.port||{})[io]=off; }); });
+  // 채널: 열 사이 간격에서 x 위치를 나눠 갖는다
+  const gapUse={}; const gapX=(gi,r)=>{ const key=gi; const list=(gapUse[key]=gapUse[key]||[]); if(!list.includes(r)) list.push(r); return list; };
+  E.forEach(r=>{ if(r.kind==='adj') gapX(r.ca,r); if(r.kind==='top'){ gapX(r.ca,r); gapX(r.cb-1,r); } if(r.kind==='bottom'){ gapX(r.ca-1,r); gapX(r.cb,r); } });
+  const chan=(gi,r)=>{ const list=gapUse[gi]||[r]; const n=list.length; const idx=Math.max(0,list.indexOf(r)); const x0=colX[gi]+L.colW, w=L.colGap; return x0+w*(idx+1)/(n+1); };
+  let topN=0, botN=0; E.forEach(r=>{ if(r.kind==='top') r.lane=topN++; if(r.kind==='bottom') r.lane=botN++; });
+  const topY=k=>18+ (topN-1-k)*12 + 10; const botY=k=>lay.H-6-(k)*12;
+  const out=[];
+  E.forEach(r=>{ const {A,B}=r; const po=(r.port&&r.port.out)||0, pi=(r.port&&r.port.in)||0; let pts=[];
+    if(r.kind==='adj'){ const x1=A.x+A.w, y1=A.ly+po, x2=B.x, y2=B.ly+pi, cx=chan(r.ca,r); pts=[[x1,y1],[cx,y1],[cx,y2],[x2,y2]]; }
+    else if(r.kind==='top'){ const x1=A.x+A.w, y1=A.ly+po, x2=B.x, y2=B.ly+pi, c1=chan(r.ca,r), c2=chan(r.cb-1,r), ty=topY(r.lane); pts=[[x1,y1],[c1,y1],[c1,ty],[c2,ty],[c2,y2],[x2,y2]]; }
+    else if(r.kind==='bottom'){ const x1=A.x, y1=A.ly+po, x2=B.x+B.w, y2=B.ly+pi, c1=chan(r.ca-1,r), c2=chan(r.cb,r), by=botY(r.lane); pts=[[x1,y1],[c1,y1],[c1,by],[c2,by],[c2,y2],[x2,y2]]; }
+    else { const down=A.y<B.y; const x=A.cx+((r.i%2)?6:-6); const y1=down?A.y+A.h:A.y, y2=down?B.y:B.y+B.h; pts=[[x,y1],[x,y2]]; }
+    // 가장 긴 수평 구간에 번호와 라벨
+    let best=null; for(let k=0;k<pts.length-1;k++){ const [x1,y1]=pts[k],[x2,y2]=pts[k+1]; if(Math.abs(y1-y2)<0.5 && (!best||Math.abs(x2-x1)>best.len)) best={len:Math.abs(x2-x1), x:(x1+x2)/2, y:y1}; }
+    if(!best){ const [x1,y1]=pts[0],[x2,y2]=pts[pts.length-1]; best={x:(x1+x2)/2,y:(y1+y2)/2,len:0,vertical:true}; }
+    out.push({i:r.i, pts, mid:best, label:r.e.label||''}); });
+  return out; }
+function drawWires(){ const box=app.querySelector('.arch'); const svg=box&&box.querySelector('svg.wires'); const a=window.__arch, lay=window.__lay; if(!box||!svg||!a||!lay) return;
+  while(svg.firstChild) svg.removeChild(svg.firstChild); const NS='http://www.w3.org/2000/svg'; const el=(t,at)=>{const e=document.createElementNS(NS,t); for(const k in at) e.setAttribute(k,at[k]); return e;};
+  const defs=el('defs',{}); defs.innerHTML='<marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#3c4043"/></marker>'; svg.appendChild(defs);
+  routes(a,lay).forEach(r=>{ svg.appendChild(el('polyline',{points:r.pts.map(p=>p.join(',')).join(' '),fill:'none',stroke:'#3c4043','stroke-width':'1.6','stroke-linejoin':'round','marker-end':'url(#arr)'}));
+    const {x,y}=r.mid; const lab=r.label.length>22?r.label.slice(0,21)+'…':r.label;
+    if(lab && !r.mid.vertical && r.mid.len>70){ const w=Math.min(r.mid.len-16, lab.length*6.4+10); svg.appendChild(el('rect',{x:x-w/2,y:y-22,width:w,height:16,rx:3,fill:'#fff'})); const t=el('text',{x,y:y-10,'text-anchor':'middle','font-size':'10.5','font-family':'Manrope, Noto Sans KR, sans-serif',fill:'#4b5160'}); t.textContent=lab; svg.appendChild(t); }
+    svg.appendChild(el('circle',{cx:x,cy:y,r:9,fill:'#fff',stroke:'#3c4043','stroke-width':'1.2'})); const n=el('text',{x,y:y+3.5,'text-anchor':'middle','font-size':'10','font-weight':'700','font-family':'Manrope, sans-serif',fill:'#202124'}); n.textContent=String(r.i+1); svg.appendChild(n); }); }
+function excalidrawJSON(){ const a=window.__arch, lay=window.__lay; if(!a||!lay) return null; const els=[]; let id=0; const nid=()=>'e'+(++id); const base=()=>({id:nid(),angle:0,strokeColor:'#1e1e1e',backgroundColor:'transparent',fillStyle:'solid',strokeWidth:1,strokeStyle:'solid',roughness:1,opacity:100,groupIds:[],frameId:null,seed:Math.floor(Math.random()*1e9),version:1,versionNonce:1,isDeleted:false,boundElements:[],updated:Date.now(),link:null,locked:false});
+  const rect=(x,y,w,h,ex={})=>els.push({...base(),type:'rectangle',x,y,width:w,height:h,roundness:{type:3},...ex}); const text=(cx,y,t,size,ex={})=>{ const w=Math.max(20,t.length*size*0.62); els.push({...base(),type:'text',x:cx-w/2,y,width:w,height:size*1.25,roundness:null,text:t,fontSize:size,fontFamily:1,textAlign:'center',verticalAlign:'top',baseline:size,containerId:null,originalText:t,lineHeight:1.25,...ex}); };
+  lay.cols.forEach(c=>{ text(c.x+L.colW/2, 10, c.label, 14, {strokeColor:'#666666'}); c.groups.forEach(g=>{ rect(g.x,g.y,g.w,g.h,{backgroundColor:'#fff8e1',strokeStyle:'dashed'}); text(g.x+g.w/2,g.y+4,g.name,14); }); c.nodes.forEach(p=>{ rect(p.x,p.y,p.w,p.h,{backgroundColor:'#ffffff'}); if(p.n.tech[0]) text(p.x+p.w/2,p.y+8,p.n.tech[0].slice(0,16),12,{strokeColor:'#444444'}); text(p.x+p.w/2,p.y+p.h*0.5,p.n.name,18); if(p.n.tech.length>1) text(p.x+p.w/2,p.y+p.h*0.5+26,p.n.tech.slice(1,3).join(' · ').slice(0,22),11,{strokeColor:'#666666'}); }); });
+  routes(a,lay).forEach(r=>{ const [x0,y0]=r.pts[0]; const pts=r.pts.map(([x,y])=>[x-x0,y-y0]); const xs=r.pts.map(p=>p[0]), ys=r.pts.map(p=>p[1]); els.push({...base(),type:'arrow',x:x0,y:y0,width:Math.max(...xs)-Math.min(...xs),height:Math.max(...ys)-Math.min(...ys),roundness:null,points:pts,lastCommittedPoint:null,startBinding:null,endBinding:null,startArrowhead:null,endArrowhead:'arrow'}); const e=a.edges[r.i]; text(r.mid.x,r.mid.y-18,`${r.i+1}${e.label?'. '+e.label:''}`,12,{strokeColor:'#666666'}); });
   return {type:'excalidraw',version:2,source:'hackathon-wiki',elements:els,appState:{viewBackgroundColor:'#ffffff',gridSize:null},files:{}}; }
-function bindArch(){ app.querySelectorAll('.archbar .seg button').forEach(b=>b.onclick=()=>setArchMode(b.dataset.m)); const dl=document.getElementById('dlExcali'); if(dl) dl.onclick=()=>{ const j=excalidrawJSON(); if(!j) return; const blob=new Blob([JSON.stringify(j,null,1)],{type:'application/json'}); const u=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=u; a.download=(location.hash.split('/')[2]||'architecture')+'.excalidraw'; a.click(); setTimeout(()=>URL.revokeObjectURL(u),2000); }; const box=app.querySelector('.arch'); if(box) box.classList.toggle('sketch', archMode==='sketch'); }
+function archToolbar(){ return `<div class="archbar"><span class="small" style="color:var(--muted)">번호는 아래 연결 목록과 같습니다</span><button class="dl" id="dlExcali">Excalidraw로 열기 (.excalidraw)</button></div>`; }
+function bindArch(){ const dl=document.getElementById('dlExcali'); if(dl) dl.onclick=()=>{ const j=excalidrawJSON(); if(!j) return; const blob=new Blob([JSON.stringify(j,null,1)],{type:'application/json'}); const u=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=u; a.download=(location.hash.split('/')[2]||'architecture')+'.excalidraw'; a.click(); setTimeout(()=>URL.revokeObjectURL(u),2000); }; }
 window.addEventListener('resize',()=>requestAnimationFrame(drawWires));
 if(document.fonts&&document.fonts.ready) document.fonts.ready.then(()=>setTimeout(drawWires,50));
 document.addEventListener('load',e=>{ if(e.target&&e.target.tagName==='IMG'&&e.target.closest&&e.target.closest('.arch')) requestAnimationFrame(drawWires); }, true);
 window.addEventListener('load',()=>setTimeout(drawWires,300));
-setInterval(()=>{ if(document.querySelector('.arch') && document.querySelector('section.sec.on .arch')) drawWires(); }, 1200);
+
 
 function project(id, initial){
   const p=byId.get(id); if(!p||p.type!=='project'){home();return;}
