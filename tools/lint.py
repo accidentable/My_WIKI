@@ -10,7 +10,7 @@
 
 환경변수:
     OPENAI_API_KEY   필수(--llm 사용 시)
-    LINT_MODEL       기본 gpt-5 (사용 가능한 최신 추론 모델로 바꿔 쓸 것)
+    LINT_MODEL       필수(--llm 사용 시). 사용할 OpenAI 모델명
     LINT_EFFORT      기본 high
 """
 from __future__ import annotations
@@ -211,17 +211,20 @@ def main() -> int:
         if not os.environ.get("OPENAI_API_KEY"):
             print("OPENAI_API_KEY 가 없습니다.", file=sys.stderr)
             return 2
-        model = os.environ.get("LINT_MODEL", "gpt-5")
+        model = os.environ.get("LINT_MODEL")
+        if not model:
+            print("LINT_MODEL 이 없습니다. 사용할 OpenAI 모델명을 환경변수(또는 GitHub Variables)에 설정하세요.", file=sys.stderr)
+            return 2
         effort = os.environ.get("LINT_EFFORT", "high")
         print(f"\n== LLM 검사 ({model}, effort={effort}) ==")
         llm_out = llm_review(model, effort)
         print(llm_out)
 
     if args.commit:
-        git("pull", "-q")
         append_log(det, llm_out, model)
         git("add", "log.md")
         git("commit", "-q", "-m", f"lint: {dt.date.today().isoformat()} [tools/lint.py]")
+        git("pull", "--rebase", "-q")
         git("push", "-q")
         print("\nlog.md 갱신 및 push 완료")
     return 1 if det else 0

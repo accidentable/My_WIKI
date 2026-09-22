@@ -1,0 +1,63 @@
+name: wiki lint
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "wiki/**"
+      - "raw/done/**"
+      - "tools/lint.py"
+  schedule:
+    - cron: "0 22 * * 0"   # 매주 월요일 07:00 KST (UTC 일요일 22:00)
+  workflow_dispatch:
+    inputs:
+      llm:
+        description: "OpenAI API로 2층 검사까지 실행"
+        type: boolean
+        default: true
+
+concurrency:
+  group: wiki-lint
+  cancel-in-progress: false
+
+jobs:
+  # push마다: 1층(결정적 검사)만. 키 불필요, 실패하면 빨간 표시.
+  deterministic:
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python tools/lint.py
+
+  # 주 1회 또는 수동: 1층 + 2층(OpenAI API), 결과를 log.md에 커밋.
+  full:
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      LINT_MODEL: ${{ vars.LINT_MODEL }}
+      LINT_EFFORT: ${{ vars.LINT_EFFORT || 'high' }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install openai
+      - name: git identity
+        run: |
+          git config user.name "wiki-lint[bot]"
+          git config user.email "wiki-lint@users.noreply.github.com"
+      - name: run lint
+        run: |
+          if [ "${{ github.event_name }}" = "schedule" ] || [ "${{ inputs.llm }}" = "true" ]; then
+            python tools/lint.py --llm --commit || true
+          else
+            python tools/lint.py --commit || true
+          fi
