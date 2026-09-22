@@ -4,10 +4,13 @@ type: project
 created: 2026-09-22
 updated: 2026-09-22
 sources: [raw/done/wanted-interview-ai-2026-readme.md, raw/done/wanted-interview-ai-2026-development.md, raw/done/wanted-interview-ai-2026-design.md]
+repo: https://github.com/Wanted-Frame/Frame
 tags: [원티드, 해커톤, 면접, 영상, 전사, LLM, Next.js]
 ---
 
 ## 1. 개요
+
+- **코드 저장소**: https://github.com/Wanted-Frame/Frame — 팀 조직 계정 (출처: 로컬 git 원격, 2026-09-22 확인)
 
 - 대회: 원티드 AI Championship 2026 해커톤
 - 프로젝트명: FRAME

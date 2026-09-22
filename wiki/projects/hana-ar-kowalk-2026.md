@@ -4,10 +4,13 @@ type: project
 created: 2026-09-22
 updated: 2026-09-22
 sources: [raw/done/hana-ar-kowalk-2026-plan.md]
+repo: https://github.com/accidentable/ko-walk
 tags: [하나금융, AR, 위치기반, 블록체인, LLM, 모바일]
 ---
 
 ## 1. 개요
+
+- **코드 저장소**: https://github.com/accidentable/ko-walk (출처: 로컬 git 원격, 2026-09-22 확인)
 
 - 대회명: 하나금융 AR 해커톤
 - 기간: 자료에 없음 (개발 계획은 4주 단위로 짜여 있음)

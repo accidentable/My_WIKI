@@ -133,3 +133,9 @@
 - 규칙 추가: wiki-rules.md 2절, ingest 서브에이전트, AGENTS.md에 "원자료의 확신 수준 보존" 조항. 점검 지적 8건 중 4건이 잠정 표현→확정 표현 왜곡이라 개별 수정보다 규칙으로 대응
 - 보류: bc-card "역대 최대 흥행" 범위 한정, region-exposure-index 한계 병기, "대안 설명 기각" 표현, vision-api-fallback-chain 모델명 — 재사용 가치 낮거나 이미 모순 표시됨. log의 lint 항목에 기록 유지
 - 도구: claude-code
+
+## 2026-09-22 ingest: github-repo-map.md
+- 갱신: projects 11건 모두 — 머리말에 `repo:` 필드 추가, 개요 절에 "코드 저장소" 줄 추가 (로컬 git 원격에서 읽음)
+- 저장소 없음 5건: bc-card(분석 스크립트 로컬만), kis-openapi(코드 로컬만), wanted-hackathon Smash Lab(코드 로컬만), news-bigdata, icognito (뒤 둘은 코드 없음)
+- 로컬 정리 전 주의: 위 코드 3건과 AgentID 코드, 그리고 모든 PDF·pptx·mp4 산출물은 어느 git에도 없음
+- 도구: claude-code

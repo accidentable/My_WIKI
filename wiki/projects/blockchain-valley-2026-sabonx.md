@@ -4,12 +4,15 @@ type: project
 created: 2026-09-22
 updated: 2026-09-22
 sources: [raw/done/blockchain-valley-2026-sabonx-readme.md, raw/done/blockchain-valley-2026-sabonx-apis.md, raw/done/blockchain-valley-2026-trust404-readme.md]
+repo: https://github.com/accidentable/Trust404_th
 tags: [블록체인, DID, VC, SD-JWT, 개인정보, 프로토타입]
 ---
 
 # SabonX — 주민등록증, 안전하게
 
 ## 1. 개요
+
+- **코드 저장소**: https://github.com/accidentable/Trust404_th — SabonX-iM-Challenge 폴더는 같은 코드의 iM 제출본 (출처: 로컬 git 원격, 2026-09-22 확인)
 
 - 대회: **2026 AI Blockchain Challenge in Daegu** 제출용 프로토타입. 같은 결과물을 **TRUST404 Track 02** 해커톤 프로토타입으로도 제출했다(두 README가 동일 구현을 각 대회명으로 소개).
 - 기간: 자료에 없음.

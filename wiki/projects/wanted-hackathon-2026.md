@@ -4,6 +4,7 @@ type: project
 created: 2026-09-22
 updated: 2026-09-22
 sources: [raw/done/wanted-hackathon-2026-readme.md]
+repo: 없음
 tags: [원티드, 해커톤, 3d, web, mediapipe, openai, three-js]
 ---
 
@@ -13,6 +14,8 @@ tags: [원티드, 해커톤, 3d, web, mediapipe, openai, three-js]
 > 출처는 둘 다 `raw/done/wanted-hackathon-2026-readme.md`. 어느 쪽이 실제 코드값인지는 자료에 없음. 다이어그램 쪽이 갱신되지 않은 옛 값일 가능성 (추정).
 
 ## 1. 개요
+
+- **코드 저장소**: 없음 (Smash Lab 코드가 로컬에만 있음) (출처: 로컬 git 원격, 2026-09-22 확인)
 
 - 대회명: 원티드 해커톤 (프로젝트 분류상. 원자료 본문에는 대회명 표기가 없음)
 - 기간: 자료에 없음. 본문에 "2026-09 기준 최신 플래그십" 표현이 있어 2026년 9월 전후 작업 (추정)

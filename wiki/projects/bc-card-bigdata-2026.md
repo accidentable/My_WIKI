@@ -4,12 +4,15 @@ type: project
 created: 2026-09-22
 updated: 2026-09-22
 sources: [raw/done/bc-card-2026-analysis-summary.md, raw/done/bc-card-2026-idea-summary.md, raw/done/bc-card-2026-project-structure.md]
+repo: 없음
 tags: [bc카드, 카드결제데이터, 검색어트렌드, 유행, 소상공인, 신용평가]
 ---
 
 # BC카드 빅데이터 해커톤 2026
 
 ## 1. 개요
+
+- **코드 저장소**: 없음 (analysis 스크립트와 output이 로컬에만 있음) (출처: 로컬 git 원격, 2026-09-22 확인)
 
 - 대회명: BC카드 빅데이터 해커톤 (2026년)
 - 주제: 소비데이터 기반 유행 리스크 분석 및 가맹점 대출·창업 조기경보 서비스 제안

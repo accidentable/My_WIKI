@@ -4,12 +4,15 @@ type: project
 created: 2026-09-22
 updated: 2026-09-22
 sources: [raw/done/jb-finance-2026-compliance-lens-mvp.md]
+repo: https://github.com/accidentable/my-hack
 tags: [jb금융, 컴플라이언스, ai에이전트, langgraph, rag, 준법심의, 멀티모달]
 ---
 
 # JB금융 Fin:AI Challenge 2026 — 컴플라이언스렌즈
 
 ## 1. 개요
+
+- **코드 저장소**: https://github.com/accidentable/my-hack — 로컬 폴더에는 제안서만 있고 코드는 저장소에만 있음 (출처: 로컬 git 원격, 2026-09-22 확인)
 
 - 대회명: JB금융그룹 Fin:AI Challenge
 - 주제: 지정주제 2 — 준법자문가 AI Agent 서비스 개발

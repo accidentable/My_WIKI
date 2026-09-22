@@ -4,6 +4,7 @@ type: project
 created: 2026-09-22
 updated: 2026-09-22
 sources: [raw/done/finance-ai-2026-idea-v2.md, raw/done/finance-ai-2026-readme.md]
+repo: https://github.com/accidentable/Finance_AI
 tags: [금융ai, 해외결제, 차지백, 이의신청, 에이전트, nextjs, llm]
 ---
 
@@ -16,6 +17,8 @@ tags: [금융ai, 해외결제, 차지백, 이의신청, 에이전트, nextjs, ll
 > 어느 쪽이 최종인지는 자료에 없음. (추정) README가 실제 구현이고 설명서가 앞선 기획이다.
 
 ## 1. 개요
+
+- **코드 저장소**: https://github.com/accidentable/Finance_AI (출처: 로컬 git 원격, 2026-09-22 확인)
 
 - 대회명: 2026 금융 AI Challenge
 - 아이디어 설명서 작성일: 2026-09-05 (ver2, 출처 확인일 동일)

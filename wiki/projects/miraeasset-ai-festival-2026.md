@@ -4,12 +4,15 @@ type: project
 created: 2026-09-22
 updated: 2026-09-22
 sources: [raw/done/miraeasset-ai-festival-2026-readme.md, raw/done/miraeasset-ai-festival-2026-api-spec.md, raw/done/miraeasset-ai-festival-2026-validation-report.md, raw/done/miraeasset-ai-festival-2026-early-design-readme.md]
+repo: https://github.com/miraeasset-aifestival-2026-dart/dis-136
 tags: [미래에셋증권, ai-festival, dart, 공시, rag, hyperclova-x, agent, fastapi, sqlite]
 ---
 
 # 미래에셋증권 AI Festival 2026 — 공시 근거 기반 AI Agent
 
 ## 1. 개요
+
+- **코드 저장소**: https://github.com/miraeasset-aifestival-2026-dart/dis-136 — 초기 설계 버전은 https://github.com/accidentable/AI_miraeasset (비공개) (출처: 로컬 git 원격, 2026-09-22 확인)
 
 - 대회명: 제10회 2026 미래에셋증권 AI Festival, 공시 Agent 과제
 - 팀: 마크주식버그 (윤태호)

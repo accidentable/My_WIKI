@@ -4,10 +4,13 @@ type: project
 created: 2026-09-22
 updated: 2026-09-22
 sources: [raw/done/kis-openapi-invest-2026-09-readme.md]
+repo: 없음
 tags: [자동매매, 한국투자증권, openapi, 이동평균, aws-lambda, telegram]
 ---
 
 ## 개요
+
+- **코드 저장소**: 없음 (코드가 로컬에만 있음) (출처: 로컬 git 원격, 2026-09-22 확인)
 
 - 대회명: 한국투자증권 OpenAPI 실전투자대회
 - 기간: 2026-09 (자료 기준 시점. 정확한 대회 기간은 자료에 없음)
