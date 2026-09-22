@@ -125,3 +125,11 @@
     - 원자료의 가설적·잠정적 판단이 대안을 확정적으로 배제한 것으로 강화됐다.
     - 자동 수정 제안: “대안 설명은 관측된 변화의 시점과 덜 부합한다고 보았다”처럼 잠정성을 유지하는 표현이 적절하다.
 - 도구: tools/lint.py (openai api)
+
+## 2026-09-22 lint 반영: 첫 API 점검(gpt-5.6-sol) 결과 처리
+- 수정: concepts/fad-lifespan-metrics (정의 개수 7→8, `09_lifespan_metrics.py` 대조로 확인; 표본 제외·목록 편향 한계 병기)
+- 수정: concepts/search-trend-api (네이버 주간·구글 월간으로 분리 표기)
+- 수정: projects/bc-card-bigdata-2026, wiki/index.md (정의 개수 7→8)
+- 규칙 추가: wiki-rules.md 2절, ingest 서브에이전트, AGENTS.md에 "원자료의 확신 수준 보존" 조항. 점검 지적 8건 중 4건이 잠정 표현→확정 표현 왜곡이라 개별 수정보다 규칙으로 대응
+- 보류: bc-card "역대 최대 흥행" 범위 한정, region-exposure-index 한계 병기, "대안 설명 기각" 표현, vision-api-fallback-chain 모델명 — 재사용 가치 낮거나 이미 모순 표시됨. log의 lint 항목에 기록 유지
+- 도구: claude-code
