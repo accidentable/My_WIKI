@@ -191,6 +191,11 @@ def git(*args: str) -> None:
 
 
 def main() -> int:
+    for stream in (sys.stdout, sys.stderr):
+        try:
+            stream.reconfigure(encoding="utf-8")
+        except Exception:
+            pass
     ap = argparse.ArgumentParser()
     ap.add_argument("--llm", action="store_true", help="OpenAI API로 2층 검사 실행")
     ap.add_argument("--commit", action="store_true", help="log.md 갱신 후 git commit/push")
