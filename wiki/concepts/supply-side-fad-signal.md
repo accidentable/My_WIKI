@@ -3,7 +3,7 @@ title: 공급 측 신호로 유행 단계 판정하기
 type: concept
 created: 2026-09-22
 updated: 2026-09-22
-sources: [raw/done/news-bigdata-2026-idea-plan.md]
+sources: [raw/done/news-bigdata-2026-idea-plan.md, raw/done/im-challenge-daegu-2026-sns-menu-trend-radar.md]
 tags: [유행, 선행지표, 뉴스데이터, 공급과잉, 규칙기반, 소상공인]
 ---
 
@@ -15,8 +15,10 @@ tags: [유행, 선행지표, 뉴스데이터, 공급과잉, 규칙기반, 소상
 
 ## 2. 어디서 썼는가
 
-- [[news-bigdata-2026-kkeutmul-radar]] — 끝물레이더. 디저트 키워드의 현재 단계를 태동·확산·포화·쇠퇴로 판정하고 포화 진입 시 경보한다. 신호 수집은 [[bigkinds-api]].
+- [[news-bigdata-2026-kkeutmul-radar]], 끝물레이더. 디저트 키워드의 현재 단계를 태동·확산·포화·쇠퇴로 판정하고 포화 진입 시 경보한다. 신호 수집은 [[bigkinds-api]].
 - 대비되는 접근: [[bc-card-bigdata-2026]]과 [[fad-lifespan-metrics]]는 같은 유행 소멸 문제를 검색량 시계열과 카드 결제로 다뤘다.
+
+- [[im-challenge-daegu-2026-sns-menu]], SNS 신메뉴 AI 컨설팅. 주 판정은 검색지수 쪽([[search-index-stage-rule]])이지만, 보유한 소상공인 상가정보(월 갱신)에서 **상호명에 키워드가 포함된 신규 점포 수**를 "공급 과열 신호"로 쓰는 후행 확인 소스를 설계에 올려 두었다. 같은 발상이되 뉴스가 아니라 인허가성 공공데이터를 쓰는 변형이다. 원자료 기준 구현·검증은 되지 않았다.
 
 ## 3. 왜 이렇게 보는가 (기획 단계, 검증 전)
 

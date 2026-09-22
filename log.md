@@ -139,3 +139,33 @@
 - 저장소 없음 5건: bc-card(분석 스크립트 로컬만), kis-openapi(코드 로컬만), wanted-hackathon Smash Lab(코드 로컬만), news-bigdata, icognito (뒤 둘은 코드 없음)
 - 로컬 정리 전 주의: 위 코드 3건과 AgentID 코드, 그리고 모든 PDF·pptx·mp4 산출물은 어느 git에도 없음
 - 도구: claude-code
+## 2026-09-22 ingest: tacotrump-2026-03-code-overview.md
+- 신규: projects/taco-index-2026-03
+- 신규: concepts/market-redline-composite-score (safe·redline 선형보간 정규화 합산)
+- 신규: concepts/free-market-data-fetch-fallback (Yahoo v8 직접호출·FRED·RCP 스크래핑, 3겹 실패 흡수)
+- 신규: concepts/vercel-python-cron-webpush (BaseHTTPRequestHandler 함수, crons, Redis 직전상태 비교, VAPID 웹푸시, 410 청소)
+- 신규: concepts/dual-backend-local-vs-serverless (backend/ FastAPI vs api/ 서버리스 로직 복제와 표류)
+- 메모: 해커톤 출품 여부는 원자료에 없어 개요에 "자료에 없음(개인 프로젝트 추정)"으로 기재. backend/와 api/의 총점 구성·레벨 색이 실제로 어긋나 있어 프로젝트 문서 4절과 concept에 기록.
+- 도구: claude-code, 노트북
+
+## 2026-09-22 ingest: im-challenge-daegu-2026-sns-menu-*.md
+- 신규: projects/im-challenge-daegu-2026-sns-menu
+- 신규: concepts/ngram-burst-discovery, concepts/search-index-stage-rule, concepts/public-store-population-context, concepts/ai-judgement-rule-ceiling, concepts/test-sale-cost-model
+- 갱신: concepts/search-trend-api (연령별 기준자 용법, NAVER API HUB 이관·구독 401 메모, pytrends 제약 추가)
+- 갱신: concepts/supply-side-fad-signal (상호명 기반 신규 점포 수를 공급 과열 후행 신호로 쓰는 변형 추가)
+- 갱신: concepts/fad-lifespan-metrics (수명 대신 훅 창을 쓴 두 번째 측정 사례 추가)
+- 갱신: concepts/rule-engine-llm-split (한 프로젝트 안에서 비용은 규칙, 적합도는 AI로 갈린 사례 추가)
+- 갱신: concepts/evidence-linked-llm-output (인용 포함 검사·근거 ID 재검증, 원문 지시문 무시 확인 추가)
+- 갱신: lessons/claim-scoping-in-hackathon-docs (개정이 아니라 최초 작성부터 범위를 좁힌 사례, 세 프로젝트 공통 형태 추가)
+- 갱신: projects/blockchain-valley-2026-sabonx (같은 대회 다른 트랙 상호 링크)
+- 도구: claude-code, 노트북
+
+## 2026-09-22 ingest: blockthon-2026-memory-market-*.md
+- 원자료: readme, demo, dev-memories, presentation-script, buyer-demo-notes (5건)
+- 신규: projects/blockthon-2026-memory-market
+- 신규: concepts/agent-session-capture-hooks, concepts/sui-timed-access-subscription, concepts/seal-key-policy-and-session-traps, concepts/onchain-buyer-only-receipt, concepts/repo-landing-chain-consistency, concepts/sui-sdk-rpc-migration-2026, concepts/stdio-mcp-server-hygiene
+- 신규: lessons/measured-baseline-over-claimed-gain (대조군 실측과 수치 출처 명시)
+- 갱신: concepts/onchain-revocation-registry ("어디서 썼는가"에 fail-open 대비 사례 추가)
+- 갱신: concepts/ai-log-anchoring-data-receipt ("어디서 썼는가"에 구매자 영수증 구현 사례 추가)
+- 메모: 블록체인 개발자 경험 팩 개수가 README 33건 / 데모 대본 30건으로 어긋나 project 문서에 모순 블록 표시 (README가 ground-truth)
+- 도구: claude-code, 노트북

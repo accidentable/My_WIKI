@@ -3,7 +3,7 @@ title: 규칙 엔진과 생성형 AI의 역할 분리
 type: concept
 created: 2026-09-22
 updated: 2026-09-22
-sources: [raw/done/finance-ai-2026-idea-v2.md, raw/done/finance-ai-2026-readme.md, raw/done/jb-finance-2026-compliance-lens-mvp.md]
+sources: [raw/done/finance-ai-2026-idea-v2.md, raw/done/finance-ai-2026-readme.md, raw/done/jb-finance-2026-compliance-lens-mvp.md, raw/done/im-challenge-daegu-2026-sns-menu-impl-report.md]
 tags: [llm, 규칙엔진, structured-outputs, 환각방지, 아키텍처, 컴플라이언스]
 ---
 
@@ -15,9 +15,11 @@ tags: [llm, 규칙엔진, structured-outputs, 환각방지, 아키텍처, 컴플
 
 ## 2. 어디서 썼는가
 
-- [[finance-ai-2026-subscription-cut]] — 해외 이상청구 대응 에이전트. `lib/playbook.ts`(LLM 없음)와 `lib/agent.ts`(OpenAI Responses API + Zod Structured Outputs)로 파일 단위까지 갈라 놓았다.
-- [[news-bigdata-2026-kkeutmul-radar]] — 끝물레이더(기획 단계). 유행 단계 판정은 규칙 엔진(Python)이 하고, LLM은 동의어·줄임말 통합, 사전에 없는 새 연관어의 흥행/포화/쇠퇴 분류, 근거 문장 선택과 판정 사유 한 줄 요약만 맡는다. 기획서가 "단계 판정 자체는 수행하지 않는다"고 못박은 이유는 판정 과정을 사람이 설명할 수 있어야 하기 때문이다.
-- [[jb-finance-compliance-lens-2026]] — 컴플라이언스렌즈. 광고 콘텐츠 준법심의의 ③판단 단계를 규칙엔진 + LLM 하이브리드로 짰다.
+- [[finance-ai-2026-subscription-cut]], 해외 이상청구 대응 에이전트. `lib/playbook.ts`(LLM 없음)와 `lib/agent.ts`(OpenAI Responses API + Zod Structured Outputs)로 파일 단위까지 갈라 놓았다.
+- [[news-bigdata-2026-kkeutmul-radar]], 끝물레이더(기획 단계). 유행 단계 판정은 규칙 엔진(Python)이 하고, LLM은 동의어·줄임말 통합, 사전에 없는 새 연관어의 흥행/포화/쇠퇴 분류, 근거 문장 선택과 판정 사유 한 줄 요약만 맡는다. 기획서가 "단계 판정 자체는 수행하지 않는다"고 못박은 이유는 판정 과정을 사람이 설명할 수 있어야 하기 때문이다.
+- [[jb-finance-compliance-lens-2026]], 컴플라이언스렌즈. 광고 콘텐츠 준법심의의 ③판단 단계를 규칙엔진 + LLM 하이브리드로 짰다.
+
+- [[im-challenge-daegu-2026-sns-menu]], SNS 신메뉴 AI 컨설팅. 비용 계산은 끝까지 AI 밖의 순수 함수(`src/domain/cost.ts`)에 두었다([[test-sale-cost-model]]). 반면 가게 적합도 점수는 규칙 계산이 "대부분 55%, 고정 문장" 상태가 되자 마지막 커밋에서 **판단을 AI로 넘기고 규칙을 상한 검증자로 강등**했다([[ai-judgement-rule-ceiling]]). 같은 프로젝트 안에 두 방향이 공존하는 사례이고, 가르는 기준은 "결정론적으로 재현돼야 하는 값인가"였다.
 
 ## 3. 실제로 겪은 문제와 해결
 
@@ -36,7 +38,7 @@ tags: [llm, 규칙엔진, structured-outputs, 환각방지, 아키텍처, 컴플
 
 검증도 분리에 맞춰 짰다. 테스트가 원문에 없는 증거 제거, 사유코드 매핑, 참고 기한 계산, 플레이북 구성, 증빙 자동 체크를 각각 확인한다.
 
-### 사례 2 — 컴플라이언스렌즈의 판정 단계 (JB금융 2026)
+### 사례 2, 컴플라이언스렌즈의 판정 단계 (JB금융 2026)
 
 같은 분리를 "무엇을 놓치면 안 되는가" 기준으로 그은 사례다. 준법심의는 **recall이 생명**이라는 특성에서 출발한다.
 
@@ -50,7 +52,7 @@ tags: [llm, 규칙엔진, structured-outputs, 환각방지, 아키텍처, 컴플
 
 ## 4. 참고 자료
 
-- 원자료: raw/done/jb-finance-2026-compliance-lens-mvp.md — 「3. 제안 솔루션 - 차별점」, 「5. 데이터 및 기술 활용」 결정 2
+- 원자료: raw/done/jb-finance-2026-compliance-lens-mvp.md, 「3. 제안 솔루션 - 차별점」, 「5. 데이터 및 기술 활용」 결정 2
 - 원자료: raw/done/finance-ai-2026-idea-v2.md 5절, raw/done/finance-ai-2026-readme.md "규칙 엔진과 생성형 AI의 역할 분리"
-- 관련: [[chargeback-deadline-and-reason-codes]] — 코드 쪽으로 넘긴 대표 계산이 기한과 사유코드다.
-- 관련: [[deterministic-rule-path]] — 이 분리 원칙을 공시 QA에 적용한 구현 사례(SQL 규칙 73종과 커버리지 게이트).
+- 관련: [[chargeback-deadline-and-reason-codes]], 코드 쪽으로 넘긴 대표 계산이 기한과 사유코드다.
+- 관련: [[deterministic-rule-path]], 이 분리 원칙을 공시 QA에 적용한 구현 사례(SQL 규칙 73종과 커버리지 게이트).

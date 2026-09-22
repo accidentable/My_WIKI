@@ -1,5 +1,5 @@
 ---
-title: SabonX — 신분증 사본 없이 월급 확인·소득 신고 (DID/VC)
+title: SabonX, 신분증 사본 없이 월급 확인·소득 신고 (DID/VC)
 type: project
 created: 2026-09-22
 updated: 2026-09-22
@@ -8,7 +8,7 @@ repo: https://github.com/accidentable/Trust404_th
 tags: [블록체인, DID, VC, SD-JWT, 개인정보, 프로토타입]
 ---
 
-# SabonX — 주민등록증, 안전하게
+# SabonX, 주민등록증, 안전하게
 
 ## 1. 개요
 
@@ -76,14 +76,14 @@ TypeScript, React, Vite, Node.js/Express, Solidity, Docker. 암호 연산은 `jo
 
 ### API 표면 (레거시 단계별 검증 흐름)
 
-`raw/done/blockchain-valley-2026-sabonx-apis.md`는 역할별 엔드포인트를 단계별로 눌러 보는 흐름을 설명한다. 현재 앱(`server/payrollRoutes.ts`) 이전의 검증 데모 경로로 보인다(추정 — README가 `/legacy/*` 경로와 단계별 검증 스크립트를 "기존 암호 검증 흐름 재현용"으로 유지한다고 적음). 이 흐름에서 검증자는 국세청이 아니라 **사장님**이다.
+`raw/done/blockchain-valley-2026-sabonx-apis.md`는 역할별 엔드포인트를 단계별로 눌러 보는 흐름을 설명한다. 현재 앱(`server/payrollRoutes.ts`) 이전의 검증 데모 경로로 보인다(추정, README가 `/legacy/*` 경로와 단계별 검증 스크립트를 "기존 암호 검증 흐름 재현용"으로 유지한다고 적음). 이 흐름에서 검증자는 국세청이 아니라 **사장님**이다.
 
-- `POST /api/issuer/issue` — 발급. 응답의 `plaintextRrnInCredential`은 자격증명 전체를 문자열 검색한 결과로 항상 `false`여야 한다.
-- `POST /api/issuer/revoke` — 분실 신고. 폐기 레지스트리에 **인덱스 번호만** 기록하고 txHash·Etherscan 링크를 돌려준다.
-- `GET /api/holder/:holderId` / `POST /api/holder/:holderId/present` — 지갑 확인과 제시 생성. `deny`로 요청받은 항목도 뺄 수 있어 최종 결정권은 지갑에 있다. (이 엔드포인트의 지갑은 내용 확인용으로 서버가 대신 든다. 폰 흐름 `/wallet`에서는 개인키가 폰 IndexedDB에만 있다.)
-- `GET /api/verifier/:sessionId` — 내부 검사 11개(`issuer-trusted` `issuer-signature` `validity` `credential-type` `disclosure-digests` `kb-signature` `kb-nonce` `kb-audience` `kb-sd-hash` `revocation` `library-crosscheck`)와 화면용 4줄 요약. `withheldDigests`로 미제출 항목은 다이제스트만 남는다.
-- `POST /api/verifier/:sessionId/open` — **항상 실패하는** 엔드포인트. 사장님 개인키로도, 국세청 공개키로도 봉인이 열리지 않음을 보여주는 것이 목적이다.
-- `POST /api/tax/unseal` — 국세청 개인키로 봉인을 열어 일용근로소득 지급명세서를 만든다. 세액은 0원이어도 명세서에는 주민번호 13자리가 필요하다는 점이 이 데모의 논거다.
+- `POST /api/issuer/issue`, 발급. 응답의 `plaintextRrnInCredential`은 자격증명 전체를 문자열 검색한 결과로 항상 `false`여야 한다.
+- `POST /api/issuer/revoke`, 분실 신고. 폐기 레지스트리에 **인덱스 번호만** 기록하고 txHash·Etherscan 링크를 돌려준다.
+- `GET /api/holder/:holderId` / `POST /api/holder/:holderId/present`, 지갑 확인과 제시 생성. `deny`로 요청받은 항목도 뺄 수 있어 최종 결정권은 지갑에 있다. (이 엔드포인트의 지갑은 내용 확인용으로 서버가 대신 든다. 폰 흐름 `/wallet`에서는 개인키가 폰 IndexedDB에만 있다.)
+- `GET /api/verifier/:sessionId`, 내부 검사 11개(`issuer-trusted` `issuer-signature` `validity` `credential-type` `disclosure-digests` `kb-signature` `kb-nonce` `kb-audience` `kb-sd-hash` `revocation` `library-crosscheck`)와 화면용 4줄 요약. `withheldDigests`로 미제출 항목은 다이제스트만 남는다.
+- `POST /api/verifier/:sessionId/open`, **항상 실패하는** 엔드포인트. 사장님 개인키로도, 국세청 공개키로도 봉인이 열리지 않음을 보여주는 것이 목적이다.
+- `POST /api/tax/unseal`, 국세청 개인키로 봉인을 열어 일용근로소득 지급명세서를 만든다. 세액은 0원이어도 명세서에는 주민번호 13자리가 필요하다는 점이 이 데모의 논거다.
 - 그 외: `GET /api/chain`(브라우저가 직접 RPC를 읽도록 레지스트리 설정 제공), `GET /api/revocation/:index`, `POST /api/merchant`, `POST /api/session`, `POST /api/session/:id/vp`.
 
 ## 4. 잘된 점 / 안된 점
@@ -117,7 +117,8 @@ TypeScript, React, Vite, Node.js/Express, Solidity, Docker. 암호 연산은 `jo
 
 ## 6. 관련 문서
 
-- [[sd-jwt-selective-disclosure-jwe]] — 선택적 공개와 봉인 암호화를 함께 쓰는 이유
-- [[vc-key-binding-approval-jwt]] — 키 바인딩과 업무 승인을 결합하기
-- [[onchain-revocation-registry]] — 온체인 폐기 레지스트리와 fail-closed 검증
-- [[testnet-reward-token]] — 같은 EVM 테스트넷 컨트랙트를 쓴 다른 프로젝트([[hana-ar-kowalk-2026]])
+- [[sd-jwt-selective-disclosure-jwe]], 선택적 공개와 봉인 암호화를 함께 쓰는 이유
+- [[vc-key-binding-approval-jwt]], 키 바인딩과 업무 승인을 결합하기
+- [[onchain-revocation-registry]], 온체인 폐기 레지스트리와 fail-closed 검증
+- [[testnet-reward-token]], 같은 EVM 테스트넷 컨트랙트를 쓴 다른 프로젝트([[hana-ar-kowalk-2026]])
+- [[im-challenge-daegu-2026-sns-menu]], 같은 2026 AI Blockchain Challenge in Daegu에 낸 다른 트랙 결과물(소상공인·골목상권 분야)

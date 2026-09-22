@@ -3,7 +3,7 @@ title: 검색어 트렌드 API로 관심도 시계열 만들기 (네이버 데�
 type: concept
 created: 2026-09-22
 updated: 2026-09-22
-sources: [raw/done/bc-card-2026-analysis-summary.md, raw/done/bc-card-2026-idea-summary.md, raw/done/bc-card-2026-project-structure.md]
+sources: [raw/done/bc-card-2026-analysis-summary.md, raw/done/bc-card-2026-idea-summary.md, raw/done/bc-card-2026-project-structure.md, raw/done/im-challenge-daegu-2026-sns-menu-trend-radar.md]
 tags: [네이버데이터랩, 구글트렌드, api, 시계열, 검색량]
 ---
 
@@ -15,7 +15,16 @@ tags: [네이버데이터랩, 구글트렌드, api, 시계열, 검색량]
 
 ## 2. 어디서 썼는가
 
+<<<<<<< HEAD
 - [[bc-card-bigdata-2026]] — 2016-01~2026-09 유행 음식 26개의 검색량(네이버 주간, 구글 월간)을 수집해 유행의 정점 시점, 수명, 교체 간격을 계산했다.
+=======
+- [[bc-card-bigdata-2026]], 2016-01~2026-09 유행 음식 26개의 주간 검색량을 수집해 유행의 정점 시점, 수명, 교체 간격을 계산했다.
+
+- [[im-challenge-daegu-2026-sns-menu]], SNS 신메뉴 AI 컨설팅. 같은 기준자 방법을 **연령별 비교**에 썼다. Search Trend는 요청 단위로 정규화하므로 연령 필터를 따로 걸면 연령 간 크기를 비교할 수 없다. 한 요청에 기준자 그룹("날씨")을 함께 넣고 `후보 지수 합 ÷ 기준자 지수 합`으로 연령대별 상대 관심도를 냈다. 단계 판정에 쓰는 법은 [[search-index-stage-rule]], 이름 없는 후보를 찾는 앞 단계는 [[ngram-burst-discovery]].
+  - 운영 메모(2026-09-14 확인): 네이버 개발자센터(developers.naver.com)에서 검색·데이터랩 API **신규 신청이 중단**됐다. 신규는 네이버 클라우드 플랫폼 → NAVER API HUB에서 Application을 만들고 "Search Trend"·"검색"을 구독해야 하며, 구독 없이 호출하면 `401 errorCode 210 Permission Denied`가 돌아온다. 구 방식(`X-Naver-Client-Id/Secret`, `openapi.naver.com`)은 기존 신청자만 2027-06-30까지 한시 사용. Search Trend는 현재 무료 월 5만 건·50 RPS이고 향후 유료화 공지 예정, 블로그 검색은 무료 일 25,000건.
+  - 구글 트렌드는 이 프로젝트에서 비공식 `pytrends` 4.9.2로 받았고 연속 요청 시 429가 나 요청 간 25~30초 간격이 필요했다. `retries`를 주면 urllib3 2.x에서 `method_whitelist` 오류가 나므로 기본값을 썼다. 이후 구현에서는 공식 API가 없어 공개 급상승 RSS만 교차 확인 신호로 남겼다.
+  - 정규화 회피의 또 다른 방법: 매일 고정 창(90일)을 통째로 다시 받아 덮어쓰기.
+>>>>>>> c4980ba (ingest: im-challenge-daegu-2026-sns-menu, blockthon-2026-memory-market, tacotrump-2026-03 (노트북))
 
 ## 3. 실제로 겪은 문제와 해결
 

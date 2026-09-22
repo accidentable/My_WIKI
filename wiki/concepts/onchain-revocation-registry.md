@@ -3,7 +3,7 @@ title: 온체인 폐기 레지스트리와 fail-closed 검증
 type: concept
 created: 2026-09-22
 updated: 2026-09-22
-sources: [raw/done/blockchain-valley-2026-sabonx-readme.md, raw/done/blockchain-valley-2026-sabonx-apis.md, raw/done/blockchain-valley-2026-trust404-readme.md]
+sources: [raw/done/blockchain-valley-2026-sabonx-readme.md, raw/done/blockchain-valley-2026-sabonx-apis.md, raw/done/blockchain-valley-2026-trust404-readme.md, raw/done/blockthon-2026-memory-market-readme.md]
 tags: [블록체인, Sepolia, Solidity, 폐기, VC]
 ---
 
@@ -13,7 +13,8 @@ VC의 폐기 여부를 개인정보 없이 **인덱스 번호만** 체인에 기
 
 ## 어디서 썼는가
 
-- [[blockchain-valley-2026-sabonx]] — 주소 변경으로 폐기된 이전 VC의 제출을 서버 검증에서 거절.
+- [[blockchain-valley-2026-sabonx]], 주소 변경으로 폐기된 이전 VC의 제출을 서버 검증에서 거절.
+- [[blockthon-2026-memory-market]], 같은 계열이지만 **의도적으로 fail-open**인 대비 사례. 판매자가 낡은 단계를 `retract`하면 `RetractKey{blob_id}` → `Retraction{reason, at_ms}`가 팩에 남지만, 접근 승인 함수 `seal_approve`는 열쇠 ID만 보고 blob_id를 모르므로 폐기를 검사하지 않는다. 폐기된 단계도 구독자에게는 여전히 열리고(Move 테스트로 명시), 구매자 도구가 `is_retracted`로 걸러 준다. 즉 "더는 권하지 않음" 표식이지 회수가 아니다. 폐기를 어디서 판정하느냐(검증기 안이냐 클라이언트냐)가 fail-closed와 fail-open을 가른다. 자세한 것은 [[onchain-buyer-only-receipt]].
 
 ## 실제로 겪은 문제와 해결
 
@@ -44,4 +45,4 @@ VC의 폐기 여부를 개인정보 없이 **인덱스 번호만** 체인에 기
 - 환경변수: `CHAIN_ID`(Sepolia `11155111`), `RPC_URL`, `REGISTRY_ADDRESS`, `ISSUER_CHAIN_KEY`(Sepolia 테스트 ETH 필요)
 - 데모 컨트랙트: `0x6c30f02f3f5e31a9a0616c5b9756d8498a6b66e5`
 - 상태 확인: `GET /api/chain`의 `isStub`, `GET /api/revocation/:index`
-- 관련: [[testnet-reward-token]] — 같은 EVM 테스트넷 컨트랙트 사례([[hana-ar-kowalk-2026]]의 ERC-20 리워드 토큰). 온체인에 무엇을 올릴지 기준이 대비된다.
+- 관련: [[testnet-reward-token]], 같은 EVM 테스트넷 컨트랙트 사례([[hana-ar-kowalk-2026]]의 ERC-20 리워드 토큰). 온체인에 무엇을 올릴지 기준이 대비된다.
