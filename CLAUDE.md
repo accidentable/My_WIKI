@@ -4,7 +4,7 @@
 
 ## 이 도구의 역할
 
-Claude Code는 **넣기(ingest)** 와 **묻기(query)** 를 담당한다. 점검(lint)은 요청이 있을 때만 한다.
+Claude Code는 **넣기(ingest)** 와 **묻기(query)** 를 담당한다. 점검(lint)은 `tools/lint.py`(OpenAI API)가 정기적으로 맡고, 사용자가 명시적으로 요청할 때만 `lint` 서브에이전트를 쓴다.
 
 ## 위임 규칙
 
