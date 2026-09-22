@@ -281,10 +281,13 @@ h2 .n{color:var(--mute);font-weight:500;font-size:13px;margin-left:8px}
 .hero .meta{font-size:13px;color:var(--mute);margin:6px 0 12px}
 .hero .meta a{color:var(--ink-2)}
 .hero .intro{font-size:16px;color:var(--ink);background:var(--accent-soft);border-radius:12px;padding:14px 16px;margin:14px 0 0;border-left:3px solid var(--accent)}
-table.stack{width:100%;border-collapse:collapse;font-size:13.5px}
+table.stack{width:100%;border-collapse:collapse;font-size:13.5px;table-layout:fixed}
+table.stack col.c1{width:20%} table.stack col.c2{width:15%} table.stack col.c3{width:38%} table.stack col.c4{width:27%}
+table.stack td,table.stack th{word-break:keep-all;overflow-wrap:anywhere}
+table.stack code{font-size:12px;word-break:break-all}
 table.stack th{text-align:left;font-weight:600;color:var(--mute);font-size:12px;padding:8px 10px;border-bottom:1px solid var(--line)}
 table.stack td{padding:10px;border-bottom:1px solid var(--line);vertical-align:top;color:var(--ink-2)}
-table.stack td:first-child{color:var(--ink);font-weight:600;white-space:nowrap}
+table.stack td:first-child{color:var(--ink);font-weight:600}
 table.stack tr:last-child td{border-bottom:0}
 .tblwrap{overflow:auto}
 .missing{color:var(--mute);font-style:italic}
@@ -335,7 +338,7 @@ svg{width:100%;height:100%;display:block;cursor:grab}
 .node.minor text{display:none}.node.hi text,.node.sel text{display:block;fill:var(--ink);font-weight:600}
 .node.sel circle{stroke:var(--ink);stroke-width:3px}
 #tip{position:absolute;pointer-events:none;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:8px 10px;max-width:300px;font-size:12px;color:var(--ink-2);box-shadow:var(--shadow);display:none}
-@media (max-width:640px){ .top input{width:140px} h1{font-size:22px} }
+@media (max-width:640px){ .top input{width:140px} h1{font-size:22px} table.stack{font-size:12.5px} table.stack col.c2{width:0} table.stack td:nth-child(2),table.stack th:nth-child(2){display:none} }
 </style>
 </head>
 <body>
@@ -447,7 +450,7 @@ function project(id){
     </div></div>
     ${iv?`
     <h2>기술 스택, 왜 썼나<span class="n">${iv.stack.length}</span></h2>
-    <div class="card tblwrap"><table class="stack"><thead><tr><th>기술</th><th>역할</th><th>왜 이걸 썼나</th><th>대안과 포기한 것</th></tr></thead><tbody>
+    <div class="card tblwrap"><table class="stack"><colgroup><col class="c1"><col class="c2"><col class="c3"><col class="c4"></colgroup><thead><tr><th>기술</th><th>역할</th><th>왜 이걸 썼나</th><th>대안과 포기한 것</th></tr></thead><tbody>
       ${iv.stack.map(s=>`<tr><td>${inline(s.tech)}</td><td>${inline(s.role)}</td><td>${/자료에 없음/.test(s.why)?`<span class="missing">${esc(s.why)} — 직접 채울 것</span>`:inline(s.why)}</td><td>${inline(s.alt)}</td></tr>`).join('')}
     </tbody></table></div>
     <h2>고민한 점<span class="n">${iv.concerns.length}</span></h2>
