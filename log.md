@@ -186,3 +186,8 @@
 - project 14개에 `### 아키텍처` 절 추가(층·기술·호스팅·연결). 호스팅 미기재는 "호스팅 자료에 없음"으로 둠 (icognito 전부, 끝물레이더 대부분, FRAME 워커 2개, jb 규정 인덱스, Ko-Walk 크론)
 - 사이트: 탭 패널 전환, 아키텍처 그림, 홈 기술 스택 필터·로고, 화면 문구 경어체
 - 도구: claude-code, Opus 서브에이전트 6개, 본체 병합
+
+## 2026-09-22 site: 아키텍처 그림 개편
+- 좌→우 흐름형 배치, iconify logos 컬러 로고(없으면 Simple Icons → 글자 배지), 묶음 상자(14절 네 번째 항목), 번호 배지 화살표와 번호 목록
+- project 5개에 묶음 항목 추가 (miraeasset, jb-finance, im-challenge, wanted-hackathon, hana-ar-kowalk). 나머지는 근거 부족 또는 층별 노드 1개라 미적용
+- 도구: claude-code, Sonnet 서브에이전트 1개

@@ -128,8 +128,8 @@ Base Sepolia 테스트넷, Solidity ERC-20, 기업별 개별 토큰(예: `KO_005
 
 ### 아키텍처
 - (계획 단계, 구현 없음)
-- [client] 모바일 앱 :: React Native, Expo SDK 51+, ViroReact 2.41+, react-native-maps, expo-location :: iOS/Android 실기기
-- [client] 앱 내장 지갑 :: privateKey, Secure Storage, ethers.js v6 :: 기기 내부
+- [client] 모바일 앱 :: React Native, Expo SDK 51+, ViroReact 2.41+, react-native-maps, expo-location :: iOS/Android 실기기 :: 모바일 기기
+- [client] 앱 내장 지갑 :: privateKey, Secure Storage, ethers.js v6 :: 기기 내부 :: 모바일 기기
 - [server] REST API :: Node.js, Express :: Vercel
 - [data] Supabase :: PostgreSQL, Supabase Auth :: Supabase
 - [ops] 퀴즈 생성 크론잡 :: 크론잡, 일 1회 :: 호스팅 자료에 없음

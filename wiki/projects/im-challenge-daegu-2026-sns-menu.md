@@ -132,8 +132,8 @@ AI 키 변수는 `AI_API_KEY` 하나로 한정했다. 범용 `OPENAI_API_KEY`/`A
 
 ### 아키텍처
 - [client] 사장님·운영자 화면 :: Next.js App Router, React 19.2, Tailwind CSS 4 :: 로컬 npm run dev, GitHub Codespaces, docker compose
-- [server] Next.js Route Handler :: Next.js 16.3.5, TypeScript 5, Zod 4.6 :: 앱과 같은 Node 22.20 프로세스
-- [server] 순수 도메인 함수 :: cost.ts, ngram.ts, trend-stage.ts, store-fit.ts :: 앱 프로세스 내부
+- [server] Next.js Route Handler :: Next.js 16.3.5, TypeScript 5, Zod 4.6 :: 앱과 같은 Node 22.20 프로세스 :: Node 프로세스
+- [server] 순수 도메인 함수 :: cost.ts, ngram.ts, trend-stage.ts, store-fit.ts :: 앱 프로세스 내부 :: Node 프로세스
 - [data] SQLite :: Prisma 7.10, @prisma/adapter-better-sqlite3 :: 실행 환경 로컬 파일
 - [external] LLM :: openai 7.15 gpt-5.6-terra, @anthropic-ai/sdk 0.125 claude-opus-5 :: OpenAI·Anthropic API
 - [external] 유행 자료 API :: 네이버 Search Trend·블로그, YouTube Data API, 구글 급상승 RSS :: 각 제공자 API

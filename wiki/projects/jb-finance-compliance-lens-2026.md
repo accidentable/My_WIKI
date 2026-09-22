@@ -142,9 +142,9 @@ tags: [jb금융, 컴플라이언스, ai에이전트, langgraph, rag, 준법심�
 
 ### 아키텍처
 - [client] 웹 화면 :: Next.js App Router, TypeScript, Tailwind :: docker-compose 컨테이너, 3000 포트 (저장소 README 기준)
-- [server] 심의 API :: FastAPI, Python 3.11, SSE :: docker-compose 컨테이너, 8000 포트
-- [server] 심의 그래프 :: LangGraph 1.0, 6단계, HITL INTERRUPT :: 심의 API 프로세스 내부
-- [server] 규칙엔진 :: YAML 규칙 :: 심의 API 프로세스 내부
+- [server] 심의 API :: FastAPI, Python 3.11, SSE :: docker-compose 컨테이너, 8000 포트 :: 심의 API 컨테이너
+- [server] 심의 그래프 :: LangGraph 1.0, 6단계, HITL INTERRUPT :: 심의 API 프로세스 내부 :: 심의 API 컨테이너
+- [server] 규칙엔진 :: YAML 규칙 :: 심의 API 프로세스 내부 :: 심의 API 컨테이너
 - [data] 규정 인덱스 :: Chroma, text-embedding-3-small, 금소법 광고규제 6건 :: 호스팅 자료에 없음
 - [data] 그래프 상태 저장 :: SQLite 체크포인터 :: 심의 API 컨테이너
 - [external] 판정·비전 모델 :: gpt-5.4, gpt-5.4-mini, Structured Outputs :: OpenAI API

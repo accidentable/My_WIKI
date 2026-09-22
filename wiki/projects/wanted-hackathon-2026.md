@@ -149,9 +149,9 @@ tags: [원티드, 해커톤, 3d, web, mediapipe, openai, three-js]
 
 ### 아키텍처
 
-- [client] 웹 데모 :: three.js, importmap, Web Audio :: 브라우저 (PC `localhost:5173`, 폰은 같은 Wi-Fi 주소)
-- [client] 온디바이스 세그멘터 :: MediaPipe InteractiveSegmenter, `magic_touch.tflite` 약 16MB, WASM :: 브라우저
-- [client] 색상 휴리스틱 폴백 :: `src/photo/material.js` 색상 통계 점수식 :: 브라우저
+- [client] 웹 데모 :: three.js, importmap, Web Audio :: 브라우저 (PC `localhost:5173`, 폰은 같은 Wi-Fi 주소) :: 브라우저
+- [client] 온디바이스 세그멘터 :: MediaPipe InteractiveSegmenter, `magic_touch.tflite` 약 16MB, WASM :: 브라우저 :: 브라우저
+- [client] 색상 휴리스틱 폴백 :: `src/photo/material.js` 색상 통계 점수식 :: 브라우저 :: 브라우저
 - [server] 로컬 서버 :: `serve.js`, Node.js, 프레임워크 없음 :: 개발 PC, 포트 5173
 - [external] 비전 소재 판정 :: OpenAI 비전 API, `detail: low`, JSON 스키마 응답 :: OpenAI API
 - 웹 데모 -> 온디바이스 세그멘터 :: 사진(최대 1024px)과 중앙 시드 점

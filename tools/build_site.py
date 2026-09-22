@@ -164,7 +164,8 @@ def parse_arch(text: str) -> dict:
         name = parts[0]
         tech = [t.strip() for t in re.split(r"[,，]", parts[1])] if len(parts) > 1 and parts[1] else []
         host = parts[2] if len(parts) > 2 else ""
-        nodes.append({"layer": layer, "name": name, "tech": [t for t in tech if t], "host": host})
+        group = parts[3] if len(parts) > 3 else ""
+        nodes.append({"layer": layer, "name": name, "tech": [t for t in tech if t], "host": host, "group": group})
     names = {n["name"] for n in nodes}
     edges = [e for e in edges if e["from"] in names and e["to"] in names]
     return {"nodes": nodes, "edges": edges, "note": note}
@@ -389,24 +390,26 @@ section.sec + section.sec{border-top:0}
 .secnav{display:flex;justify-content:space-between;gap:10px;margin-top:28px;padding-top:16px;border-top:1px solid var(--line)}
 .secnav a{font-size:13px;color:var(--muted);padding:10px 0;display:inline-flex;align-items:center;gap:6px}
 .secnav a:hover{color:var(--ink)}
-/* 아키텍처 */
-.arch{position:relative;border:1px solid var(--line);border-radius:12px;padding:18px 18px 10px;background:#fff;overflow:auto}
-.arch svg.wires{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
-.arch .layer{display:grid;grid-template-columns:88px 1fr;gap:14px;align-items:center;padding:10px 0;position:relative;z-index:1}
-.arch .layer + .layer{border-top:1px dashed var(--line)}
-.arch .lname{font-family:"Manrope",sans-serif;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
-.arch .boxes{display:flex;flex-wrap:wrap;gap:12px}
-.arch .box{border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:#fff;min-width:170px;max-width:260px;position:relative;z-index:1}
-.arch .box .bn{font-weight:700;font-size:14px;display:flex;align-items:center;gap:8px;line-height:1.3}
-.arch .box .bn img{width:18px;height:18px;flex:none}
-.arch .box .bn .ini{width:18px;height:18px;border-radius:4px;background:var(--soft);color:var(--muted);font-size:10px;display:inline-flex;align-items:center;justify-content:center;font-family:"Manrope",sans-serif;font-weight:700;flex:none}
-.arch .box .bt{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
-.arch .box .bt span{font-size:11px;border:1px solid var(--line);border-radius:5px;padding:0 6px;color:var(--ink);display:inline-flex;align-items:center;gap:4px}
-.arch .box .bt img{width:11px;height:11px}
-.arch .box .bh{font-size:11px;color:var(--muted);margin-top:6px;font-family:"Manrope","Noto Sans KR",sans-serif}
-.arch .box .bh.none{font-style:italic}
+/* 아키텍처: 좌→우 흐름 */
+.arch{position:relative;border:1px solid var(--line);border-radius:12px;padding:22px 20px;background:#fff;overflow:auto}
+.arch svg.wires{position:absolute;left:0;top:0;pointer-events:none}
+.flow{display:flex;gap:48px;align-items:flex-start;min-width:max-content;position:relative;z-index:1}
+.col{display:flex;flex-direction:column;gap:26px;align-items:center;min-width:140px}
+.col .lname{font-family:"Manrope",sans-serif;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);text-align:center;height:16px}
+.grp{border:1.5px dashed #c9ccd6;border-radius:16px;padding:32px 14px 14px;background:#fafbfc;position:relative;display:flex;flex-direction:column;gap:16px;align-items:center}
+.grp .gname{position:absolute;top:8px;left:14px;font-family:"Manrope","Noto Sans KR",sans-serif;font-size:12px;font-weight:700;color:var(--ink);display:flex;gap:6px;align-items:center}
+.grp .gname img{width:16px;height:16px}
+.nd{width:140px;text-align:center;position:relative;z-index:1}
+.nd .logo{width:56px;height:56px;margin:0 auto 8px;display:flex;align-items:center;justify-content:center}
+.nd .logo img{max-width:52px;max-height:52px}
+.nd .logo .ini{width:52px;height:52px;border-radius:12px;background:var(--soft);border:1px solid var(--line);color:var(--muted);font-size:15px;display:inline-flex;align-items:center;justify-content:center;font-family:"Manrope",sans-serif;font-weight:700}
+.nd .bn{font-weight:700;font-size:13.5px;line-height:1.35}
+.nd .bt{font-size:11.5px;color:var(--ink-2,#4b5160);margin-top:3px;line-height:1.5}
+.nd .bh{font-size:11px;color:var(--muted);margin-top:3px;font-family:"Manrope","Noto Sans KR",sans-serif}
+.nd .bh.none{font-style:italic}
 .arch .note{font-size:12px;color:var(--muted);margin:0 0 8px}
-.edgelist{margin:10px 0 0;padding:0;list-style:none;font-size:13px;color:var(--muted);display:flex;flex-wrap:wrap;gap:6px 18px}
+.edgelist{margin:12px 0 0;padding:0;list-style:none;font-size:13px;color:var(--muted);display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:6px 18px}
+.edgelist .en{display:inline-flex;width:18px;height:18px;border-radius:50%;border:1px solid var(--ink);color:var(--ink);font-size:10px;font-weight:700;align-items:center;justify-content:center;margin-right:8px;font-family:"Manrope",sans-serif;vertical-align:-3px}
 .edgelist li b{color:var(--ink);font-weight:500}
 .hostrow{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 12px}
 .hostrow .chip img{width:13px;height:13px}
@@ -474,8 +477,12 @@ function overview(body){ const parts=body.split(/\n(?=## )/); const first=parts.
 
 // ---- 기술 로고 (Simple Icons CDN, 없으면 글자 배지) ----
 const ICON_ALIAS = {'next.js':'nextdotjs','nextjs':'nextdotjs','next':'nextdotjs','node.js':'nodedotjs','node':'nodedotjs','three.js':'threedotjs','threejs':'threedotjs','tailwind css':'tailwindcss','tailwind':'tailwindcss','amazon web services':'amazonwebservices','aws':'amazonwebservices','aws lambda':'awslambda','lambda':'awslambda','api gateway':'amazonapigateway','amazon api gateway':'amazonapigateway','postgres':'postgresql','postgresql':'postgresql','sqlite':'sqlite','hyperclova x':'naver','hyperclova':'naver','hcx-005':'naver','clova':'naver','네이버':'naver','naver cloud':'naver','ncloud':'naver','openai':'openai','gpt':'openai','chatgpt':'openai','claude':'claude','claude code':'claude','anthropic':'anthropic','codex':'openai','react native':'react','expo':'expo','solidity':'solidity','ethereum':'ethereum','base sepolia':'ethereum','sepolia':'ethereum','erc-20':'ethereum','sui':'sui','move':'sui','walrus':'walrus','telegram':'telegram','python':'python','fastapi':'fastapi','docker':'docker','vercel':'vercel','supabase':'supabase','prisma':'prisma','redis':'redis','upstash':'upstash','github':'github','ubuntu':'ubuntu','linux':'linux','langgraph':'langgraph','langchain':'langchain','typescript':'typescript','javascript':'javascript','react':'react','vite':'vite','express':'express','mediapipe':'google','google trends':'google','구글 트렌드':'google','cloudflare':'cloudflare','vercel cron':'vercel','pandas':'pandas','numpy':'numpy','matplotlib':'python','pytorch':'pytorch','huggingface':'huggingface','chroma':'chromadb','chromadb':'chromadb','assemblyai':'assemblyai','trigger.dev':'triggerdotdev','systemd':'linux','apscheduler':'python','webrtc':'webrtc','pwa':'pwa','service worker':'pwa','web push':'pwa','dart':'opendart','opendart':'opendart','sqlite fts5':'sqlite','fts5':'sqlite','parquet':'apacheparquet','csv':'googlesheets'};
+const LOGOS = {'nextdotjs':'nextjs-icon','react':'react','vite':'vitejs','typescript':'typescript-icon','javascript':'javascript','python':'python','fastapi':'fastapi-icon','sqlite':'sqlite','postgresql':'postgresql','redis':'redis','docker':'docker-icon','vercel':'vercel-icon','amazonwebservices':'aws','awslambda':'aws-lambda','amazonapigateway':'aws-api-gateway','supabase':'supabase-icon','prisma':'prisma','solidity':'solidity','ethereum':'ethereum','telegram':'telegram','openai':'openai-icon','claude':'claude-icon','anthropic':'anthropic-icon','expo':'expo-icon','threedotjs':'threejs','tailwindcss':'tailwindcss-icon','nodedotjs':'nodejs-icon','express':'express','cloudflare':'cloudflare-icon','github':'github-icon','ubuntu':'ubuntu','linux':'linux-tux','langchain':'langchain-icon','google':'google-icon','pandas':'pandas-icon','numpy':'numpy','upstash':'upstash-icon','naver':'naver','pwa':'pwa','githubactions':'github-actions','caddy':'caddy','nginx':'nginx','mariadb':'mariadb-icon','mysql':'mysql-icon','firebase':'firebase','netlify':'netlify-icon','chromadb':'chroma','huggingface':'hugging-face-icon','pytorch':'pytorch-icon','jupyter':'jupyter','graphql':'graphql','rust':'rust','go':'go','java':'java','spring':'spring-icon','kotlin':'kotlin-icon','swift':'swift','flutter':'flutter','sui':'sui','walrus':'walrus','opendart':'opendart','apacheparquet':'apache-parquet'};
 function iconSlug(tech){ let t=String(tech||'').replace(/`/g,'').toLowerCase().trim(); if(!t) return null; if(ICON_ALIAS[t]) return ICON_ALIAS[t]; const first=t.split(/[\s(·,/+]/)[0]; if(ICON_ALIAS[first]) return ICON_ALIAS[first]; for(const k in ICON_ALIAS){ if(t.startsWith(k+' ')||t.startsWith(k+'(')) return ICON_ALIAS[k]; } if(/^[a-z0-9.]+$/.test(first)) return first.replace(/\.js$/,'dotjs').replace(/[^a-z0-9]/g,''); return null; }
-function iconImg(tech, size){ const slug=iconSlug(tech); const ini=`<span class="ini" title="${esc(tech)}">${esc(String(tech).replace(/`/g,'').trim().slice(0,2).toUpperCase())}</span>`; if(!slug) return ini; return `<img src="https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/${slug}.svg" alt="" width="${size||18}" height="${size||18}" loading="lazy" onerror="this.outerHTML=${JSON.stringify(ini).replace(/"/g,'&quot;')}">`; }
+function iconImg(tech, size){ const slug=iconSlug(tech); const label=String(tech).replace(/`/g,'').trim(); const ini=`<span class="ini" title="${esc(label)}">${esc(label.slice(0,2).toUpperCase())}</span>`; if(!slug) return ini;
+  const logo=LOGOS[slug]; const src1=logo?`https://api.iconify.design/logos/${logo}.svg`:`https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/${slug}.svg`; const src2=logo?`https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/${slug}.svg`:'';
+  const fb=JSON.stringify(ini).replace(/"/g,'&quot;');
+  return `<img src="${src1}" data-fb="${src2}" alt="" width="${size||18}" height="${size||18}" loading="lazy" onerror="if(this.dataset.fb){this.src=this.dataset.fb;this.dataset.fb='';}else{this.outerHTML=${fb};}">`; }
 // ---- 기술 필터 ----
 let techFilter = null; let techMore = false;
 function techStats(){ const cnt=new Map(); projects.forEach(p=>{ new Set(techNames(p).map(shortTech)).forEach(t=>cnt.set(t,(cnt.get(t)||0)+1)); }); return [...cnt.entries()].filter(([t,c])=>c>=1).sort((a,b)=>b[1]-a[1]||a[0].localeCompare(b[0])); }
@@ -572,23 +579,29 @@ function showSec(n, push){ const secs=[...app.querySelectorAll('section.sec')]; 
 }
 function spy(initial){ app.querySelectorAll('#tabbar a').forEach(a=>a.onclick=e=>{e.preventDefault(); showSec(+a.dataset.s,true);}); if(!app.querySelector('.secnav')) app.insertAdjacentHTML('beforeend','<div class="secnav"></div>'); const raw=app.querySelector('details.raw'); if(raw) app.appendChild(raw); showSec(initial||1,false); }
 
-// ---- 아키텍처 그림 ----
-const LAYERS=[['client','클라이언트'],['edge','엣지·CDN'],['server','서버'],['worker','워커·배치'],['data','데이터'],['chain','체인'],['external','외부 서비스'],['ops','운영']];
+// ---- 아키텍처 그림 (좌→우 흐름, 묶음 상자, 컬러 로고) ----
+const LAYERS=[['client','클라이언트'],['edge','엣지 · CDN'],['server','서버'],['worker','워커 · 배치'],['data','데이터'],['chain','체인'],['external','외부 서비스'],['ops','운영']];
+function nodeHtml(n){ return `<div class="nd" data-node="${esc(n.name)}"><div class="logo">${iconImg(n.tech[0]||n.name,52)}</div><div class="bn">${esc(n.name)}</div>${n.tech.length?`<div class="bt">${n.tech.map(esc).join(' · ')}</div>`:''}<div class="bh ${/자료에 없음/.test(n.host)?'none':''}">${esc(n.host||'')}</div></div>`; }
 function archHtml(a){ if(!a) return ''; const by=new Map(); a.nodes.forEach(n=>{ if(!by.has(n.layer)) by.set(n.layer,[]); by.get(n.layer).push(n); });
-  const hosts=[...new Set(a.nodes.map(n=>n.host).filter(h=>h&&!/자료에 없음/.test(h)))];
-  return `${a.note?`<p class="note">${esc(a.note)}</p>`:''}
-  ${hosts.length?`<div class="hostrow"><span class="small" style="align-self:center;color:var(--muted)">호스팅</span>${hosts.map(h=>`<span class="chip">${iconImg(h,13)}${esc(h)}</span>`).join('')}</div>`:''}
-  <div class="arch"><svg class="wires"></svg>
-  ${LAYERS.filter(([k])=>by.has(k)).map(([k,label])=>`<div class="layer"><div class="lname">${label}</div><div class="boxes">${by.get(k).map(n=>`<div class="box" data-node="${esc(n.name)}"><div class="bn">${iconImg(n.tech[0]||n.name,18)}${esc(n.name)}</div>${n.tech.length?`<div class="bt">${n.tech.map(t=>`<span>${iconImg(t,11)}${esc(t)}</span>`).join('')}</div>`:''}<div class="bh ${/자료에 없음/.test(n.host)?'none':''}">${esc(n.host||'')}</div></div>`).join('')}</div></div>`).join('')}
-  </div>
-  ${a.edges.length?`<ul class="edgelist">${a.edges.map(e=>`<li><b>${esc(e.from)}</b> → <b>${esc(e.to)}</b>${e.label?` · ${esc(e.label)}`:''}</li>`).join('')}</ul>`:''}`; }
+  const cols=LAYERS.filter(([k])=>by.has(k)).map(([k,label])=>{ const items=by.get(k); const groups=new Map(); const singles=[]; items.forEach(n=>{ if(n.group){ if(!groups.has(n.group)) groups.set(n.group,[]); groups.get(n.group).push(n);} else singles.push(n); });
+    return `<div class="col" data-layer="${k}"><div class="lname">${label}</div>${[...groups.entries()].map(([g,ns])=>`<div class="grp" data-group="${esc(g)}"><div class="gname">${LOGOS[iconSlug(g)]?iconImg(g,16):''}${esc(g)}</div>${ns.map(nodeHtml).join('')}</div>`).join('')}${singles.map(nodeHtml).join('')}</div>`; }).join('');
+  return `${a.note?`<p class="note">${esc(a.note)}</p>`:''}<div class="arch"><svg class="wires"></svg><div class="flow">${cols}</div></div>
+  ${a.edges.length?`<ol class="edgelist">${a.edges.map((e,i)=>`<li><span class="en">${i+1}</span><b>${esc(e.from)}</b> → <b>${esc(e.to)}</b>${e.label?`<span class="el"> · ${esc(e.label)}</span>`:''}</li>`).join('')}</ol>`:''}`; }
 function drawWires(){ const box=app.querySelector('.arch'); if(!box) return; const svg=box.querySelector('svg.wires'); const a=window.__arch; if(!a||!svg) return;
-  const r0=box.getBoundingClientRect(); const pos=name=>{ const el=box.querySelector(`.box[data-node="${CSS.escape(name)}"]`); if(!el) return null; const r=el.getBoundingClientRect(); return {x:r.left-r0.left+box.scrollLeft+r.width/2, top:r.top-r0.top+box.scrollTop, bottom:r.bottom-r0.top+box.scrollTop, left:r.left-r0.left+box.scrollLeft, right:r.right-r0.left+box.scrollLeft, cy:r.top-r0.top+box.scrollTop+r.height/2}; };
-  svg.setAttribute('viewBox',`0 0 ${box.scrollWidth} ${box.scrollHeight}`); svg.style.width=box.scrollWidth+'px'; svg.style.height=box.scrollHeight+'px';
-  let d='<defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#9aa0a6"/></marker></defs>';
-  a.edges.forEach(e=>{ const A=pos(e.from), B=pos(e.to); if(!A||!B) return; let x1,y1,x2,y2; if(Math.abs(A.cy-B.cy)<4){ x1=A.right; y1=A.cy; x2=B.left; y2=B.cy; if(A.left>B.left){x1=A.left;x2=B.right;} d+=`<path d="M${x1},${y1} C${(x1+x2)/2},${y1} ${(x1+x2)/2},${y2} ${x2},${y2}" fill="none" stroke="#9aa0a6" stroke-width="1.5" marker-end="url(#arr)"/>`; } else { const down=A.cy<B.cy; x1=A.x; y1=down?A.bottom:A.top; x2=B.x; y2=down?B.top:B.bottom; d+=`<path d="M${x1},${y1} C${x1},${(y1+y2)/2} ${x2},${(y1+y2)/2} ${x2},${y2}" fill="none" stroke="#9aa0a6" stroke-width="1.5" marker-end="url(#arr)"/>`; } });
+  const r0=box.getBoundingClientRect(); const W=box.scrollWidth, H=box.scrollHeight; svg.setAttribute('width',W); svg.setAttribute('height',H); svg.setAttribute('viewBox',`0 0 ${W} ${H}`);
+  const rect=name=>{ const el=box.querySelector(`.nd[data-node="${CSS.escape(name)}"]`); if(!el) return null; const r=el.getBoundingClientRect(); const lg=(el.querySelector('.logo')||el).getBoundingClientRect(); const ox=box.scrollLeft-r0.left, oy=box.scrollTop-r0.top; return {l:r.left+ox, r:r.right+ox, t:r.top+oy, b:r.bottom+oy, cx:lg.left+ox+lg.width/2, ly:lg.top+oy+lg.height/2, lt:lg.top+oy, lb:lg.bottom+oy}; };
+  let d='<defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#5f6368"/></marker></defs>';
+  const badges=[];
+  a.edges.forEach((e,i)=>{ const A=rect(e.from), B=rect(e.to); if(!A||!B) return; let x1,y1,x2,y2,path;
+    if(Math.abs(A.cx-B.cx)>60){ const lr=A.cx<B.cx; x1=lr?A.r-6:A.l+6; y1=A.ly; x2=lr?B.l+6:B.r-6; y2=B.ly; const mx=(x1+x2)/2; path=`M${x1},${y1} C${mx},${y1} ${mx},${y2} ${x2},${y2}`; }
+    else { const down=A.ly<B.ly; x1=A.cx; y1=down?A.b+2:A.t-2; x2=B.cx; y2=down?B.t-2:B.b+2; const my=(y1+y2)/2; path=`M${x1},${y1} C${x1},${my} ${x2},${my} ${x2},${y2}`; }
+    d+=`<path d="${path}" fill="none" stroke="#5f6368" stroke-width="1.6" marker-end="url(#arr)"/>`;
+    badges.push({x:(x1+x2)/2, y:(y1+y2)/2, n:i+1}); });
+  badges.forEach(b=>{ d+=`<circle cx="${b.x}" cy="${b.y}" r="9" fill="#fff" stroke="#5f6368" stroke-width="1.2"/><text x="${b.x}" y="${b.y+3.5}" text-anchor="middle" font-size="10" font-weight="700" font-family="Manrope, sans-serif" fill="#202124">${b.n}</text>`; });
   svg.innerHTML=d; }
 window.addEventListener('resize',()=>requestAnimationFrame(drawWires));
+window.addEventListener('load',()=>setTimeout(drawWires,300));
+setInterval(()=>{ if(document.querySelector('.arch') && document.querySelector('section.sec.on .arch')) drawWires(); }, 1200);
 
 function project(id, initial){
   const p=byId.get(id); if(!p||p.type!=='project'){home();return;}

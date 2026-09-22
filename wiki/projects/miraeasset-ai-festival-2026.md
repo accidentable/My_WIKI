@@ -160,10 +160,10 @@ DART 공시 4,204건에 자연어로 물으면 근거 접수번호가 붙은 답
 
 ### 아키텍처
 - [client] 평가 하네스 :: HTTP GET/POST :: 주최 측 환경
-- [server] 답변 API :: FastAPI, Python :: Ncloud Ubuntu 24.04, Docker, systemd (49.50.137.93:8000)
-- [server] 오케스트레이터 :: 정책 판정, 결정론 경로 73종, 게이트, 분해, 사전 검색, 검증 :: 답변 API 프로세스 내부
-- [data] 공시 DB :: SQLite, FTS5 3종 :: 서버 디스크, 컨테이너에 읽기 전용 마운트
-- [data] 목차 제목 벡터 :: SQLite, bge-m3 임베딩 311건 :: 서버 디스크
+- [server] 답변 API :: FastAPI, Python :: Ncloud Ubuntu 24.04, Docker, systemd (49.50.137.93:8000) :: Ncloud 서버 (Docker)
+- [server] 오케스트레이터 :: 정책 판정, 결정론 경로 73종, 게이트, 분해, 사전 검색, 검증 :: 답변 API 프로세스 내부 :: Ncloud 서버 (Docker)
+- [data] 공시 DB :: SQLite, FTS5 3종 :: 서버 디스크, 컨테이너에 읽기 전용 마운트 :: 서버 디스크
+- [data] 목차 제목 벡터 :: SQLite, bge-m3 임베딩 311건 :: 서버 디스크 :: 서버 디스크
 - [worker] 공시 파서 :: Python, DART XML 파서, XForms HTML 파서 :: 사전 실행, 런타임 아님
 - [external] HyperCLOVA X HCX-005 :: function calling :: 네이버 클라우드 API
 - 평가 하네스 -> 답변 API :: 질문, 5필드 JSON 응답
