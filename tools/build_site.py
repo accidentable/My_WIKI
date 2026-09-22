@@ -400,7 +400,7 @@ dialog#archDlg{border:0;border-radius:16px;padding:0;width:auto;max-width:96vw;m
 dialog#archDlg::backdrop{background:rgba(20,22,28,.55)}
 dialog#archDlg .dhead{display:flex;align-items:center;gap:14px;padding:14px 20px;border-bottom:1px solid var(--line)}
 dialog#archDlg .dhead .dl{margin-left:auto}
-dialog#archDlg .dbody{overflow:auto;padding:12px;position:relative}
+dialog#archDlg .dbody{overflow:auto;padding:12px;position:relative;max-height:calc(94vh - 72px)}
 dialog#archDlg .dscale{transform-origin:top left;position:relative}
 dialog#archDlg .arch.inmodal{border:0;overflow:visible}
 /* 아키텍처: 좌표 고정 캔버스 */
@@ -599,9 +599,9 @@ function layout(a){ const cols=[]; const byLayer=new Map(); const colIdx=Object.
     const x=L.padX+ci*(L.colW+L.colGap); let y=L.padTop; const placed=[]; const groups=[];
     order.forEach(o=>{ if(o.group){ const gy=y; y+=L.grpHead; o.items.forEach(n=>{ placed.push({n,x:x+L.grpPad,y,w:L.colW-2*L.grpPad,h:L.nodeH}); y+=L.nodeH+L.nodeGap; }); y-=L.nodeGap; groups.push({name:o.group,x,y:gy,w:L.colW,h:y-gy+L.grpPad}); y+=L.grpPad+L.nodeGap+8; } else { const n=o.items[0]; placed.push({n,x,y,w:L.colW,h:L.nodeH}); y+=L.nodeH+L.nodeGap; } });
     cols.push({key:k,label,x,nodes:placed,groups,h:y}); });
-  const W=L.padX*2+cols.length*L.colW+Math.max(0,cols.length-1)*L.colGap; const H=Math.max(...cols.map(c=>c.h),L.padTop)+L.padBottom;
+  const W=L.padX*2+cols.length*L.colW+Math.max(0,cols.length-1)*L.colGap; const bottomBase=Math.max(...cols.map(c=>c.h),L.padTop)-L.nodeGap; const H=bottomBase+L.padBottom;
   const pos={}; cols.forEach(c=>c.nodes.forEach(p=>{ pos[p.n.name]={...p, cx:p.x+p.w/2, ly:p.y+8+26, col:c.x}; }));
-  return {cols,W,H,pos}; }
+  return {cols,W,H,pos,bottomBase}; }
 function archHtml(a){ if(!a) return ''; const lay=layout(a); window.__lay=lay;
   const nodes=lay.cols.flatMap(c=>c.nodes).map(p=>{ const n=p.n; return `<div class="nd" data-node="${esc(n.name)}" style="left:${p.x}px;top:${p.y}px;width:${p.w}px;height:${p.h}px" title="${esc(n.host||'')}"><div class="logo">${iconImg(n.tech[0]||n.name,48)}</div><div class="bn">${esc(n.name)}</div>${n.tech.length?`<div class="bt">${esc(n.tech.slice(0,3).join(' · '))}</div>`:''}<div class="bh ${/자료에 없음/.test(n.host)?'none':''}">${esc(n.host||'')}</div></div>`; }).join('');
   const groups=lay.cols.flatMap(c=>c.groups).map(g=>`<div class="grpbox" style="left:${g.x}px;top:${g.y}px;width:${g.w}px;height:${g.h}px"></div><div class="gname" style="left:${g.x+12}px;top:${g.y+6}px">${LOGOS[iconSlug(g.name)]?iconImg(g.name,15):''}${esc(g.name)}</div>`).join('');
@@ -622,7 +622,7 @@ function routes(a,lay){ const pos=lay.pos; const colX=lay.cols.map(c=>c.x); cons
   E.forEach(r=>{ if(r.kind==='adj') gapX(r.ca,r); if(r.kind==='top'){ gapX(r.ca,r); gapX(r.cb-1,r); } if(r.kind==='bottom'){ gapX(r.ca-1,r); gapX(r.cb,r); } });
   const chan=(gi,r)=>{ const list=gapUse[gi]||[r]; const n=list.length; const idx=Math.max(0,list.indexOf(r)); const x0=colX[gi]+L.colW, w=L.colGap; return x0+w*(idx+1)/(n+1); };
   let topN=0, botN=0; E.forEach(r=>{ if(r.kind==='top') r.lane=topN++; if(r.kind==='bottom') r.lane=botN++; });
-  const topY=k=>26+(topN-1-k)*18; const botY=k=>lay.H-10-(k)*18;
+  const topY=k=>26+(topN-1-k)*18; const botY=k=>lay.bottomBase+22+(k)*18;
   const out=[];
   E.forEach(r=>{ const {A,B}=r; const po=(r.port&&r.port.out)||0, pi=(r.port&&r.port.in)||0; let pts=[];
     if(r.kind==='adj'){ const x1=A.x+A.w, y1=A.ly+po, x2=B.x, y2=B.ly+pi, cx=chan(r.ca,r); pts=[[x1,y1],[cx,y1],[cx,y2],[x2,y2]]; }
@@ -650,7 +650,7 @@ function archToolbar(){ return `<div class="archbar"><span class="small" style="
 function openArchModal(){ const src=app.querySelector('.arch'); const lay=window.__lay; if(!src||!lay) return; let dlg=document.getElementById('archDlg'); if(!dlg){ dlg=document.createElement('dialog'); dlg.id='archDlg'; document.body.appendChild(dlg); }
   dlg.innerHTML=`<div class="dhead"><b>아키텍처</b><span class="small" style="color:var(--muted)">번호는 연결 목록과 같습니다 · Esc로 닫기</span><button class="dl" id="archDlgClose">닫기</button></div><div class="dbody"><div class="dscale"></div></div>`;
   const clone=src.cloneNode(true); clone.classList.add('inmodal'); dlg.querySelector('.dscale').appendChild(clone);
-  const fit=()=>{ const vw=window.innerWidth*0.96-40, vh=window.innerHeight*0.94-90; const k=Math.max(0.6, Math.min(2, vw/lay.W, vh/lay.H)); const sc=dlg.querySelector('.dscale'); sc.style.transform=`scale(${k})`; sc.style.width=lay.W+'px'; sc.style.height=lay.H+'px'; const body=dlg.querySelector('.dbody'); body.style.height=(lay.H*k+24)+'px'; body.style.minWidth=Math.min(vw, lay.W*k+24)+'px'; };
+  const fit=()=>{ const vw=window.innerWidth*0.96-40, vh=window.innerHeight*0.94-110; const k=Math.max(0.6, Math.min(2, vw/lay.W, vh/lay.H)); const sc=dlg.querySelector('.dscale'); sc.style.transform=`scale(${k})`; sc.style.width=lay.W+'px'; sc.style.height=lay.H+'px'; const body=dlg.querySelector('.dbody'); body.style.height=(lay.H*k+24)+'px'; body.style.minWidth=Math.min(vw, lay.W*k+24)+'px'; };
   dlg.showModal(); fit(); drawWires(clone); window.addEventListener('resize',fit);
   dlg.querySelector('#archDlgClose').onclick=()=>dlg.close(); dlg.onclick=e=>{ if(e.target===dlg) dlg.close(); }; dlg.onclose=()=>{ window.removeEventListener('resize',fit); }; }
 function bindArch(){ const fb=document.getElementById('fullArch'); if(fb) fb.onclick=openArchModal; const dl=document.getElementById('dlExcali'); if(dl) dl.onclick=()=>{ const j=excalidrawJSON(); if(!j) return; const blob=new Blob([JSON.stringify(j,null,1)],{type:'application/json'}); const u=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=u; a.download=(location.hash.split('/')[2]||'architecture')+'.excalidraw'; a.click(); setTimeout(()=>URL.revokeObjectURL(u),2000); }; }
