@@ -55,6 +55,8 @@
 - [[kis-master-file-universe]] — 한투 종목마스터 고정폭 파싱으로 외부 라이브러리 없이 KOSPI100 유니버스 만들기
 
 ### 블록체인 · 신원
+- [[did-vc-trust-chain]] — DID·VC·전자서명의 역할을 구분하고 발급기관 신뢰와 체인 조회 범위 설명하기
+- [[browser-wallet-key-storage]] — IndexedDB 지갑의 출처 분리와 XSS·키 분실 한계 설명하기
 - [[sd-jwt-selective-disclosure-jwe]] — SD-JWT는 공개 범위, JWE는 전달값 기밀성. 한 제출 묶음에 역할을 나눠 쓰기
 - [[vc-key-binding-approval-jwt]] — KB-JWT로 소유자 제시를, 별도 승인 JWT로 특정 금액·월 동의를 증명하기
 - [[onchain-revocation-registry]] — VC 폐기를 인덱스 번호만 온체인에 남기고 조회 실패 시에도 거절하는 fail-closed 검증

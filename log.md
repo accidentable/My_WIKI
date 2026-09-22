@@ -191,3 +191,12 @@
 - 좌→우 흐름형 배치, iconify logos 컬러 로고(없으면 Simple Icons → 글자 배지), 묶음 상자(14절 네 번째 항목), 번호 배지 화살표와 번호 목록
 - project 5개에 묶음 항목 추가 (miraeasset, jb-finance, im-challenge, wanted-hackathon, hana-ar-kowalk). 나머지는 근거 부족 또는 층별 노드 1개라 미적용
 - 도구: claude-code, Sonnet 서브에이전트 1개
+
+## 2026-09-22 ingest: SabonX DID·브라우저 지갑 학습 정리
+
+- 원자료: raw/done/blockchain-valley-2026-sabonx-readme.md, raw/done/blockchain-valley-2026-trust404-readme.md와 SabonX에 관해 나눈 DID·VC·개인키 보관 대화
+- 신규: concepts/did-vc-trust-chain (식별자·전자서명·VC·발급기관 신뢰의 역할과 체인 조회 범위)
+- 신규: concepts/browser-wallet-key-storage (IndexedDB 출처 분리, XSS·키 분실 한계, 저장 시 암호화의 범위)
+- 갱신: projects/blockchain-valley-2026-sabonx (관련 개념 링크), wiki/index.md
+- 확인: W3C DID Core·VC Data Model·did:key Method, MDN 동일 출처 정책, OWASP HTML5 Security Cheat Sheet를 대조함
+- 도구: codex

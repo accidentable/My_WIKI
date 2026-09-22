@@ -118,6 +118,8 @@ TypeScript, React, Vite, Node.js/Express, Solidity, Docker. 암호 연산은 `jo
 ## 6. 관련 문서
 
 - [[sd-jwt-selective-disclosure-jwe]], 선택적 공개와 봉인 암호화를 함께 쓰는 이유
+- [[did-vc-trust-chain]], DID·VC·전자서명과 발급기관 신뢰의 역할 구분
+- [[browser-wallet-key-storage]], IndexedDB 지갑의 개인키 보관 범위와 남는 위험
 - [[vc-key-binding-approval-jwt]], 키 바인딩과 업무 승인을 결합하기
 - [[onchain-revocation-registry]], 온체인 폐기 레지스트리와 fail-closed 검증
 - [[testnet-reward-token]], 같은 EVM 테스트넷 컨트랙트를 쓴 다른 프로젝트([[hana-ar-kowalk-2026]])
