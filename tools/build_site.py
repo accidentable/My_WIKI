@@ -240,7 +240,7 @@ TEMPLATE = r"""<!doctype html>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>해커톤 면접 노트</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Manrope:wght@500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Manrope:wght@500;700&family=Nanum+Pen+Script&display=swap" rel="stylesheet">
 <style>
 :root{
   --bg:#ffffff; --ink:#202124; --muted:#666666; --line:#e5e5e5; --soft:#f7f7f8; --head:#2b2f3a;
@@ -390,9 +390,31 @@ section.sec + section.sec{border-top:0}
 .secnav{display:flex;justify-content:space-between;gap:10px;margin-top:28px;padding-top:16px;border-top:1px solid var(--line)}
 .secnav a{font-size:13px;color:var(--muted);padding:10px 0;display:inline-flex;align-items:center;gap:6px}
 .secnav a:hover{color:var(--ink)}
+
+/* 손그림 모드 */
+.archbar{display:flex;gap:8px;align-items:center;margin:0 0 10px;flex-wrap:wrap}
+.archbar .seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.archbar .seg button{border:0;background:#fff;padding:6px 12px;font-size:12px;color:var(--muted);min-height:32px}
+.archbar .seg button[aria-pressed="true"]{background:var(--ink);color:#fff}
+.archbar .dl{margin-left:auto;font-size:12px;color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:6px 12px;background:#fff;min-height:32px}
+.arch.sketch{border:0;background:#fff;padding:26px 24px}
+.arch.sketch .flow{gap:64px}
+.arch.sketch .col{gap:34px}
+.arch.sketch .lname{font-family:"Nanum Pen Script",cursive;font-size:18px;letter-spacing:0;text-transform:none;color:#555}
+.arch.sketch .nd{width:128px;padding:10px 6px 8px;min-height:118px}
+.arch.sketch .nd .logo{width:48px;height:48px;margin-bottom:6px}
+.arch.sketch .nd .logo img{max-width:44px;max-height:44px}
+.arch.sketch .nd .bn{font-family:"Nanum Pen Script",cursive;font-size:21px;font-weight:400;line-height:1.15;color:#1e1e1e}
+.arch.sketch .nd .bt{font-family:"Nanum Pen Script",cursive;font-size:15px;color:#666;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.arch.sketch .nd .bh{display:none}
+.arch.sketch .grp{border:0;background:transparent;padding:34px 12px 12px}
+.arch.sketch .grp .gname{font-family:"Nanum Pen Script",cursive;font-size:19px;font-weight:400;color:#1e1e1e;top:6px;left:16px}
+.arch.sketch .edgeno{position:absolute;pointer-events:none}
 /* 아키텍처: 좌→우 흐름 */
 .arch{position:relative;border:1px solid var(--line);border-radius:12px;padding:22px 20px;background:#fff;overflow:auto}
-.arch svg.wires{position:absolute;left:0;top:0;pointer-events:none}
+.arch svg.wires{position:absolute;left:0;top:0;pointer-events:none;z-index:0}
+.arch .flow{z-index:1}
+.arch .nd,.arch .grp{background:transparent}
 .flow{display:flex;gap:48px;align-items:flex-start;min-width:max-content;position:relative;z-index:1}
 .col{display:flex;flex-direction:column;gap:26px;align-items:center;min-width:140px}
 .col .lname{font-family:"Manrope",sans-serif;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);text-align:center;height:16px}
@@ -456,6 +478,7 @@ svg{width:100%;height:100%;display:block;cursor:grab}
 <script id="data" type="application/json">__DATA__</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/roughjs@4.6.6/bundled/rough.js"></script>
 <script>
 const DATA = JSON.parse(document.getElementById('data').textContent);
 const byId = new Map(DATA.nodes.map(n => [n.id, n]));
@@ -585,21 +608,53 @@ function nodeHtml(n){ return `<div class="nd" data-node="${esc(n.name)}"><div cl
 function archHtml(a){ if(!a) return ''; const by=new Map(); a.nodes.forEach(n=>{ if(!by.has(n.layer)) by.set(n.layer,[]); by.get(n.layer).push(n); });
   const cols=LAYERS.filter(([k])=>by.has(k)).map(([k,label])=>{ const items=by.get(k); const groups=new Map(); const singles=[]; items.forEach(n=>{ if(n.group){ if(!groups.has(n.group)) groups.set(n.group,[]); groups.get(n.group).push(n);} else singles.push(n); });
     return `<div class="col" data-layer="${k}"><div class="lname">${label}</div>${[...groups.entries()].map(([g,ns])=>`<div class="grp" data-group="${esc(g)}"><div class="gname">${LOGOS[iconSlug(g)]?iconImg(g,16):''}${esc(g)}</div>${ns.map(nodeHtml).join('')}</div>`).join('')}${singles.map(nodeHtml).join('')}</div>`; }).join('');
-  return `${a.note?`<p class="note">${esc(a.note)}</p>`:''}<div class="arch"><svg class="wires"></svg><div class="flow">${cols}</div></div>
+  return `${archToolbar()}${a.note?`<p class="note">${esc(a.note)}</p>`:''}<div class="arch ${archMode==='sketch'?'sketch':''}"><svg class="wires"></svg><div class="flow">${cols}</div></div>
   ${a.edges.length?`<ol class="edgelist">${a.edges.map((e,i)=>`<li><span class="en">${i+1}</span><b>${esc(e.from)}</b> → <b>${esc(e.to)}</b>${e.label?`<span class="el"> · ${esc(e.label)}</span>`:''}</li>`).join('')}</ol>`:''}`; }
+let archMode = (()=>{ try { return localStorage.getItem('arch-mode') || 'sketch'; } catch(e) { return 'sketch'; } })();
+function setArchMode(m){ archMode=m; try{localStorage.setItem('arch-mode',m);}catch(e){} const box=app.querySelector('.arch'); if(box){ box.classList.toggle('sketch', m==='sketch'); app.querySelectorAll('.archbar .seg button').forEach(b=>b.setAttribute('aria-pressed', b.dataset.m===m)); requestAnimationFrame(drawWires); } }
+function archToolbar(){ return `<div class="archbar"><div class="seg" role="group" aria-label="그림 스타일"><button data-m="sketch" aria-pressed="${archMode==='sketch'}">손그림</button><button data-m="clean" aria-pressed="${archMode==='clean'}">깔끔</button></div><button class="dl" id="dlExcali">Excalidraw로 열기 (.excalidraw)</button></div>`; }
+function geom(box){ const r0=box.getBoundingClientRect(); const ox=box.scrollLeft-r0.left, oy=box.scrollTop-r0.top;
+  const R=el=>{ const r=el.getBoundingClientRect(); return {l:r.left+ox, r:r.right+ox, t:r.top+oy, b:r.bottom+oy, w:r.width, h:r.height}; };
+  const nodes={}; box.querySelectorAll('.nd').forEach(el=>{ const g=R(el); const lg=R(el.querySelector('.logo')||el); nodes[el.dataset.node]={...g, cx:lg.l+lg.w/2, ly:lg.t+lg.h/2}; });
+  const groups=[]; box.querySelectorAll('.grp').forEach(el=>groups.push({name:el.dataset.group, ...R(el)}));
+  return {nodes, groups, W:box.scrollWidth, H:box.scrollHeight}; }
+function edgePath(A,B){ let x1,y1,x2,y2; if(Math.abs(A.cx-B.cx)>60){ const lr=A.cx<B.cx; x1=lr?A.r-4:A.l+4; y1=A.ly; x2=lr?B.l+4:B.r-4; y2=B.ly; const mx=(x1+x2)/2; return {d:`M${x1},${y1} C${mx},${y1} ${mx},${y2} ${x2},${y2}`, x1,y1,x2,y2, end:[x2,y2], dir:[x2-mx, y2-y2||0.001]}; }
+  const down=A.ly<B.ly; x1=A.cx; y1=down?A.b+2:A.t-2; x2=B.cx; y2=down?B.t-2:B.b+2; const my=(y1+y2)/2; return {d:`M${x1},${y1} C${x1},${my} ${x2},${my} ${x2},${y2}`, x1,y1,x2,y2, end:[x2,y2], dir:[x2-x2||0.001, y2-my]}; }
 function drawWires(){ const box=app.querySelector('.arch'); if(!box) return; const svg=box.querySelector('svg.wires'); const a=window.__arch; if(!a||!svg) return;
-  const r0=box.getBoundingClientRect(); const W=box.scrollWidth, H=box.scrollHeight; svg.setAttribute('width',W); svg.setAttribute('height',H); svg.setAttribute('viewBox',`0 0 ${W} ${H}`);
-  const rect=name=>{ const el=box.querySelector(`.nd[data-node="${CSS.escape(name)}"]`); if(!el) return null; const r=el.getBoundingClientRect(); const lg=(el.querySelector('.logo')||el).getBoundingClientRect(); const ox=box.scrollLeft-r0.left, oy=box.scrollTop-r0.top; return {l:r.left+ox, r:r.right+ox, t:r.top+oy, b:r.bottom+oy, cx:lg.left+ox+lg.width/2, ly:lg.top+oy+lg.height/2, lt:lg.top+oy, lb:lg.bottom+oy}; };
-  let d='<defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#5f6368"/></marker></defs>';
-  const badges=[];
-  a.edges.forEach((e,i)=>{ const A=rect(e.from), B=rect(e.to); if(!A||!B) return; let x1,y1,x2,y2,path;
-    if(Math.abs(A.cx-B.cx)>60){ const lr=A.cx<B.cx; x1=lr?A.r-6:A.l+6; y1=A.ly; x2=lr?B.l+6:B.r-6; y2=B.ly; const mx=(x1+x2)/2; path=`M${x1},${y1} C${mx},${y1} ${mx},${y2} ${x2},${y2}`; }
-    else { const down=A.ly<B.ly; x1=A.cx; y1=down?A.b+2:A.t-2; x2=B.cx; y2=down?B.t-2:B.b+2; const my=(y1+y2)/2; path=`M${x1},${y1} C${x1},${my} ${x2},${my} ${x2},${y2}`; }
-    d+=`<path d="${path}" fill="none" stroke="#5f6368" stroke-width="1.6" marker-end="url(#arr)"/>`;
-    badges.push({x:(x1+x2)/2, y:(y1+y2)/2, n:i+1}); });
-  badges.forEach(b=>{ d+=`<circle cx="${b.x}" cy="${b.y}" r="9" fill="#fff" stroke="#5f6368" stroke-width="1.2"/><text x="${b.x}" y="${b.y+3.5}" text-anchor="middle" font-size="10" font-weight="700" font-family="Manrope, sans-serif" fill="#202124">${b.n}</text>`; });
-  svg.innerHTML=d; }
+  const g=geom(box); svg.setAttribute('width',g.W); svg.setAttribute('height',g.H); svg.setAttribute('viewBox',`0 0 ${g.W} ${g.H}`);
+  const sketch=box.classList.contains('sketch') && window.rough;
+  while(svg.firstChild) svg.removeChild(svg.firstChild);
+  const NS='http://www.w3.org/2000/svg'; const el=(t,at)=>{const e=document.createElementNS(NS,t); for(const k in at) e.setAttribute(k,at[k]); return e;};
+  const rc = sketch ? rough.svg(svg) : null;
+  if(sketch){ // 묶음 상자, 노드 상자
+    g.groups.forEach(gr=>svg.appendChild(rc.rectangle(gr.l+2,gr.t+2,gr.w-4,gr.h-4,{roughness:1.4,stroke:'#1e1e1e',strokeWidth:1.3,fill:'#fff8e1',fillStyle:'solid',fillWeight:1})));
+    Object.values(g.nodes).forEach(n=>svg.appendChild(rc.rectangle(n.l+1,n.t+1,n.w-2,n.h-2,{roughness:1.2,stroke:'#1e1e1e',strokeWidth:1.2,fill:'#ffffff',fillStyle:'solid'})));
+  } else {
+    const defs=el('defs',{}); defs.innerHTML='<marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#5f6368"/></marker>'; svg.appendChild(defs);
+  }
+  a.edges.forEach((e,i)=>{ const A=g.nodes[e.from], B=g.nodes[e.to]; if(!A||!B) return; const P=edgePath(A,B);
+    if(sketch){ svg.appendChild(rc.path(P.d,{roughness:1.1,stroke:'#1e1e1e',strokeWidth:1.4,bowing:1.2}));
+      const [ex,ey]=P.end; const ang=Math.atan2(P.dir[1],P.dir[0]); const L=11; [ang+Math.PI*0.8, ang-Math.PI*0.8].forEach(t=>svg.appendChild(rc.line(ex,ey,ex+L*Math.cos(t),ey+L*Math.sin(t),{roughness:1,stroke:'#1e1e1e',strokeWidth:1.4})));
+      const mx=(P.x1+P.x2)/2, my=(P.y1+P.y2)/2; svg.appendChild(rc.circle(mx,my,20,{roughness:1,stroke:'#1e1e1e',strokeWidth:1,fill:'#fff',fillStyle:'solid'}));
+      const tx=el('text',{x:mx,y:my+5,'text-anchor':'middle','font-size':'14','font-family':'Nanum Pen Script, cursive',fill:'#1e1e1e'}); tx.textContent=String(i+1); svg.appendChild(tx);
+    } else {
+      svg.appendChild(el('path',{d:P.d,fill:'none',stroke:'#5f6368','stroke-width':'1.6','marker-end':'url(#arr)'}));
+      const mx=(P.x1+P.x2)/2, my=(P.y1+P.y2)/2; svg.appendChild(el('circle',{cx:mx,cy:my,r:9,fill:'#fff',stroke:'#5f6368','stroke-width':'1.2'}));
+      const tx=el('text',{x:mx,y:my+3.5,'text-anchor':'middle','font-size':'10','font-weight':'700','font-family':'Manrope, sans-serif',fill:'#202124'}); tx.textContent=String(i+1); svg.appendChild(tx);
+    } });
+}
+// Excalidraw 파일 내보내기 (위치는 화면 배치를 그대로 사용)
+function excalidrawJSON(){ const box=app.querySelector('.arch'); const a=window.__arch; if(!box||!a) return null; const g=geom(box); const els=[]; let id=0; const nid=()=>'e'+(++id);
+  const rect=(x,y,w,h,extra={})=>{ const o={id:nid(),type:'rectangle',x,y,width:w,height:h,angle:0,strokeColor:'#1e1e1e',backgroundColor:'transparent',fillStyle:'solid',strokeWidth:1,strokeStyle:'solid',roughness:1,opacity:100,groupIds:[],frameId:null,roundness:{type:3},seed:Math.floor(Math.random()*1e9),version:1,versionNonce:1,isDeleted:false,boundElements:[],updated:Date.now(),link:null,locked:false,...extra}; els.push(o); return o; };
+  const text=(x,y,t,size,extra={})=>{ const w=Math.max(20,t.length*size*0.6); const o={id:nid(),type:'text',x:x-w/2,y,width:w,height:size*1.25,angle:0,strokeColor:'#1e1e1e',backgroundColor:'transparent',fillStyle:'solid',strokeWidth:1,strokeStyle:'solid',roughness:1,opacity:100,groupIds:[],frameId:null,roundness:null,seed:Math.floor(Math.random()*1e9),version:1,versionNonce:1,isDeleted:false,boundElements:[],updated:Date.now(),link:null,locked:false,text:t,fontSize:size,fontFamily:1,textAlign:'center',verticalAlign:'top',baseline:size,containerId:null,originalText:t,lineHeight:1.25,...extra}; els.push(o); return o; };
+  g.groups.forEach(gr=>{ rect(gr.l,gr.t,gr.w,gr.h,{backgroundColor:'#fff8e1',strokeStyle:'dashed'}); text(gr.l+gr.w/2, gr.t+6, gr.name, 16); });
+  a.nodes.forEach(n=>{ const r=g.nodes[n.name]; if(!r) return; rect(r.l,r.t,r.w,r.h,{backgroundColor:'#ffffff'}); text(r.cx, r.t+r.h*0.55, n.name, 18); if(n.tech.length) text(r.cx, r.t+r.h*0.78, n.tech.slice(0,2).join(' · '), 12, {strokeColor:'#666666'}); if(n.tech[0]) text(r.cx, r.t+10, n.tech[0].slice(0,14), 12, {strokeColor:'#1e1e1e'}); });
+  a.edges.forEach((e,i)=>{ const A=g.nodes[e.from], B=g.nodes[e.to]; if(!A||!B) return; const P=edgePath(A,B); const pts=[[0,0],[P.x2-P.x1,P.y2-P.y1]]; els.push({id:nid(),type:'arrow',x:P.x1,y:P.y1,width:Math.abs(P.x2-P.x1),height:Math.abs(P.y2-P.y1),angle:0,strokeColor:'#1e1e1e',backgroundColor:'transparent',fillStyle:'solid',strokeWidth:1,strokeStyle:'solid',roughness:1,opacity:100,groupIds:[],frameId:null,roundness:{type:2},seed:Math.floor(Math.random()*1e9),version:1,versionNonce:1,isDeleted:false,boundElements:[],updated:Date.now(),link:null,locked:false,points:pts,lastCommittedPoint:null,startBinding:null,endBinding:null,startArrowhead:null,endArrowhead:'arrow'}); if(e.label) text((P.x1+P.x2)/2,(P.y1+P.y2)/2-18,`${i+1}. ${e.label}`,12,{strokeColor:'#666666'}); });
+  return {type:'excalidraw',version:2,source:'hackathon-wiki',elements:els,appState:{viewBackgroundColor:'#ffffff',gridSize:null},files:{}}; }
+function bindArch(){ app.querySelectorAll('.archbar .seg button').forEach(b=>b.onclick=()=>setArchMode(b.dataset.m)); const dl=document.getElementById('dlExcali'); if(dl) dl.onclick=()=>{ const j=excalidrawJSON(); if(!j) return; const blob=new Blob([JSON.stringify(j,null,1)],{type:'application/json'}); const u=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=u; a.download=(location.hash.split('/')[2]||'architecture')+'.excalidraw'; a.click(); setTimeout(()=>URL.revokeObjectURL(u),2000); }; const box=app.querySelector('.arch'); if(box) box.classList.toggle('sketch', archMode==='sketch'); }
 window.addEventListener('resize',()=>requestAnimationFrame(drawWires));
+if(document.fonts&&document.fonts.ready) document.fonts.ready.then(()=>setTimeout(drawWires,50));
+document.addEventListener('load',e=>{ if(e.target&&e.target.tagName==='IMG'&&e.target.closest&&e.target.closest('.arch')) requestAnimationFrame(drawWires); }, true);
 window.addEventListener('load',()=>setTimeout(drawWires,300));
 setInterval(()=>{ if(document.querySelector('.arch') && document.querySelector('section.sec.on .arch')) drawWires(); }, 1200);
 
@@ -636,7 +691,7 @@ function project(id, initial){
     <div class="hint">이 프로젝트에는 아직 <b>면접 준비</b> 절이 없습니다. 위키 문서에 <code>## 면접 준비</code>를 채우면 기술 스택·고민·예상 질문이 여기에 표시됩니다.</div>
     ${sec(2,'이 프로젝트에서 배운 개념','', conceptGrid(cs))}`}
     <details class="raw"><summary>위키 문서 전문 보기</summary><div class="md">${md(p.body)}</div></details>`;
-  bindRate(); spy(initial);
+  bindRate(); bindArch(); spy(initial);
 }
 function conceptGrid(cs){ return cs.length?`<div class="cgrid">${cs.map(c=>`<a class="ccard" href="#/c/${c.id}">
   <div class="t"><span class="dot" style="background:var(--${c.type})"></span>${esc(c.title)}<span class="st ${stateOf(c.id)}" title="${STATE[stateOf(c.id)]||'기록 없음'}" style="margin-left:auto"></span></div>
