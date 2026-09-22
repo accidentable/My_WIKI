@@ -45,3 +45,11 @@
   - 원자료 대조(문서 서술이 raw/done/ 내용과 맞는지)는 이번 lint에서 수행하지 않음. 특히 병렬 ingest로 들어온 10개 프로젝트는 아직 대조 이력이 없으므로 다음 lint의 우선 대상
 - git commit 하지 않음 (본체가 처리)
 - 도구: claude-code, lint 서브에이전트
+
+## 2026-09-22 notion-sync: 트래커 첫 동기화 (위키 → 노션)
+- 트래커에 열 추가: "제출"(체크박스), "위키 문서"(URL)
+- 기존 행 갱신 7건: JB금융, 모바일신분증(AgentID, 제출 체크만), BC카드, 고려대 Trust404, iM뱅크(SabonX 동일 결과물), 원티드 AI Championship(FRAME), 뉴스빅데이터(끝물레이더, 제출 미체크)
+- 신규 행 5건: 금융 AI Challenge(구독컷), 미래에셋 AI Festival(공시 Agent), 한투 OpenAPI 투자대회, 하나금융 AR(Ko-Walk), icognito(TrustSeal)
+- 뷰 재구성: "🔥 남은 해커톤"(제출 미체크 + 마감 전, 열은 해커톤명·D-day·제출 마감만), "✅ 제출한 해커톤"(제출 체크, 열은 해커톤명·프로젝트명·결과·위키 문서)
+- 미처리: 원티드 해커톤 Smash Lab은 대회명이 원자료에 없어 행을 만들지 않음. Blockthon(Memory Market)은 위키에 없음
+- 도구: claude-code (Notion MCP)
