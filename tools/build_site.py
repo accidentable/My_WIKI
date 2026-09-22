@@ -395,6 +395,13 @@ section.sec + section.sec{border-top:0}
 .archbar{display:flex;gap:8px;align-items:center;margin:0 0 10px;flex-wrap:wrap}
 .archbar .dl{margin-left:auto;font-size:12px;color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:6px 12px;background:#fff;min-height:32px}
 .arch .elabel{font-family:"Manrope","Noto Sans KR",sans-serif}
+dialog#archDlg{border:0;border-radius:16px;padding:0;width:auto;max-width:96vw;max-height:94vh;background:#fff;box-shadow:0 20px 60px rgba(0,0,0,.25)}
+dialog#archDlg::backdrop{background:rgba(20,22,28,.55)}
+dialog#archDlg .dhead{display:flex;align-items:center;gap:14px;padding:14px 20px;border-bottom:1px solid var(--line)}
+dialog#archDlg .dhead .dl{margin-left:auto}
+dialog#archDlg .dbody{overflow:auto;padding:12px;position:relative}
+dialog#archDlg .dscale{transform-origin:top left;position:relative}
+dialog#archDlg .arch.inmodal{border:0;overflow:visible}
 /* 아키텍처: 좌표 고정 캔버스 */
 .arch{position:relative;border:1px solid var(--line);border-radius:12px;background:#fff;overflow:auto}
 .arch .canvas{position:relative}
@@ -626,7 +633,7 @@ function routes(a,lay){ const pos=lay.pos; const colX=lay.cols.map(c=>c.x); cons
     if(!best){ const [x1,y1]=pts[0],[x2,y2]=pts[pts.length-1]; best={x:(x1+x2)/2,y:(y1+y2)/2,len:0,vertical:true}; }
     out.push({i:r.i, pts, mid:best, label:(r.kind==='adj'||r.kind==='same')?(r.e.label||''):'', kind:r.kind}); });
   return out; }
-function drawWires(){ const box=app.querySelector('.arch'); const svg=box&&box.querySelector('svg.wires'); const a=window.__arch, lay=window.__lay; if(!box||!svg||!a||!lay) return;
+function drawWires(target){ const box=(target&&target.querySelector)?target:app.querySelector('.arch'); const svg=box&&box.querySelector('svg.wires'); const a=window.__arch, lay=window.__lay; if(!box||!svg||!a||!lay) return;
   while(svg.firstChild) svg.removeChild(svg.firstChild); const NS='http://www.w3.org/2000/svg'; const el=(t,at)=>{const e=document.createElementNS(NS,t); for(const k in at) e.setAttribute(k,at[k]); return e;};
   const defs=el('defs',{}); defs.innerHTML='<marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#3c4043"/></marker>'; svg.appendChild(defs);
   routes(a,lay).forEach(r=>{ svg.appendChild(el('polyline',{points:r.pts.map(p=>p.join(',')).join(' '),fill:'none',stroke:'#3c4043','stroke-width':'1.6','stroke-linejoin':'round','marker-end':'url(#arr)'}));
@@ -638,8 +645,14 @@ function excalidrawJSON(){ const a=window.__arch, lay=window.__lay; if(!a||!lay)
   lay.cols.forEach(c=>{ text(c.x+L.colW/2, 10, c.label, 14, {strokeColor:'#666666'}); c.groups.forEach(g=>{ rect(g.x,g.y,g.w,g.h,{backgroundColor:'#fff8e1',strokeStyle:'dashed'}); text(g.x+g.w/2,g.y+4,g.name,14); }); c.nodes.forEach(p=>{ rect(p.x,p.y,p.w,p.h,{backgroundColor:'#ffffff'}); if(p.n.tech[0]) text(p.x+p.w/2,p.y+8,p.n.tech[0].slice(0,16),12,{strokeColor:'#444444'}); text(p.x+p.w/2,p.y+p.h*0.5,p.n.name,18); if(p.n.tech.length>1) text(p.x+p.w/2,p.y+p.h*0.5+26,p.n.tech.slice(1,3).join(' · ').slice(0,22),11,{strokeColor:'#666666'}); }); });
   routes(a,lay).forEach(r=>{ const [x0,y0]=r.pts[0]; const pts=r.pts.map(([x,y])=>[x-x0,y-y0]); const xs=r.pts.map(p=>p[0]), ys=r.pts.map(p=>p[1]); els.push({...base(),type:'arrow',x:x0,y:y0,width:Math.max(...xs)-Math.min(...xs),height:Math.max(...ys)-Math.min(...ys),roundness:null,points:pts,lastCommittedPoint:null,startBinding:null,endBinding:null,startArrowhead:null,endArrowhead:'arrow'}); const e=a.edges[r.i]; text(r.mid.x,r.mid.y-18,`${r.i+1}${e.label?'. '+e.label:''}`,12,{strokeColor:'#666666'}); });
   return {type:'excalidraw',version:2,source:'hackathon-wiki',elements:els,appState:{viewBackgroundColor:'#ffffff',gridSize:null},files:{}}; }
-function archToolbar(){ return `<div class="archbar"><span class="small" style="color:var(--muted)">번호는 아래 연결 목록과 같습니다</span><button class="dl" id="dlExcali">Excalidraw로 열기 (.excalidraw)</button></div>`; }
-function bindArch(){ const dl=document.getElementById('dlExcali'); if(dl) dl.onclick=()=>{ const j=excalidrawJSON(); if(!j) return; const blob=new Blob([JSON.stringify(j,null,1)],{type:'application/json'}); const u=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=u; a.download=(location.hash.split('/')[2]||'architecture')+'.excalidraw'; a.click(); setTimeout(()=>URL.revokeObjectURL(u),2000); }; }
+function archToolbar(){ return `<div class="archbar"><span class="small" style="color:var(--muted)">번호는 아래 연결 목록과 같습니다</span><button class="dl" id="fullArch">전체 화면</button><button class="dl" id="dlExcali" style="margin-left:0">Excalidraw로 열기 (.excalidraw)</button></div>`; }
+function openArchModal(){ const src=app.querySelector('.arch'); const lay=window.__lay; if(!src||!lay) return; let dlg=document.getElementById('archDlg'); if(!dlg){ dlg=document.createElement('dialog'); dlg.id='archDlg'; document.body.appendChild(dlg); }
+  dlg.innerHTML=`<div class="dhead"><b>아키텍처</b><span class="small" style="color:var(--muted)">번호는 연결 목록과 같습니다 · Esc로 닫기</span><button class="dl" id="archDlgClose">닫기</button></div><div class="dbody"><div class="dscale"></div></div>`;
+  const clone=src.cloneNode(true); clone.classList.add('inmodal'); dlg.querySelector('.dscale').appendChild(clone);
+  const fit=()=>{ const vw=window.innerWidth*0.96-40, vh=window.innerHeight*0.94-90; const k=Math.max(0.6, Math.min(2, vw/lay.W, vh/lay.H)); const sc=dlg.querySelector('.dscale'); sc.style.transform=`scale(${k})`; sc.style.width=lay.W+'px'; sc.style.height=lay.H+'px'; const body=dlg.querySelector('.dbody'); body.style.height=(lay.H*k+24)+'px'; body.style.minWidth=Math.min(vw, lay.W*k+24)+'px'; };
+  dlg.showModal(); fit(); drawWires(clone); window.addEventListener('resize',fit);
+  dlg.querySelector('#archDlgClose').onclick=()=>dlg.close(); dlg.onclick=e=>{ if(e.target===dlg) dlg.close(); }; dlg.onclose=()=>{ window.removeEventListener('resize',fit); }; }
+function bindArch(){ const fb=document.getElementById('fullArch'); if(fb) fb.onclick=openArchModal; const dl=document.getElementById('dlExcali'); if(dl) dl.onclick=()=>{ const j=excalidrawJSON(); if(!j) return; const blob=new Blob([JSON.stringify(j,null,1)],{type:'application/json'}); const u=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=u; a.download=(location.hash.split('/')[2]||'architecture')+'.excalidraw'; a.click(); setTimeout(()=>URL.revokeObjectURL(u),2000); }; }
 window.addEventListener('resize',()=>requestAnimationFrame(drawWires));
 if(document.fonts&&document.fonts.ready) document.fonts.ready.then(()=>setTimeout(drawWires,50));
 document.addEventListener('load',e=>{ if(e.target&&e.target.tagName==='IMG'&&e.target.closest&&e.target.closest('.arch')) requestAnimationFrame(drawWires); }, true);
