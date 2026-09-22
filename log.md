@@ -169,3 +169,13 @@
 - 갱신: concepts/ai-log-anchoring-data-receipt ("어디서 썼는가"에 구매자 영수증 구현 사례 추가)
 - 메모: 블록체인 개발자 경험 팩 개수가 README 33건 / 데모 대본 30건으로 어긋나 project 문서에 모순 블록 표시 (README가 ground-truth)
 - 도구: claude-code, 노트북
+
+## 2026-09-22 ingest: 학습 절·면접 준비 절 일괄 추가 (서브에이전트 8개, 웹 대조)
+- 규칙 11절(concept `## 학습`)·12절(project `## 면접 준비`) 신설. 질문 수준은 신입 기술면접 프로젝트 딥다이브(L1 개념 / L2 판단 / L3 한계 + 꼬리질문 + 틀리기 쉬운 답)
+- concept 47개 전부에 cs_topics + 학습 절 (확인 질문 185개). 각 서브에이전트가 WebSearch로 실제 면접 질문·공식 문서를 대조하고 "더 파볼 것"은 WebFetch로 열어 확인한 URL만 기재
+- project 14개 전부에 면접 준비 절 (한 문장 소개, 기술 스택과 선택 이유 표, 고민한 점, 예상 질문 67개, 솔직하게 말할 것)
+- "왜 이걸 썼나"가 원자료에 없는 칸은 "이유 자료에 없음"으로 비움 — 사용자가 직접 채울 자리. 특히 jb-finance(9칸), wanted-interview-ai(13칸), hana-ar-kowalk(7칸)에 집중
+- 미디어·인프라 concept 10개의 "설명할 수 있어야 하는 것"이 규칙 예시 문구 그대로 들어간 것을 발견해 재작성
+- 새로 발견된 불일치: taco-index의 크론 docstring(5분)과 vercel.json(매시간) 불일치
+- 사이트: 프로젝트 중심 면접 노트 UI로 개편 (tools/build_site.py). 홈 → 프로젝트 → 개념. 그래프는 보조
+- 도구: claude-code, ingest 서브에이전트(Opus) 8개, 본체 병합
