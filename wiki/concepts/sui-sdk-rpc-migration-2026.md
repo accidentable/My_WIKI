@@ -50,27 +50,27 @@ cs_topics: [네트워크, 웹, 소프트웨어공학]
 - 소프트웨어공학: 의존성 버전 고정, 오래된 예제의 부채, 환경별 빌드 함정
 
 ### 설명할 수 있어야 하는 것
-- 왜 이 방법을 골랐는가: 공개 풀노드의 JSON-RPC가 폐기돼 선택지가 없었고, 쓰기는 gRPC, 목록·이벤트는 GraphQL로 나누는 게 각 인터페이스의 색인 특성에 맞았다.
-- 대안은 무엇이었고 무엇을 포기했는가: 1.x에 머무르면 예제를 그대로 쓸 수 있지만 transaction resolution이 없어 애초에 동작하지 않았다. 2.x로 올리며 API 형태 변경을 전부 떠안았다.
-- 어떤 조건에서 깨지는가: gRPC 이벤트 색인은 최근 체크포인트만 보유해 며칠 지난 이벤트를 놓친다.
+- 공개 풀노드의 JSON-RPC가 폐기돼 선택지가 없었다는 점과, 쓰기는 gRPC로 목록·이벤트는 GraphQL로 나눈 것이 각 인터페이스의 색인 특성에 맞았던 이유를 설명할 수 있습니다.
+- 1.x에 머무르면 예제를 그대로 쓸 수 있지만 transaction resolution이 없어 애초에 동작하지 않았다는 점과, 2.x로 올리며 API 형태 변경을 전부 떠안은 대가를 말할 수 있습니다.
+- gRPC 이벤트 색인이 최근 체크포인트만 들고 있어서 며칠 지난 이벤트를 놓친다는 점을 이유와 함께 설명할 수 있습니다.
 
 ### 확인 질문
-1. **Q:** (L1 개념) 2026년 기준 Sui에 접속하는 인터페이스는 무엇이고, 각각 어디에 쓰는가?
-   **A:** 공개 풀노드의 JSON-RPC는 폐기됐고, `new SuiClient({ url: getFullnodeUrl('testnet') })`로 트랜잭션을 보내면 `JsonRpcError: Method not found ... deprecated`(code -32601)가 난다. 브라우저의 `sui_getObject`도 같은 -32601이다. 대체는 둘로, 쓰기(트랜잭션 실행)와 객체 조회는 `@mysten/sui` 2.x의 gRPC, 목록과 이벤트 같은 구조적 질의는 GraphQL이다. Memory Market은 컨트랙트 호출을 gRPC로, 팩 목록과 랜딩의 체인 조회를 `graphql.testnet.sui.io`로 처리했다.
-   **꼬리:** 같은 데이터를 gRPC로도 GraphQL로도 읽을 수 있을 때 무엇을 기준으로 고르는가?
-   **틀리기 쉬운 답:** "RPC URL만 바꾸면 된다"는 답. 호출 형태와 응답 구조가 모두 다르다.
-2. **Q:** (L2 판단) 목록과 이벤트만 GraphQL로 뺀 이유는?
-   **A:** gRPC의 이벤트 색인이 최근 체크포인트만 들고 있어 며칠 지난 `PackCreated` 이벤트가 조회되지 않았기 때문이다. 시장 목록은 오래된 팩까지 다 보여야 하므로 gRPC로는 성립하지 않는다. GraphQL은 `query($a:SuiAddress!){ object(address:$a){ asMoveObject{ contents{ json } } } }` 형태로 객체 필드가 그대로 나오고, CORS가 `*`라 브라우저에서 직접 읽을 수 있어 랜딩 페이지도 백엔드 없이 체인을 읽는다.
-   **꼬리:** 오래된 이벤트가 필요한데 GraphQL도 못 쓰는 상황이면 무엇을 세워야 하는가?
-   **틀리기 쉬운 답:** "이벤트가 안 나오면 트랜잭션이 실패한 것"이라는 답. 색인 보존 범위의 문제다.
-3. **Q:** (L3 한계) SDK 1.x로는 왜 안 됐고, 2.x로 올리면서 코드에서 무엇이 바뀌었는가?
-   **A:** 1.45.2의 gRPC 클라이언트는 transaction resolution을 지원하지 않고(`Transaction resolution is not supported with the GRPC client`, SDK 소스에서 해당 플러그인이 통째로 주석 처리), 수동으로 다 채워도 노드가 `invalid read_mask path: transaction.transaction`으로 거절했다(노드 1.79 기준). 2.29로 올리면 둘 다 해결된다. 2.x에서는 `client.signAndExecuteTransaction({ transaction, signer, include })`로 부르고 응답에 담을 필드를 `include`로 명시해야 하며(`{ effects: true, objectTypes: true }`를 안 주면 `undefined`), 결과가 `$kind: 'Transaction' | 'FailedTransaction'` 유니온이라 `$kind`를 먼저 본다. `objectChanges`가 없어 새 객체는 `res.effects.changedObjects`에서 `idOperation === 'Created'`로 거르고 필드명은 `c.id`가 아니라 `c.objectId`다. 반대로 가스·객체 버전 수동 지정(`sharedObjectRef`/`objectRef`, `setGasPrice/Budget/Payment`)은 전부 걷어냈다.
-   **꼬리:** `include`를 명시해야 하는 API 설계는 어떤 문제를 풀려는 것인가?
-   **틀리기 쉬운 답:** 오래된 예제를 보고 `^1.x`, `^0.9.x`로 버전을 잡는 것. 2026-09 기준 latest는 `@mysten/sui` 2.29.0, `@mysten/seal` 1.4.8이다.
-4. **Q:** (L2 판단) GraphQL로 읽은 값이 계속 0이었다. 어떻게 찾았고 교훈은?
-   **A:** 필드명을 넘겨짚은 것이 원인이었다. `price_mist`가 아니라 `fee`(MIST 단위)였고 `namespace`가 아니라 `source_namespace`였다. `contents{ json }`을 한 번 통째로 찍어 실제 이름을 확인하고 쓰는 것이 해결책이다. 비슷한 계열로, Walrus aggregator는 content-type을 주지 않아 같은 미리보기 목록에 JSON·JPEG·순수 텍스트가 섞이므로 읽는 쪽이 첫 바이트로 종류를 나눈다(`89 50`=PNG, `ff d8`=JPG, `{`=JSON, 나머지는 글). 스키마나 메타데이터를 가정하지 말고 실제 응답을 먼저 덤프하라는 같은 교훈이다.
-   **꼬리:** 타입 안전한 gRPC였다면 이 버그가 났을까?
-   **틀리기 쉬운 답:** 값이 0으로 나올 때 체인 데이터가 비었다고 결론짓는 것.
+1. **Q:** (L1 개념) 2026년 기준으로 Sui에 접속하는 인터페이스에는 무엇이 있고, 각각 어디에 쓰셨나요?
+   **A:** 공개 풀노드의 JSON-RPC는 폐기돼서 `new SuiClient({ url: getFullnodeUrl('testnet') })`로 트랜잭션을 보내면 `JsonRpcError: Method not found ... deprecated`가 code -32601로 나고, 브라우저의 `sui_getObject`도 같은 -32601이었습니다. 대체는 두 가지였는데 쓰기인 트랜잭션 실행과 객체 조회는 `@mysten/sui` 2.x의 gRPC로, 목록과 이벤트 같은 구조적 질의는 GraphQL로 갔습니다. Memory Market은 컨트랙트 호출을 gRPC로 하고 팩 목록과 랜딩의 체인 조회를 `graphql.testnet.sui.io`로 처리했습니다.
+   **꼬리:** 그러면 같은 데이터를 gRPC로도 GraphQL로도 읽을 수 있을 때는 무엇을 기준으로 고르시나요?
+   **틀리기 쉬운 답:** "RPC URL만 바꾸면 됩니다"라고 답하는 경우가 있는데, 실제로는 호출 형태와 응답 구조가 모두 다릅니다.
+2. **Q:** (L2 판단) 목록과 이벤트만 GraphQL로 빼신 이유가 있나요?
+   **A:** gRPC의 이벤트 색인이 최근 체크포인트만 들고 있어서 며칠 지난 `PackCreated` 이벤트가 조회되지 않았기 때문입니다. 시장 목록은 오래된 팩까지 다 보여야 해서 gRPC로는 성립하지 않았습니다. GraphQL은 `query($a:SuiAddress!){ object(address:$a){ asMoveObject{ contents{ json } } } }` 형태로 객체 필드가 그대로 나오고 CORS가 `*`라 브라우저에서 직접 읽을 수 있어서, 랜딩 페이지도 백엔드 없이 체인을 읽게 했습니다.
+   **꼬리:** 그러면 오래된 이벤트가 필요한데 GraphQL도 못 쓰는 상황이면 무엇을 세우시겠어요?
+   **틀리기 쉬운 답:** "이벤트가 안 나오면 트랜잭션이 실패한 것입니다"라고 답하는 경우가 있는데, 실제로는 색인 보존 범위의 문제입니다.
+3. **Q:** (L3 한계) SDK 1.x로는 왜 안 됐고, 2.x로 올리면서 코드에서 무엇이 바뀌었나요?
+   **A:** 1.45.2의 gRPC 클라이언트가 transaction resolution을 지원하지 않았고(`Transaction resolution is not supported with the GRPC client`, SDK 소스에서 해당 플러그인이 통째로 주석 처리돼 있었습니다), 수동으로 다 채워 봐도 노드가 `invalid read_mask path: transaction.transaction`으로 거절했습니다(노드 1.79 기준). 2.29로 올리니 둘 다 풀렸는데, 2.x에서는 `client.signAndExecuteTransaction({ transaction, signer, include })`로 부르면서 응답에 담을 필드를 `include`로 명시해야 하고(`{ effects: true, objectTypes: true }`를 안 주면 `undefined`가 됩니다), 결과가 `$kind: 'Transaction' | 'FailedTransaction'` 유니온이라 `$kind`를 먼저 봅니다. `objectChanges`가 없어져서 새 객체는 `res.effects.changedObjects`에서 `idOperation === 'Created'`로 걸렀고 필드명도 `c.id`가 아니라 `c.objectId`였습니다. 반대로 가스와 객체 버전 수동 지정인 `sharedObjectRef`/`objectRef`, `setGasPrice/Budget/Payment`는 전부 걷어냈습니다.
+   **꼬리:** 그러면 `include`를 명시하게 하는 API 설계는 어떤 문제를 풀려는 것일까요?
+   **틀리기 쉬운 답:** 오래된 예제를 보고 `^1.x`나 `^0.9.x`로 버전을 잡는 경우가 있는데, 2026-09 기준 latest는 `@mysten/sui` 2.29.0과 `@mysten/seal` 1.4.8입니다.
+4. **Q:** (L2 판단) GraphQL로 읽은 값이 계속 0으로 나왔다고 하셨는데, 어떻게 찾으셨고 무엇을 배우셨나요?
+   **A:** 필드명을 넘겨짚은 것이 원인이었습니다. `price_mist`가 아니라 `fee`였고 단위는 MIST였으며, `namespace`가 아니라 `source_namespace`였습니다. `contents{ json }`을 한 번 통째로 찍어 실제 이름을 확인하고 쓰는 것으로 해결했습니다. 비슷한 계열로 Walrus aggregator는 content-type을 주지 않아서 같은 미리보기 목록에 JSON과 JPEG와 순수 텍스트가 섞이는데, 읽는 쪽이 첫 바이트로 종류를 나누게 했습니다(`89 50`은 PNG, `ff d8`은 JPG, `{`는 JSON, 나머지는 글). 스키마나 메타데이터를 가정하지 말고 실제 응답을 먼저 덤프하라는 같은 이야기라고 생각합니다.
+   **꼬리:** 그러면 타입 안전한 gRPC였다면 이 버그가 났을까요?
+   **틀리기 쉬운 답:** 값이 0으로 나올 때 체인 데이터가 비었다고 결론짓는 경우가 있는데, 실제로는 필드명이 틀린 경우가 있습니다.
 
 ### 더 파볼 것
 - [JSON-RPC Migration Guide (Sui Docs)](https://docs.sui.io/develop/accessing-data/json-rpc-migration) — 폐기 일정(2026-07-27 주 mainnet 차단, 10월 중순 코드 제거)과 메서드 대응표
