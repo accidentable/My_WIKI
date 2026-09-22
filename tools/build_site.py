@@ -139,6 +139,36 @@ def parse_study(body: str) -> tuple[str, dict | None]:
     }
 
 
+
+def parse_arch(text: str) -> dict:
+    """14절 형식: '- [층] 이름 :: 기술, 기술 :: 호스팅' / '- A -> B :: 라벨'"""
+    nodes, edges, note = [], [], ""
+    for raw in text.splitlines():
+        line = raw.strip()
+        if not line.startswith("-"):
+            continue
+        line = line[1:].strip()
+        if line.startswith("("):
+            note = line.strip("()")
+            continue
+        if "->" in line and not line.startswith("["):
+            left, _, label = line.partition("::")
+            a, _, b = left.partition("->")
+            edges.append({"from": a.strip(), "to": b.strip(), "label": label.strip()})
+            continue
+        m = re.match(r"\[(\w+)\]\s*(.+)", line)
+        if not m:
+            continue
+        layer, rest = m.group(1).lower(), m.group(2)
+        parts = [x.strip() for x in rest.split("::")]
+        name = parts[0]
+        tech = [t.strip() for t in re.split(r"[,，]", parts[1])] if len(parts) > 1 and parts[1] else []
+        host = parts[2] if len(parts) > 2 else ""
+        nodes.append({"layer": layer, "name": name, "tech": [t for t in tech if t], "host": host})
+    names = {n["name"] for n in nodes}
+    edges = [e for e in edges if e["from"] in names and e["to"] in names]
+    return {"nodes": nodes, "edges": edges, "note": note}
+
 def parse_interview(body: str) -> tuple[str, dict | None]:
     main, parts = cut_section(body, "면접 준비")
     if parts is None:
@@ -148,9 +178,11 @@ def parse_interview(body: str) -> tuple[str, dict | None]:
     for row in table(parts.get("기술 스택과 선택 이유", "")):
         row = (row + ["", "", "", ""])[:4]
         stack.append({"tech": row[0], "role": row[1], "why": row[2], "alt": row[3]})
+    arch = parse_arch(parts.get("아키텍처", ""))
     return main, {
         "intro": intro,
         "stack": stack,
+        "arch": arch if arch["nodes"] else None,
         "concerns": bullets(parts.get("고민한 점", "")),
         "questions": questions(parts.get("예상 질문", "")),
         "honest": bullets(parts.get("솔직하게 말할 것", "")),
@@ -343,6 +375,41 @@ details.raw summary{cursor:pointer;color:var(--muted);font-size:13px;padding:8px
 .md blockquote{border-left:3px solid var(--line);margin:8px 0;padding:2px 12px;color:var(--muted)}
 .md a.wiki{color:var(--accent);text-decoration:underline;text-underline-offset:3px}
 
+
+/* 기술 필터 */
+.techbar{display:flex;flex-wrap:wrap;gap:6px;margin:-8px 0 22px}
+.techbar button{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:#fff;border-radius:8px;padding:5px 10px;font-size:12px;color:var(--muted);min-height:32px}
+.techbar button img{width:14px;height:14px}
+.techbar button[aria-pressed="true"]{border-color:var(--ink);color:var(--ink);background:var(--soft)}
+.techbar .more{color:var(--muted);border-style:dashed}
+/* 탭 패널 */
+section.sec{display:none;padding:26px 0 10px}
+section.sec.on{display:block}
+section.sec + section.sec{border-top:0}
+.secnav{display:flex;justify-content:space-between;gap:10px;margin-top:28px;padding-top:16px;border-top:1px solid var(--line)}
+.secnav a{font-size:13px;color:var(--muted);padding:10px 0;display:inline-flex;align-items:center;gap:6px}
+.secnav a:hover{color:var(--ink)}
+/* 아키텍처 */
+.arch{position:relative;border:1px solid var(--line);border-radius:12px;padding:18px 18px 10px;background:#fff;overflow:auto}
+.arch svg.wires{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.arch .layer{display:grid;grid-template-columns:88px 1fr;gap:14px;align-items:center;padding:10px 0;position:relative;z-index:1}
+.arch .layer + .layer{border-top:1px dashed var(--line)}
+.arch .lname{font-family:"Manrope",sans-serif;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.arch .boxes{display:flex;flex-wrap:wrap;gap:12px}
+.arch .box{border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:#fff;min-width:170px;max-width:260px;position:relative;z-index:1}
+.arch .box .bn{font-weight:700;font-size:14px;display:flex;align-items:center;gap:8px;line-height:1.3}
+.arch .box .bn img{width:18px;height:18px;flex:none}
+.arch .box .bn .ini{width:18px;height:18px;border-radius:4px;background:var(--soft);color:var(--muted);font-size:10px;display:inline-flex;align-items:center;justify-content:center;font-family:"Manrope",sans-serif;font-weight:700;flex:none}
+.arch .box .bt{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
+.arch .box .bt span{font-size:11px;border:1px solid var(--line);border-radius:5px;padding:0 6px;color:var(--ink);display:inline-flex;align-items:center;gap:4px}
+.arch .box .bt img{width:11px;height:11px}
+.arch .box .bh{font-size:11px;color:var(--muted);margin-top:6px;font-family:"Manrope","Noto Sans KR",sans-serif}
+.arch .box .bh.none{font-style:italic}
+.arch .note{font-size:12px;color:var(--muted);margin:0 0 8px}
+.edgelist{margin:10px 0 0;padding:0;list-style:none;font-size:13px;color:var(--muted);display:flex;flex-wrap:wrap;gap:6px 18px}
+.edgelist li b{color:var(--ink);font-weight:500}
+.hostrow{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 12px}
+.hostrow .chip img{width:13px;height:13px}
 footer{border-top:1px solid var(--line);padding:18px 0;color:var(--muted);font-size:12px}
 footer .wrap{display:flex;gap:16px;flex-wrap:wrap;align-items:center}
 footer button{border:0;background:none;text-decoration:underline;padding:8px 0;font-size:12px;color:var(--muted)}
@@ -404,6 +471,15 @@ const inline = t => md(t).replace(/^<p>|<\/p>\s*$/g,'');
 const shortTitle = t => t.split(/\s[—-]\s/)[0];
 function overview(body){ const parts=body.split(/\n(?=## )/); const first=parts.find(x=>/^## .*개요/.test(x)) || parts[1]; if(first) return first.replace(/^## [^\n]*\n?/,''); return body.replace(/^# [^\n]*\n?/,'').slice(0,600); }
 
+
+// ---- 기술 로고 (Simple Icons CDN, 없으면 글자 배지) ----
+const ICON_ALIAS = {'next.js':'nextdotjs','nextjs':'nextdotjs','next':'nextdotjs','node.js':'nodedotjs','node':'nodedotjs','three.js':'threedotjs','threejs':'threedotjs','tailwind css':'tailwindcss','tailwind':'tailwindcss','amazon web services':'amazonwebservices','aws':'amazonwebservices','aws lambda':'awslambda','lambda':'awslambda','api gateway':'amazonapigateway','amazon api gateway':'amazonapigateway','postgres':'postgresql','postgresql':'postgresql','sqlite':'sqlite','hyperclova x':'naver','hyperclova':'naver','hcx-005':'naver','clova':'naver','네이버':'naver','naver cloud':'naver','ncloud':'naver','openai':'openai','gpt':'openai','chatgpt':'openai','claude':'claude','claude code':'claude','anthropic':'anthropic','codex':'openai','react native':'react','expo':'expo','solidity':'solidity','ethereum':'ethereum','base sepolia':'ethereum','sepolia':'ethereum','erc-20':'ethereum','sui':'sui','move':'sui','walrus':'walrus','telegram':'telegram','python':'python','fastapi':'fastapi','docker':'docker','vercel':'vercel','supabase':'supabase','prisma':'prisma','redis':'redis','upstash':'upstash','github':'github','ubuntu':'ubuntu','linux':'linux','langgraph':'langgraph','langchain':'langchain','typescript':'typescript','javascript':'javascript','react':'react','vite':'vite','express':'express','mediapipe':'google','google trends':'google','구글 트렌드':'google','cloudflare':'cloudflare','vercel cron':'vercel','pandas':'pandas','numpy':'numpy','matplotlib':'python','pytorch':'pytorch','huggingface':'huggingface','chroma':'chromadb','chromadb':'chromadb','assemblyai':'assemblyai','trigger.dev':'triggerdotdev','systemd':'linux','apscheduler':'python','webrtc':'webrtc','pwa':'pwa','service worker':'pwa','web push':'pwa','dart':'opendart','opendart':'opendart','sqlite fts5':'sqlite','fts5':'sqlite','parquet':'apacheparquet','csv':'googlesheets'};
+function iconSlug(tech){ let t=String(tech||'').replace(/`/g,'').toLowerCase().trim(); if(!t) return null; if(ICON_ALIAS[t]) return ICON_ALIAS[t]; const first=t.split(/[\s(·,/+]/)[0]; if(ICON_ALIAS[first]) return ICON_ALIAS[first]; for(const k in ICON_ALIAS){ if(t.startsWith(k+' ')||t.startsWith(k+'(')) return ICON_ALIAS[k]; } if(/^[a-z0-9.]+$/.test(first)) return first.replace(/\.js$/,'dotjs').replace(/[^a-z0-9]/g,''); return null; }
+function iconImg(tech, size){ const slug=iconSlug(tech); const ini=`<span class="ini" title="${esc(tech)}">${esc(String(tech).replace(/`/g,'').trim().slice(0,2).toUpperCase())}</span>`; if(!slug) return ini; return `<img src="https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/${slug}.svg" alt="" width="${size||18}" height="${size||18}" loading="lazy" onerror="this.outerHTML=${JSON.stringify(ini).replace(/"/g,'&quot;')}">`; }
+// ---- 기술 필터 ----
+let techFilter = null; let techMore = false;
+function techStats(){ const cnt=new Map(); projects.forEach(p=>{ new Set(techNames(p).map(shortTech)).forEach(t=>cnt.set(t,(cnt.get(t)||0)+1)); }); return [...cnt.entries()].filter(([t,c])=>c>=1).sort((a,b)=>b[1]-a[1]||a[0].localeCompare(b[0])); }
+function shortTech(t){ t=t.replace(/`/g,'').trim(); const m=t.match(/^(Next\.js|React Native|React|Vite|TypeScript|Python|FastAPI|SQLite|PostgreSQL|Redis|Docker|Vercel|Supabase|Prisma|Solidity|Sui|Move|Walrus|Seal|Telegram|OpenAI|Claude|HyperCLOVA X|LangGraph|Express|Expo|Three\.js|MediaPipe|pandas|numpy|AWS|Trigger\.dev|AssemblyAI|Tailwind CSS|Node\.js|Web Push|SD-JWT|JWE|DID|VC|ERC-20|Chroma|APScheduler|systemd|Upstash|KIS API|한국투자증권 OpenAPI|네이버 데이터랩|구글 트렌드|빅카인즈|DART)/i); return m? m[1] : t.split(/[\s(·,/+]/)[0]; }
 const KEY='wiki-progress-v1'; let progress={};
 try{progress=JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){}
 const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(progress))}catch(e){}};
@@ -422,8 +498,8 @@ window.addEventListener('hashchange',route);
 let filter='all';
 function route(){ const h=location.hash||'#/'; window.scrollTo(0,0);
   document.querySelectorAll('.top nav a').forEach(a=>a.classList.toggle('on', a.dataset.nav==='graph'?h.startsWith('#/graph'):!h.startsWith('#/graph')));
-  let m; if((m=h.match(/^#\/p\/(.+)$/))) return project(decodeURIComponent(m[1]));
-  if((m=h.match(/^#\/c\/(.+)$/))) return concept(decodeURIComponent(m[1]));
+  let m; if((m=h.match(/^#\/p\/([^\/]+)(?:\/(\d+))?$/))) return project(decodeURIComponent(m[1]), +(m[2]||1));
+  if((m=h.match(/^#\/c\/([^\/]+)(?:\/(\d+))?$/))) return concept(decodeURIComponent(m[1]), +(m[2]||1));
   if(h.startsWith('#/graph')) return graph();
   home(); }
 
@@ -438,7 +514,8 @@ const TECH_CATS = [
 function primaryCat(p){ const names=techNames(p).join(' '); let best=['기타',0]; for(const [c,re] of TECH_CATS){ const n=(names.match(new RegExp(re.source,'gi'))||[]).length; if(n>best[1]) best=[c,n]; } return best[0]; }
 function home(){
   const cs=DATA.nodes.filter(n=>n.type==='concept'); const known=cs.filter(c=>stateOf(c.id)==='know').length;
-  const list=projects.filter(matches).filter(p=>filter==='all'||(filter==='ready'?readiness(p).pct>=70:readiness(p).pct<70));
+  const list=projects.filter(matches).filter(p=>filter==='all'||(filter==='ready'?readiness(p).pct>=70:readiness(p).pct<70)).filter(p=>!techFilter||techNames(p).map(shortTech).includes(techFilter));
+  const stats=techStats(); const shown=techMore?stats:stats.slice(0,10);
   const order=[...TECH_CATS.map(x=>x[0]),'기타'];
   const groups=new Map(); list.forEach(p=>{const c=primaryCat(p); if(!groups.has(c)) groups.set(c,[]); groups.get(c).push(p);});
   app.innerHTML=`
@@ -448,6 +525,10 @@ function home(){
       <button data-f="all" aria-pressed="${filter==='all'}">전체</button>
       <button data-f="todo" aria-pressed="${filter==='todo'}">아직 준비 안 됨</button>
       <button data-f="ready" aria-pressed="${filter==='ready'}">준비도 70% 이상</button>
+    </div>
+    <div class="techbar" aria-label="기술 스택 필터">
+      ${shown.map(([t,c])=>`<button data-t="${esc(t)}" aria-pressed="${techFilter===t}">${iconImg(t,14)}${esc(t)}<span style="color:var(--muted)">${c}</span></button>`).join('')}
+      ${stats.length>10?`<button class="more" data-more="1">${techMore?'접기':`+${stats.length-10}`}</button>`:''}
     </div>
     ${order.filter(c=>groups.has(c)).map(c=>`
       <section class="pgroup"><h2 class="ghead">${esc(c)}<span class="n">${groups.get(c).length}</span></h2>
@@ -461,6 +542,8 @@ function home(){
           </div></a>`;}).join('')}</div></section>`).join('')}
     ${list.length?'':'<p class="page-sub">조건에 맞는 프로젝트가 없습니다.</p>'}`;
   app.querySelectorAll('.filters button').forEach(b=>b.onclick=()=>{filter=b.dataset.f;home();});
+  app.querySelectorAll('.techbar button[data-t]').forEach(b=>b.onclick=()=>{techFilter=techFilter===b.dataset.t?null:b.dataset.t;home();});
+  const mb=app.querySelector('.techbar .more'); if(mb) mb.onclick=()=>{techMore=!techMore;home();};
 }
 
 function qcards(list){ return `<div class="qlist">${list.map((x,i)=>`
@@ -474,17 +557,43 @@ function rateBox(key, label){ const st=stateOf(key); return `<div class="rate" d
   <button class="dunno" data-st="dunno" aria-pressed="${st==='dunno'}">모름</button>
   <button class="half" data-st="half" aria-pressed="${st==='half'}">애매함</button>
   <button class="know" data-st="know" aria-pressed="${st==='know'}">설명 가능</button></div>`; }
-function bindRate(){ app.querySelectorAll('.rate button').forEach(b=>b.onclick=()=>{ const y=window.scrollY; setState(b.parentElement.dataset.key,b.dataset.st); route(); window.scrollTo(0,y); }); }
-function sec(n, title, desc, body){ return `<section class="sec" id="s${n}"><h2><span class="num">${n}.</span>${esc(title)}</h2>${desc?`<p class="desc">${desc}</p>`:''}${body}</section>`; }
-function tabbar(items){ return `<nav class="tabbar" id="tabbar" aria-label="절 이동">${items.map(([n,t])=>`<a href="#s${n}" data-s="s${n}" onclick="event.preventDefault();document.getElementById('s${n}').scrollIntoView({behavior:'smooth'})">${n}. ${esc(t)}</a>`).join('')}</nav>`; }
-function spy(){ const tabs=[...document.querySelectorAll('#tabbar a')]; if(!tabs.length) return; const secs=tabs.map(a=>document.getElementById(a.dataset.s));
-  const on=()=>{ let cur=secs[0]; for(const s of secs){ if(s && s.getBoundingClientRect().top<=120) cur=s; } tabs.forEach(a=>a.classList.toggle('on', a.dataset.s===cur.id)); };
-  window.removeEventListener('scroll', window.__spy); window.__spy=on; window.addEventListener('scroll',on,{passive:true}); on(); }
+function bindRate(){ app.querySelectorAll('.rate button').forEach(b=>b.onclick=()=>{ const y=window.scrollY; const keep=curSec; setState(b.parentElement.dataset.key,b.dataset.st); const base=location.hash.replace(/\/\d+$/,''); history.replaceState(null,'',`${base}/${keep}`); route(); window.scrollTo(0,y); }); }
+function sec(n, title, desc, body){ return `<section class="sec" id="s${n}" data-n="${n}"><h2><span class="num">${n}.</span>${esc(title)}</h2>${desc?`<p class="desc">${desc}</p>`:''}${body}</section>`; }
+function tabbar(items){ return `<nav class="tabbar" id="tabbar" aria-label="절 이동">${items.map(([n,t])=>`<a href="#" data-s="${n}">${n}. ${esc(t)}</a>`).join('')}</nav>`; }
+let curSec = 1;
+function showSec(n, push){ const secs=[...app.querySelectorAll('section.sec')]; if(!secs.length) return; const ns=secs.map(x=>+x.dataset.n); if(!ns.includes(n)) n=ns[0]; curSec=n;
+  secs.forEach(x=>x.classList.toggle('on', +x.dataset.n===n));
+  app.querySelectorAll('#tabbar a').forEach(a=>a.classList.toggle('on', +a.dataset.s===n));
+  const i=ns.indexOf(n); const prev=ns[i-1], next=ns[i+1]; const nav=app.querySelector('.secnav');
+  if(nav){ const t=x=>app.querySelector(`#tabbar a[data-s="${x}"]`).textContent; nav.innerHTML=`<a href="#" data-go="${prev??''}" ${prev?'':'style="visibility:hidden"'}>← ${prev?t(prev):''}</a><a href="#" data-go="${next??''}" ${next?'':'style="visibility:hidden"'}>${next?t(next):''} →</a>`; nav.querySelectorAll('a').forEach(a=>a.onclick=e=>{e.preventDefault(); if(a.dataset.go) showSec(+a.dataset.go,true);}); }
+  if(push){ const base=location.hash.replace(/\/\d+$/,''); history.replaceState(null,'',`${base}/${n}`); }
+  const box=app.querySelector('.arch'); if(box && box.closest('section.sec').classList.contains('on')) requestAnimationFrame(drawWires);
+  window.scrollTo({top: Math.min(window.scrollY, (app.querySelector('#tabbar')||app).offsetTop-8)});
+}
+function spy(initial){ app.querySelectorAll('#tabbar a').forEach(a=>a.onclick=e=>{e.preventDefault(); showSec(+a.dataset.s,true);}); if(!app.querySelector('.secnav')) app.insertAdjacentHTML('beforeend','<div class="secnav"></div>'); const raw=app.querySelector('details.raw'); if(raw) app.appendChild(raw); showSec(initial||1,false); }
 
-function project(id){
+// ---- 아키텍처 그림 ----
+const LAYERS=[['client','클라이언트'],['edge','엣지·CDN'],['server','서버'],['worker','워커·배치'],['data','데이터'],['chain','체인'],['external','외부 서비스'],['ops','운영']];
+function archHtml(a){ if(!a) return ''; const by=new Map(); a.nodes.forEach(n=>{ if(!by.has(n.layer)) by.set(n.layer,[]); by.get(n.layer).push(n); });
+  const hosts=[...new Set(a.nodes.map(n=>n.host).filter(h=>h&&!/자료에 없음/.test(h)))];
+  return `${a.note?`<p class="note">${esc(a.note)}</p>`:''}
+  ${hosts.length?`<div class="hostrow"><span class="small" style="align-self:center;color:var(--muted)">호스팅</span>${hosts.map(h=>`<span class="chip">${iconImg(h,13)}${esc(h)}</span>`).join('')}</div>`:''}
+  <div class="arch"><svg class="wires"></svg>
+  ${LAYERS.filter(([k])=>by.has(k)).map(([k,label])=>`<div class="layer"><div class="lname">${label}</div><div class="boxes">${by.get(k).map(n=>`<div class="box" data-node="${esc(n.name)}"><div class="bn">${iconImg(n.tech[0]||n.name,18)}${esc(n.name)}</div>${n.tech.length?`<div class="bt">${n.tech.map(t=>`<span>${iconImg(t,11)}${esc(t)}</span>`).join('')}</div>`:''}<div class="bh ${/자료에 없음/.test(n.host)?'none':''}">${esc(n.host||'')}</div></div>`).join('')}</div></div>`).join('')}
+  </div>
+  ${a.edges.length?`<ul class="edgelist">${a.edges.map(e=>`<li><b>${esc(e.from)}</b> → <b>${esc(e.to)}</b>${e.label?` · ${esc(e.label)}`:''}</li>`).join('')}</ul>`:''}`; }
+function drawWires(){ const box=app.querySelector('.arch'); if(!box) return; const svg=box.querySelector('svg.wires'); const a=window.__arch; if(!a||!svg) return;
+  const r0=box.getBoundingClientRect(); const pos=name=>{ const el=box.querySelector(`.box[data-node="${CSS.escape(name)}"]`); if(!el) return null; const r=el.getBoundingClientRect(); return {x:r.left-r0.left+box.scrollLeft+r.width/2, top:r.top-r0.top+box.scrollTop, bottom:r.bottom-r0.top+box.scrollTop, left:r.left-r0.left+box.scrollLeft, right:r.right-r0.left+box.scrollLeft, cy:r.top-r0.top+box.scrollTop+r.height/2}; };
+  svg.setAttribute('viewBox',`0 0 ${box.scrollWidth} ${box.scrollHeight}`); svg.style.width=box.scrollWidth+'px'; svg.style.height=box.scrollHeight+'px';
+  let d='<defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#9aa0a6"/></marker></defs>';
+  a.edges.forEach(e=>{ const A=pos(e.from), B=pos(e.to); if(!A||!B) return; let x1,y1,x2,y2; if(Math.abs(A.cy-B.cy)<4){ x1=A.right; y1=A.cy; x2=B.left; y2=B.cy; if(A.left>B.left){x1=A.left;x2=B.right;} d+=`<path d="M${x1},${y1} C${(x1+x2)/2},${y1} ${(x1+x2)/2},${y2} ${x2},${y2}" fill="none" stroke="#9aa0a6" stroke-width="1.5" marker-end="url(#arr)"/>`; } else { const down=A.cy<B.cy; x1=A.x; y1=down?A.bottom:A.top; x2=B.x; y2=down?B.top:B.bottom; d+=`<path d="M${x1},${y1} C${x1},${(y1+y2)/2} ${x2},${(y1+y2)/2} ${x2},${y2}" fill="none" stroke="#9aa0a6" stroke-width="1.5" marker-end="url(#arr)"/>`; } });
+  svg.innerHTML=d; }
+window.addEventListener('resize',()=>requestAnimationFrame(drawWires));
+
+function project(id, initial){
   const p=byId.get(id); if(!p||p.type!=='project'){home();return;}
   const iv=p.interview; const cs=conceptsOf(id); const r=readiness(p); const [c1,c2]=pal(id);
-  const tabs=iv?[[1,'개요'],[2,'기술 스택'],[3,'고민한 점'],[4,'예상 질문'],[5,'솔직하게'],[6,'배운 개념']]:[[1,'개요'],[2,'배운 개념']];
+  const tabs=iv?[[1,'개요'],[2,'기술 스택'],[3,'아키텍처'],[4,'고민한 점'],[5,'예상 질문'],[6,'솔직하게'],[7,'배운 개념']]:[[1,'개요'],[2,'배운 개념']]; window.__arch = iv? iv.arch : null;
   app.innerHTML=`
     <div class="hero">
       <div class="banner" style="--c1:${c1};--c2:${c2}"><div class="kind">Hackathon · ${esc(p.created||'')}</div><h1>${esc(p.title)}</h1></div>
@@ -505,15 +614,16 @@ function project(id){
       `<table class="t"><colgroup><col style="width:22%"><col style="width:16%"><col style="width:36%"><col style="width:26%"></colgroup><thead><tr><th>기술</th><th>역할</th><th>왜 이걸 썼나</th><th>대안과 포기한 것</th></tr></thead><tbody>
       ${iv.stack.map(s=>`<tr><td>${inline(s.tech)}</td><td>${inline(s.role)}</td><td>${/자료에 없음/.test(s.why)?`<span class="missing"><b>비어 있음</b> · 직접 채울 것</span>`:inline(s.why)}</td><td>${/자료에 없음/.test(s.alt)?`<span class="missing">${esc(s.alt)}</span>`:inline(s.alt)}</td></tr>`).join('')}
       </tbody></table>`)}
-    ${sec(3,'고민한 점','다른 선택지가 있었고 나름의 근거로 골랐다는 것을 보여 주는 부분입니다. 꼬리질문이 대개 여기서 이어지므로, 각 항목마다 왜 그렇게 정했는지 한 번씩 말해 보면 좋습니다.', `<ol class="plain">${iv.concerns.map((c,i)=>`<li><span class="n">${i+1}</span><div>${inline(c)}</div></li>`).join('')}</ol>`)}
-    ${sec(4,'예상 질문','개념을 묻는 질문(L1)에서 시작해 왜 그렇게 했는지(L2), 어디서 깨지는지(L3)로 내려갑니다. 답을 펼치기 전에 먼저 소리 내어 답해 보고, 아래에서 스스로 평가해 두면 다음에 복습할 때 도움이 됩니다.', qcards(iv.questions)+rateBox('p:'+id,'이 프로젝트를 지금 5분 동안 설명할 수 있을까요'))}
-    ${sec(5,'솔직하게 말할 것','AI 도구가 대신 짠 부분이나 검증하지 못한 주장은 부풀려 말하면 꼬리질문에서 드러나기 쉽습니다. 먼저 인정하고 거기서 무엇을 배웠는지로 이어 가는 편이 오히려 좋은 인상을 남긴다고 생각합니다.', `<ul class="plain">${iv.honest.map((c,i)=>`<li><span class="n">!</span><div>${inline(c)}</div></li>`).join('')}</ul>`)}
-    ${sec(6,'이 프로젝트에서 배운 개념','이 프로젝트에서 처음 써 본 기술과 개념입니다. 각 페이지에 확인 질문이 있고, 설명할 수 있다고 표시한 개념이 늘수록 프로젝트 준비도가 함께 올라갑니다.', conceptGrid(cs))}
+    ${sec(3,'아키텍처','어디에 무엇을 올렸고 서로 어떻게 연결되는지 그림으로 봅니다. 호스팅이 비어 있는 상자는 자료에 기록이 없어 남겨 둔 것입니다.', iv.arch? archHtml(iv.arch) : '<div class="hint">이 프로젝트에는 아직 아키텍처 절이 없습니다. 위키 문서의 면접 준비 절에 <code>### 아키텍처</code>를 채우면 여기에 그려집니다.</div>')}
+    ${sec(4,'고민한 점','다른 선택지가 있었고 나름의 근거로 골랐다는 것을 보여 주는 부분입니다. 꼬리질문이 대개 여기서 이어지므로, 각 항목마다 왜 그렇게 정했는지 한 번씩 말해 보면 좋습니다.', `<ol class="plain">${iv.concerns.map((c,i)=>`<li><span class="n">${i+1}</span><div>${inline(c)}</div></li>`).join('')}</ol>`)}
+    ${sec(5,'예상 질문','개념을 묻는 질문(L1)에서 시작해 왜 그렇게 했는지(L2), 어디서 깨지는지(L3)로 내려갑니다. 답을 펼치기 전에 먼저 소리 내어 답해 보고, 아래에서 스스로 평가해 두면 다음에 복습할 때 도움이 됩니다.', qcards(iv.questions)+rateBox('p:'+id,'이 프로젝트를 지금 5분 동안 설명할 수 있을까요'))}
+    ${sec(6,'솔직하게 말할 것','AI 도구가 대신 짠 부분이나 검증하지 못한 주장은 부풀려 말하면 꼬리질문에서 드러나기 쉽습니다. 먼저 인정하고 거기서 무엇을 배웠는지로 이어 가는 편이 오히려 좋은 인상을 남긴다고 생각합니다.', `<ul class="plain">${iv.honest.map((c,i)=>`<li><span class="n">!</span><div>${inline(c)}</div></li>`).join('')}</ul>`)}
+    ${sec(7,'이 프로젝트에서 배운 개념','이 프로젝트에서 처음 써 본 기술과 개념입니다. 각 페이지에 확인 질문이 있고, 설명할 수 있다고 표시한 개념이 늘수록 프로젝트 준비도가 함께 올라갑니다.', conceptGrid(cs))}
     `:`
     <div class="hint">이 프로젝트에는 아직 <b>면접 준비</b> 절이 없습니다. 위키 문서에 <code>## 면접 준비</code>를 채우면 기술 스택·고민·예상 질문이 여기에 표시됩니다.</div>
     ${sec(2,'이 프로젝트에서 배운 개념','', conceptGrid(cs))}`}
     <details class="raw"><summary>위키 문서 전문 보기</summary><div class="md">${md(p.body)}</div></details>`;
-  bindRate(); spy();
+  bindRate(); spy(initial);
 }
 function conceptGrid(cs){ return cs.length?`<div class="cgrid">${cs.map(c=>`<a class="ccard" href="#/c/${c.id}">
   <div class="t"><span class="dot" style="background:var(--${c.type})"></span>${esc(c.title)}<span class="st ${stateOf(c.id)}" title="${STATE[stateOf(c.id)]||'기록 없음'}" style="margin-left:auto"></span></div>
@@ -521,7 +631,7 @@ function conceptGrid(cs){ return cs.length?`<div class="cgrid">${cs.map(c=>`<a c
   <div class="m">${c.cs_topics.length?c.cs_topics.map(esc).join(' · ')+' · ':''}${c.study?c.study.questions.length+'문항':''}${c.type==='lesson'?'교훈':''}</div>
 </a>`).join('')}</div>`:'<p class="page-sub">연결된 개념 문서가 없습니다.</p>'; }
 
-function concept(id){
+function concept(id, initial){
   const c=byId.get(id); if(!c||c.type==='project'){home();return;}
   const s=c.study; const from=projectsOf(id); const back=from[0]; const [c1,c2]=pal(back?back.id:id);
   const tabs=s?[[1,'설명할 것'],[2,'바탕 CS'],[3,'확인 질문'],[4,'더 파볼 것']]:[[1,'본문']];
@@ -546,7 +656,7 @@ function concept(id){
     ${sec(4,'더 파볼 것','작성할 때 직접 열어 내용을 확인한 자료만 골라 두었습니다.', s.further.length?`<ul class="plain">${s.further.map(f=>`<li><span class="n">→</span><div>${f.url?`<a href="${esc(f.url)}" target="_blank" rel="noopener" style="text-decoration:underline;text-underline-offset:3px">${esc(f.title)}</a>`:esc(f.title)}${f.note?`<div style="color:var(--muted);font-size:13px">${esc(f.note)}</div>`:''}</div></li>`).join('')}</ul>`:'<p class="page-sub">없음</p>')}
     <details class="raw"><summary>위키 문서 전문 보기</summary><div class="md">${md(c.body)}</div></details>
     `:sec(1,'본문','', `<div class="md">${md(c.body)}</div>`)}`;
-  bindRate(); spy();
+  bindRate(); spy(initial);
 }
 
 let nodeSel=null, linkSel=null, selected=null;
