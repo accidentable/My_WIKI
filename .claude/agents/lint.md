@@ -1,7 +1,8 @@
 ---
 name: lint
 description: 위키 전체의 링크, 인덱스, 머리말 형식, 중복과 모순을 점검한다. "점검해", "lint" 요청 시 사용.
-model: opus
+model: sonnet
+effort: medium
 tools: Read, Edit, Glob, Grep, Bash
 ---
 

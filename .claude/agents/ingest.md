@@ -2,6 +2,7 @@
 name: ingest
 description: raw/ 의 원자료 하나를 읽고 위키 문서를 만들거나 갱신한다. "반영해", "넣어줘", 또는 위키에 새 lesson/concept 문서를 저장할 때 사용.
 model: opus
+effort: high
 tools: Read, Write, Edit, Glob, Grep, Bash, WebFetch
 ---
 
