@@ -29,4 +29,5 @@ Codex는 Claude Code와 동등한 **넣기(ingest)와 묻기(query)** 담당이�
 - 시작할 때 `git pull`, 끝날 때 `git add -A && git commit && git push`. 커밋 메시지는 wiki-rules.md 4절 형식. 메시지 끝에 `[codex]`를 붙인다.
 - 위키 전체를 훑지 않는다. 항상 인덱스에서 시작한다.
 - `raw/`는 읽기만 하고, 처리 후 `raw/done/`으로 옮기기만 한다.
+- 문체는 wiki-rules.md 13절을 따른다(경어체, 반전 없이, 짧게 끊지 않기).
 - 원자료의 확신 수준을 보존한다(wiki-rules.md 2절). 잠정적 표현을 확정적으로 바꾸지 않고, 한계는 결론 옆에 함께 옮긴다.

@@ -370,7 +370,7 @@ svg{width:100%;height:100%;display:block;cursor:grab}
 </head>
 <body>
 <header class="top"><div class="wrap">
-  <a class="brand" href="#/">해커톤 면접 노트<small>프로젝트로 배우는 CS</small></a>
+  <a class="brand" href="#/">해커톤 면접 노트<small>해커톤에서 배운 것을 면접 언어로</small></a>
   <span class="sp"></span>
   <input type="search" id="q" placeholder="프로젝트·기술 검색" aria-label="검색">
   <nav><a href="#/" data-nav="home">프로젝트</a><a href="#/graph" data-nav="graph">관계도</a></nav>
@@ -499,16 +499,16 @@ function project(id){
       ${iv&&iv.intro?`<div class="intro">${inline(iv.intro)}</div>`:''}
     </div>
     ${tabbar(tabs)}
-    ${sec(1,'개요','이 프로젝트가 무엇이었는지 30초 안에 말할 수 있어야 합니다.', `<div class="md">${md(overview(p.body))}</div>`)}
+    ${sec(1,'개요','무엇을 만들었고 어떻게 끝났는지, 30초 안에 말할 수 있을 만큼만 다시 읽어 봅니다.', `<div class="md">${md(overview(p.body))}</div>`)}
     ${iv?`
-    ${sec(2,'기술 스택과 선택 이유','면접관은 무엇을 썼는지가 아니라 왜 그것이었는지를 묻습니다. 비어 있는 칸은 원자료에 근거가 없어 남긴 자리입니다.',
+    ${sec(2,'기술 스택과 선택 이유','면접에서는 어떤 기술을 썼는지보다 왜 그것을 골랐는지를 묻게 됩니다. 비어 있는 칸은 원자료에 이유가 남아 있지 않아 비워 둔 자리이니, 기억나는 대로 직접 채워 넣으면 됩니다.',
       `<table class="t"><colgroup><col style="width:22%"><col style="width:16%"><col style="width:36%"><col style="width:26%"></colgroup><thead><tr><th>기술</th><th>역할</th><th>왜 이걸 썼나</th><th>대안과 포기한 것</th></tr></thead><tbody>
       ${iv.stack.map(s=>`<tr><td>${inline(s.tech)}</td><td>${inline(s.role)}</td><td>${/자료에 없음/.test(s.why)?`<span class="missing"><b>비어 있음</b> · 직접 채울 것</span>`:inline(s.why)}</td><td>${/자료에 없음/.test(s.alt)?`<span class="missing">${esc(s.alt)}</span>`:inline(s.alt)}</td></tr>`).join('')}
       </tbody></table>`)}
-    ${sec(3,'고민한 점','선택지가 있었고 근거를 들어 골랐다는 것을 보여주는 대목입니다. 꼬리질문은 대부분 여기서 나옵니다.', `<ol class="plain">${iv.concerns.map((c,i)=>`<li><span class="n">${i+1}</span><div>${inline(c)}</div></li>`).join('')}</ol>`)}
-    ${sec(4,'예상 질문','L1 개념 → L2 판단 → L3 한계 순서입니다. 답을 보기 전에 소리 내어 답해보세요.', qcards(iv.questions)+rateBox('p:'+id,'이 프로젝트, 지금 면접에서 5분 설명할 수 있나?'))}
-    ${sec(5,'솔직하게 말할 것','부풀리면 꼬리질문에 무너지는 지점입니다. 먼저 인정하고 배운 점으로 돌리는 편이 강합니다.', `<ul class="plain">${iv.honest.map((c,i)=>`<li><span class="n">!</span><div>${inline(c)}</div></li>`).join('')}</ul>`)}
-    ${sec(6,'이 프로젝트에서 배운 개념','각 개념 페이지에 확인 질문이 있습니다. 개념을 설명할 수 있으면 프로젝트 준비도가 올라갑니다.', conceptGrid(cs))}
+    ${sec(3,'고민한 점','다른 선택지가 있었고 나름의 근거로 골랐다는 것을 보여 주는 부분입니다. 꼬리질문이 대개 여기서 이어지므로, 각 항목마다 왜 그렇게 정했는지 한 번씩 말해 보면 좋습니다.', `<ol class="plain">${iv.concerns.map((c,i)=>`<li><span class="n">${i+1}</span><div>${inline(c)}</div></li>`).join('')}</ol>`)}
+    ${sec(4,'예상 질문','개념을 묻는 질문(L1)에서 시작해 왜 그렇게 했는지(L2), 어디서 깨지는지(L3)로 내려갑니다. 답을 펼치기 전에 먼저 소리 내어 답해 보고, 아래에서 스스로 평가해 두면 다음에 복습할 때 도움이 됩니다.', qcards(iv.questions)+rateBox('p:'+id,'이 프로젝트를 지금 5분 동안 설명할 수 있을까요'))}
+    ${sec(5,'솔직하게 말할 것','AI 도구가 대신 짠 부분이나 검증하지 못한 주장은 부풀려 말하면 꼬리질문에서 드러나기 쉽습니다. 먼저 인정하고 거기서 무엇을 배웠는지로 이어 가는 편이 오히려 좋은 인상을 남긴다고 생각합니다.', `<ul class="plain">${iv.honest.map((c,i)=>`<li><span class="n">!</span><div>${inline(c)}</div></li>`).join('')}</ul>`)}
+    ${sec(6,'이 프로젝트에서 배운 개념','이 프로젝트에서 처음 써 본 기술과 개념입니다. 각 페이지에 확인 질문이 있고, 설명할 수 있다고 표시한 개념이 늘수록 프로젝트 준비도가 함께 올라갑니다.', conceptGrid(cs))}
     `:`
     <div class="hint">이 프로젝트에는 아직 <b>면접 준비</b> 절이 없습니다. 위키 문서에 <code>## 면접 준비</code>를 채우면 기술 스택·고민·예상 질문이 여기에 표시됩니다.</div>
     ${sec(2,'이 프로젝트에서 배운 개념','', conceptGrid(cs))}`}
@@ -540,10 +540,10 @@ function concept(id){
     </div>
     ${tabbar(tabs)}
     ${s?`
-    ${sec(1,'설명할 수 있어야 하는 것','이 세 문장을 자기 말로 할 수 있으면 이 개념은 끝난 겁니다.', `<ol class="plain">${s.explain.map((x,i)=>`<li><span class="n">${i+1}</span><div>${inline(x)}</div></li>`).join('')}</ol>`)}
-    ${sec(2,'바탕이 되는 CS','이 개념이 어느 과목의 어느 장과 이어지는지.', `<ul class="plain">${s.cs.map(x=>`<li><span class="n">·</span><div>${esc(x)}</div></li>`).join('')}</ul>`)}
-    ${sec(3,'확인 질문','답을 보기 전에 먼저 답해보고, 아래에서 이해도를 표시하세요.', qcards(s.questions)+rateBox(id,'이 개념, 면접에서 설명할 수 있나?'))}
-    ${sec(4,'더 파볼 것','직접 열어 확인한 자료만 있습니다.', s.further.length?`<ul class="plain">${s.further.map(f=>`<li><span class="n">→</span><div>${f.url?`<a href="${esc(f.url)}" target="_blank" rel="noopener" style="text-decoration:underline;text-underline-offset:3px">${esc(f.title)}</a>`:esc(f.title)}${f.note?`<div style="color:var(--muted);font-size:13px">${esc(f.note)}</div>`:''}</div></li>`).join('')}</ul>`:'<p class="page-sub">없음</p>')}
+    ${sec(1,'설명할 수 있어야 하는 것','아래 문장들을 자기 말로 풀어 설명할 수 있는지 먼저 확인해 봅니다.', `<ol class="plain">${s.explain.map((x,i)=>`<li><span class="n">${i+1}</span><div>${inline(x)}</div></li>`).join('')}</ol>`)}
+    ${sec(2,'바탕이 되는 CS','이 개념이 어느 과목의 어느 부분과 이어지는지 적어 두었습니다. 교과서로 돌아가 볼 때 참고하면 됩니다.', `<ul class="plain">${s.cs.map(x=>`<li><span class="n">·</span><div>${esc(x)}</div></li>`).join('')}</ul>`)}
+    ${sec(3,'확인 질문','답을 펼치기 전에 먼저 답해 보고, 아래에서 이해도를 표시해 두면 복습 순서를 정하는 데 씁니다.', qcards(s.questions)+rateBox(id,'이 개념을 면접에서 설명할 수 있을까요'))}
+    ${sec(4,'더 파볼 것','작성할 때 직접 열어 내용을 확인한 자료만 골라 두었습니다.', s.further.length?`<ul class="plain">${s.further.map(f=>`<li><span class="n">→</span><div>${f.url?`<a href="${esc(f.url)}" target="_blank" rel="noopener" style="text-decoration:underline;text-underline-offset:3px">${esc(f.title)}</a>`:esc(f.title)}${f.note?`<div style="color:var(--muted);font-size:13px">${esc(f.note)}</div>`:''}</div></li>`).join('')}</ul>`:'<p class="page-sub">없음</p>')}
     <details class="raw"><summary>위키 문서 전문 보기</summary><div class="md">${md(c.body)}</div></details>
     `:sec(1,'본문','', `<div class="md">${md(c.body)}</div>`)}`;
   bindRate(); spy();
@@ -551,7 +551,7 @@ function concept(id){
 
 let nodeSel=null, linkSel=null, selected=null;
 function graph(){
-  app.innerHTML=`<h1 class="page-title">문서 관계도</h1><p class="page-sub">프로젝트(보라)와 개념(초록), 교훈(주황)이 어떻게 이어지는지. 노드를 누르면 해당 페이지로 갑니다.</p><div id="graphbox"><svg></svg><div id="tip"></div></div>`;
+  app.innerHTML=`<h1 class="page-title">문서 관계도</h1><p class="page-sub">프로젝트(보라)와 개념(초록), 교훈(주황)이 어떻게 이어져 있는지 보여 줍니다. 노드를 누르면 해당 페이지로 이동합니다.</p><div id="graphbox"><svg></svg><div id="tip"></div></div>`;
   const box=document.getElementById('graphbox'), svg=d3.select(box).select('svg'); const W=box.clientWidth,H=box.clientHeight;
   const degree=new Map(DATA.nodes.map(n=>[n.id,nb.get(n.id).size]));
   const nodes=DATA.nodes.map(n=>({id:n.id,type:n.type,title:n.title,summary:n.summary})); const links=DATA.links.map(l=>({source:l.source,target:l.target}));
