@@ -200,3 +200,13 @@
 - 갱신: projects/blockchain-valley-2026-sabonx (관련 개념 링크), wiki/index.md
 - 확인: W3C DID Core·VC Data Model·did:key Method, MDN 동일 출처 정책, OWASP HTML5 Security Cheat Sheet를 대조함
 - 도구: codex
+
+## 2026-09-22 ingest: frame-midnight-2026-09-conversation-excerpts.md
+
+- 원자료: 기존 Codex 작업 2개의 사용자 메시지 5건과 당시 AI 제안 1건을 발췌해 새 원자료로 보존함. 사용자 발언과 AI의 검토 제안을 구분함.
+- 갱신: projects/wanted-interview-ai-2026 (사용자가 직접 바로잡은 첫 검토의 불편을 문제 정의·면접 소개에 반영, 시간 단축의 측정 자료가 없음을 병기)
+- 신규: lessons/user-problem-before-technology (FRAME·미드나잇 사례로 사용자 문제, 기술의 보장 범위, 검증 전 가설을 구분)
+- 갱신: concepts/evidence-linked-llm-output (`store: false`가 제공자 측 무보관을 보장한다는 기존 설명을 원자료·공식 문서와 대조해 정정, 모순 블록에 이전 표현과 근거 보존)
+- 갱신: wiki/index.md (FRAME·근거 연결형 출력 요약, 신규 lesson 등록)
+- 반영 제외: 미드나잇을 구현 완료 프로젝트로 등록하지 않음. 확인한 대화는 제품 방향 검토이며 고객 수요·연령 증명 발급·Midnight 연동을 검증한 기록이 아님.
+- 도구: codex

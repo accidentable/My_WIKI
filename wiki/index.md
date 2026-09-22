@@ -7,7 +7,7 @@
 - [[blockchain-valley-2026-sabonx]] — SabonX, 신분증 사본 없이 DID·VC로 월급 확인·소득 신고를 잇는 블록체인 프로토타입 (AI Blockchain Challenge in Daegu / TRUST404 Track 02)
 - [[miraeasset-ai-festival-2026]] — 미래에셋증권 AI Festival 공시 Agent, DART 공시 4,204건 구조화 + 결정론 경로·근거 검증으로 접수번호 붙은 답 생성 (2026-09)
 - [[finance-ai-2026-subscription-cut]] — 2026 금융 AI Challenge, 해외 구독·클라우드 이상청구 대응 에이전트 "구독컷" (2026-09)
-- [[wanted-interview-ai-2026]] — 원티드 AI Championship 2026, 채용 영상에서 검토 기준별 지원자 발언을 원문·타임스탬프로 연결하는 FRAME (2026)
+- [[wanted-interview-ai-2026]] — 원티드 AI Championship 2026, 지원 영상을 처음 검토할 때 기준별 발언을 훑고 원본 구간을 확인하는 FRAME (2026)
 - [[kis-openapi-invest-2026-09]] — 한국투자증권 OpenAPI 실전투자대회, KOSPI100 5일선 돌파 역발상 자동매매 봇 (2026-09)
 - [[wanted-hackathon-2026]] — 원티드 해커톤, 사진 속 물건을 AI로 잘라내 소재별로 부수는 모바일 웹 3D 데모 Smash Lab (2026-09 추정)
 - [[jb-finance-compliance-lens-2026]] — JB금융 Fin:AI Challenge, 금융 광고 콘텐츠를 게시 전 자동 사전심의하는 준법 AI Agent 제안 (2026)
@@ -36,7 +36,7 @@
 - [[deterministic-rule-path]] — 확정 가능한 사실은 SQL 규칙이 꺼내고, 게이트로 규칙이 덮은 범위를 재기
 - [[grounded-answer-verification]] — 모델이 쓴 숫자·접수번호를 근거와 기계 대조해 뒷받침 안 되는 값 지우기
 - [[citation-grounding-verification]] — 인용한 규정 조항이 실재하는지 인덱스와 대조해 가짜면 폐기·재판정하기
-- [[evidence-linked-llm-output]] — LLM에 판정을 맡기지 않고 원본 구간을 근거로 가리키게 해 사람이 확인·수정하게 하기
+- [[evidence-linked-llm-output]] — 원본 구간을 가리키는 LLM 출력의 검증·수정과 데이터 보관 범위 구분하기
 - [[fixed-graph-hitl-agent]] — 그래프를 고정하고 사람 앞에서 멈춰 최종 책임을 사람에게 남기기
 - [[vision-api-fallback-chain]] — 비전 LLM을 기본→대체모델→휴리스틱 3단 폴백으로 감싸 데모가 안 멈추게 하기
 - [[llm-quiz-from-disclosure]] — DART 공시를 배치로 긁어 LLM으로 4지선다 퀴즈 JSON 미리 생성하기
@@ -80,6 +80,7 @@
 - [[dual-backend-local-vs-serverless]] — FastAPI 로컬판과 서버리스 배포판에 로직을 복제했을 때 생기는 표류
 
 ## lessons
+- [[user-problem-before-technology]] — FRAME·미드나잇 기획 대화에서 사용자 문제, 기술의 보장 범위, 검증 전 가설을 구분하기
 - [[claim-scoping-in-hackathon-docs]] — 기획서 개정은 주장을 키우지 말고 근거가 받쳐 주는 범위까지 좁혀라
 - [[measured-baseline-over-claimed-gain]] — 효과는 대조군을 직접 돌려 말하고, 어느 실험의 수치인지 붙여 말하라
 - [[self-authored-eval-overfitting]] — 내가 만든 평가는 내가 아는 실패만 잡는다. 질의 선택·정답·채점기 중 하나는 손에서 떼기
