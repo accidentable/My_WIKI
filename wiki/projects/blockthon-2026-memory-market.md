@@ -12,7 +12,7 @@ tags: [블록체인, Sui, Seal, Walrus, MCP, Claude Code, 에이전트, 데이�
 - 대회명: Blockthon 2026 (자료에는 "Blockthon 2026 출품작" 이라고만 적혀 있다)
 - 기간: 자료에 없음. 개발 기억 로그는 2026-09-03부터, 실측 리허설은 2026-09-07, 실제 사용 기록은 2026-09-13, 최종 커밋은 2026-09-19
 - 결과(수상 여부): 자료에 없음
-- 발표자: 윤태호, 오픈수이 팀. 고려대학교 블록체인 학회 블록체인 밸리 개발팀 소속
+- 발표자: 오픈수이 팀. 대학 블록체인 학회 개발팀 소속
 - 주제: AI와 일하며 쌓인 대화 기록(경험)을 Sui 체인에서 값을 받고 기간 한정으로 파는 시장
 - 산출물: 저장소 https://github.com/Blockthon-th/my-project, 랜딩 https://blockthon-th.github.io/my-project/ 둘뿐. 라이선스 MIT
 - 로컬 경로: `C:\Users\pc\Desktop\해커톤\my-project`. 시장에서 산 경험을 적용한 데모 결과 폴더는 `C:\Users\pc\Desktop\해커톤\blockthon2\designer-version`(`.mm-cache`에 step 스크린샷과 `market-acquisition.json`)

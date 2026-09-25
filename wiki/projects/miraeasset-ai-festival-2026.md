@@ -15,7 +15,7 @@ tags: [미래에셋증권, ai-festival, dart, 공시, rag, hyperclova-x, agent, 
 - **코드 저장소**: https://github.com/miraeasset-aifestival-2026-dart/dis-136 — 초기 설계 버전은 https://github.com/accidentable/AI_miraeasset (비공개) (출처: 로컬 git 원격, 2026-09-22 확인)
 
 - 대회명: 제10회 2026 미래에셋증권 AI Festival, 공시 Agent 과제
-- 팀: 마크주식버그 (윤태호)
+- 팀: 마크주식버그 (1인)
 - 산출물: DART 공시 질의응답 API. 평가 API `http://49.50.137.93:8000/answer` (GET/POST), 상태 확인 `/health`
 - 코퍼스: 주최 측 제공 DART 공시 70개사, 2023.01~2026.03, 4,204건
 - 제출 문서: README, `API_SPEC.md`, 기술 제안서 PDF

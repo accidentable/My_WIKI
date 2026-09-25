@@ -48,7 +48,7 @@
 
 ## 2026-09-22 notion-sync: 트래커 첫 동기화 (위키 → 노션)
 - 트래커에 열 추가: "제출"(체크박스), "위키 문서"(URL)
-- 기존 행 갱신 7건: JB금융, 모바일신분증(AgentID, 제출 체크만), BC카드, 고려대 Trust404, iM뱅크(SabonX 동일 결과물), 원티드 AI Championship(FRAME), 뉴스빅데이터(끝물레이더, 제출 미체크)
+- 기존 행 갱신 7건: JB금융, 모바일신분증(AgentID, 제출 체크만), BC카드, Trust404, iM뱅크(SabonX 동일 결과물), 원티드 AI Championship(FRAME), 뉴스빅데이터(끝물레이더, 제출 미체크)
 - 신규 행 5건: 금융 AI Challenge(구독컷), 미래에셋 AI Festival(공시 Agent), 한투 OpenAPI 투자대회, 하나금융 AR(Ko-Walk), icognito(TrustSeal)
 - 뷰 재구성: "🔥 남은 해커톤"(제출 미체크 + 마감 전, 열은 해커톤명·D-day·제출 마감만), "✅ 제출한 해커톤"(제출 체크, 열은 해커톤명·프로젝트명·결과·위키 문서)
 - 미처리: 원티드 해커톤 Smash Lab은 대회명이 원자료에 없어 행을 만들지 않음. Blockthon(Memory Market)은 위키에 없음
@@ -210,3 +210,8 @@
 - 갱신: wiki/index.md (FRAME·근거 연결형 출력 요약, 신규 lesson 등록)
 - 반영 제외: 미드나잇을 구현 완료 프로젝트로 등록하지 않음. 확인한 대화는 제품 방향 검토이며 고객 수요·연령 증명 발급·Midnight 연동을 검증한 기록이 아님.
 - 도구: codex
+
+## 2026-09-26 docs: README 추가, 공개 전환에 맞춰 이름·학회명 정리
+- 신규: README.md (저장소 소개, 규칙 요약, 타코 트럼프 정리 사례, 실행법)
+- 수정: raw/done 6건, wiki/projects 5건, log.md, AGENTS.md에서 본인 이름과 학회명을 지우거나 일반 표현으로 바꿈. 저장소 공개에 맞춘 신상 정보 정리이며 사실 관계는 바꾸지 않음. raw/ 수정은 사용자 지시에 따른 예외
+- 도구: claude-code
