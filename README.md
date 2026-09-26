@@ -2,7 +2,7 @@
 
 # My_WIKI
 
-해커톤 14회의 자료를 LLM이 규칙대로 위키로 정리하고, 면접 노트 사이트로 만드는 저장소
+해커톤 출전 자료를 LLM이 규칙대로 위키로 정리하고, 면접 노트 사이트로 만드는 저장소
 
 [사이트](https://hackathon-wiki-rho.vercel.app/) · [규칙](wiki-rules.md) · [인덱스](wiki/index.md) · [로그](log.md)
 
